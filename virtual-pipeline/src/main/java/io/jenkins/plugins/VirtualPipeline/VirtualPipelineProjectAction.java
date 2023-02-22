@@ -1,15 +1,15 @@
 package io.jenkins.plugins.VirtualPipeline;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import hudson.model.AbstractBuild;
 import hudson.model.Action;
 import jenkins.tasks.SimpleBuildStep;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,39 +35,17 @@ public class VirtualPipelineProjectAction  implements SimpleBuildStep.LastBuildA
         return cacheFile;
     }
 
-    public  List<VirtualPipelineOutput> getAllFiltered(){
-        List<VirtualPipelineOutput> result = new ArrayList<>();
-        JSONParser jsonParser = new JSONParser();
+    public  List<VirtualPipelineOutput> getAllCacheFromFile(){
+        ObjectMapper objectMapper = new ObjectMapper();
+
+
         try {
-            JSONArray array = (JSONArray) jsonParser.parse(new FileReader(this.getCacheFile().getPath()));
-
-            for (Object obj :
-                    array) {
-                JSONObject jsonObj = (JSONObject) obj;
-                // int number = (int) jsonObj.get("number");
-                String name = (String) jsonObj.get("name");
-                String regex = (String) jsonObj.get("regex");
-                //JSONArray filteredArray = (JSONArray) jsonObj.get("filtered");
-                /**List<String> filtered = new ArrayList<>();
-                for (Object objLine :
-                        filteredArray) {
-                    JSONObject jsonObjLine = (JSONObject) objLine;
-                    filtered.add(objLine.toString());
-                }**/
-                //List<String> notFiltered = (List<String>) jsonObj.get("notFiltered");
-                VirtualPipelineOutput output = new VirtualPipelineOutput(name,  regex, new ArrayList<>(), new ArrayList<>());
-                result.add(output);
-
-            }
-               return result;
-
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            List<VirtualPipelineOutput> result = objectMapper.readValue(cacheFile, new TypeReference<List<VirtualPipelineOutput>>() {});
+            return result;
         } catch (IOException e) {
             throw new RuntimeException(e);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
         }
+
     }
 
     public AbstractBuild<?, ?> getBuild() {

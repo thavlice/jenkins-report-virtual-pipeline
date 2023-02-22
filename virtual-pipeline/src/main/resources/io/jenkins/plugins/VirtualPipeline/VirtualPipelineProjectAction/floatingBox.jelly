@@ -1,21 +1,21 @@
 <j:jelly xmlns:j="jelly:core" xmlns:d="jelly:define" xmlns:l="/lib/layout"
          xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt">
-            <h1>Virtual pipeline results</h1>
+    <h1>Virtual pipeline results</h1>
 
-            <j:set var="regexList" value="${it.allFiltered}"/>
-            <j:forEach items="${regexList}" var="regexGroup">
-                <h2>Result for regex ${regexGroup.regex} with name ${regexGroup.name}</h2>
-                <h3>Filtered:</h3>
-                <ul>
-                <j:forEach items="${regexGroup.filtered}" var="filteredLine">
-                    <li>${filteredLine}</li>
-                </j:forEach>
-                </ul>
-                <ul>
-                <j:forEach items="${regexGroup.notFiltered}" var="notFilteredLine">
-                    <li>${notFilteredLine}</li>
-                </j:forEach>
-                </ul>
+    <j:set var="regexList" value="${from.allCacheFromFile}"/>
+    <j:forEach items="${regexList}" var="regexGroup">
+        <h2>Result for regex ${regexGroup.regex} with name ${regexGroup.name}</h2>
+        <h3>Filtered:</h3>
+        <ul>
+            <j:forEach items="${regexGroup.filtered}" var="filteredLine">
+                <li>${filteredLine}</li>
             </j:forEach>
-    <div>gggeeeee</div>
+        </ul>
+        <h3>Not filtered:</h3>
+        <ul>
+            <j:forEach items="${regexGroup.notFiltered}" var="notFilteredLine">
+                <li>${notFilteredLine}</li>
+            </j:forEach>
+        </ul>
+    </j:forEach>
 </j:jelly>

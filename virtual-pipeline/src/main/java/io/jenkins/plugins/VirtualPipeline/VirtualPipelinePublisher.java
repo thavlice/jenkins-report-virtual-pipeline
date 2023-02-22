@@ -11,16 +11,15 @@ import hudson.tasks.Recorder;
 import hudson.util.FormValidation;
 import jenkins.tasks.SimpleBuildStep;
 import org.jenkinsci.Symbol;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 
 import javax.servlet.ServletException;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -71,29 +70,18 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
         //creates necessary directories
         currentBuildFolder.mkdirs();
 
-        //creating cachefile
-        File workspaceFile = new File(currentBuildFolder.getPath() + File.separator + "cachefile.txt");
-        workspaceFile.createNewFile();
-
 
         //getting filtered lines
-        List<VirtualPipelineOutput> filterOutput = VirtualPipelineInputFilter.filter(build.getLog(1000), getConfigurations());
+        List<VirtualPipelineOutput> filterOutput = VirtualPipelineFilter.filter(build.getLog(1000), getConfigurations());
 
 
         //writing in JSON format into output.json
-        JSONArray jsonArray = new JSONArray();
-        for (int i = 0; i < filterOutput.size(); i++) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("number", i);
-            jsonObject.put("name", filterOutput.get(i).getName());
-            jsonObject.put("regex", filterOutput.get(i).getRegex());
-            jsonObject.put("filtered", filterOutput.get(i).getFiltered());
-            jsonObject.put("notFiltered", filterOutput.get(i).getNotFiltered());
-            jsonArray.add(jsonObject);
-        }
         File jsonCacheFile = new File( currentBuildFolder.getPath() + File.separator + "cache.json");
         jsonCacheFile.createNewFile();
-        VirtualPipelineInputFilter.saveToJSON(jsonArray, jsonCacheFile);
+        List<VirtualPipelineOutput> example = new ArrayList<VirtualPipelineOutput>();
+        //example.add(new VirtualPipelineOutput("karel", "rega", Arrays.asList("line1", "Line2", "LIne3"), Arrays.asList("toherLIne", "otherline2")));
+
+        VirtualPipelineFilter.saveToJSON(filterOutput, jsonCacheFile);
 
 
         // creating picture
@@ -101,25 +89,15 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
         BufferedImage image = pm.createPicture(filterOutput.get(0).getFiltered());
 
 
-        File picturePath = new File(currentBuildFolder + File.separator + "archives" + File.separator + "picture.png");
+        File picturePath = new File(currentBuildFolder + File.separator + "archive" + File.separator + "picture.png");
         picturePath.mkdirs();
         javax.imageio.ImageIO.write(image, "png", picturePath);
 
 
         // adding action to build in Jenkins
         VirtualPipelineProjectAction action =  new VirtualPipelineProjectAction(build, this.getConfigurations(), jsonCacheFile);
-        List<VirtualPipelineOutput> allFiltered = action.getAllFiltered();
+        List<VirtualPipelineOutput> allFiltered = action.getAllCacheFromFile();
         build.addAction(action);
-        for (VirtualPipelineOutput o :
-                allFiltered) {
-            listener.getLogger().println("HEY: " + o.getName() + "   " + o.getRegex());
-            for (String line :
-                 o.getFiltered()) {
-                listener.getLogger().println(line);
-
-            }
-        }
-
 
         return true;
     }

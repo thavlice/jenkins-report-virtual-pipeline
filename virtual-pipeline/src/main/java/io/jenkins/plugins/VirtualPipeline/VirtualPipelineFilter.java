@@ -1,16 +1,14 @@
 package io.jenkins.plugins.VirtualPipeline;
 
-import org.json.simple.JSONArray;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VirtualPipelineInputFilter {
+public class VirtualPipelineFilter {
 
     public static List<VirtualPipelineOutput> filter(List<String> lines, List<VirtualPipelineFormInput> configs) throws IOException {
         List<VirtualPipelineOutput> result = new ArrayList<>();
@@ -34,13 +32,13 @@ public class VirtualPipelineInputFilter {
         return result;
     }
 
-    public static void saveToJSON(JSONArray array, File file){
+    public static void saveToJSON(List<VirtualPipelineOutput> list, File file) {
 
-        try (FileWriter fileWriter = new FileWriter(file)) {
-            fileWriter.write(array.toString());
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            objectMapper.writeValue(file, list);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-
     }
 }
