@@ -10,29 +10,29 @@ import java.util.List;
 
 public class VirtualPipelineFilter {
 
-    public static List<VirtualPipelineOutput> filter(List<String> lines, List<VirtualPipelineFormInput> configs) throws IOException {
-        List<VirtualPipelineOutput> result = new ArrayList<>();
+    public static List<VirtualPipelineLineOutput> filter(List<String> lines, List<VirtualPipelineFormInput> configs) throws IOException {
+        List<VirtualPipelineLineOutput> result = new ArrayList<>();
+        int lineIndex = 0;
 
-        for (VirtualPipelineFormInput config :
-                configs) {
-            List<String> filtered = new ArrayList<>();
-            List<String> notFiltered = new ArrayList<>();
+        //TODO bytecount for offset goes here
 
-            for (String line :
-                    lines) {
+        for (String line :
+                lines) {
+
+            for (VirtualPipelineFormInput config:
+                    configs) {
                 if(line.matches(config.getRegex())){
-                    filtered.add(line);
-                }
-                else {
-                    notFiltered.add(line);
+                    //TODO check to include mark or not
+                    result.add(new VirtualPipelineLineOutput(config.getRegex(), line, lineIndex, config.getDeleteMark()));
+                    break;
                 }
             }
-            result.add(new VirtualPipelineOutput(config.getName(), config.getRegex(), filtered, notFiltered));
+            lineIndex++;
         }
         return result;
     }
 
-    public static void saveToJSON(List<VirtualPipelineOutput> list, File file) {
+    public static void saveToJSON(List<VirtualPipelineLineOutput> list, File file) {
 
         ObjectMapper objectMapper = new ObjectMapper();
         try {

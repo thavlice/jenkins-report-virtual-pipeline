@@ -2,12 +2,11 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
     <f:section title="Input regex">
         <f:repeatable field="configurations">
-            <f:entry title="Regex name" field="name">
-                <f:textbox/>
-            </f:entry>
             <f:entry title="Regex" field="regex">
                 <f:textbox/>
             </f:entry>
+            <f:checkbox title="Delete regex part of the mark" field="deleteMark"/>
+            <f:checkbox title="Generate picture as artifact" field="generatePicture"/>
             <f:repeatableDeleteButton/>
         </f:repeatable>
     </f:section>

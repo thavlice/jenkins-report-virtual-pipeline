@@ -2,6 +2,7 @@ package io.jenkins.plugins.VirtualPipeline;
 
 import hudson.Extension;
 import hudson.Launcher;
+import hudson.console.AnnotatedLargeText;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
@@ -16,8 +17,7 @@ import org.kohsuke.stapler.QueryParameter;
 
 import javax.servlet.ServletException;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -70,33 +70,35 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
         //creates necessary directories
         currentBuildFolder.mkdirs();
 
-
         //getting filtered lines
-        List<VirtualPipelineOutput> filterOutput = VirtualPipelineFilter.filter(build.getLog(1000), getConfigurations());
+        List<VirtualPipelineLineOutput> filterOutput = VirtualPipelineFilter.filter(build.getLog(10000), getConfigurations());
+        listener.getLogger().println("LOGGGGGGGGGGGGGGGG");
+        for (VirtualPipelineLineOutput fO :
+                filterOutput) {
+            listener.getLogger().println("OUTPUT: "+ fO.getLine() + "||"+ fO.getRegex()+ "||"+fO.getDeleteMark() +"||"+ fO.getIndex());
+        }
 
 
         //writing in JSON format into output.json
         File jsonCacheFile = new File( currentBuildFolder.getPath() + File.separator + "cache.json");
         jsonCacheFile.createNewFile();
-        List<VirtualPipelineOutput> example = new ArrayList<VirtualPipelineOutput>();
-        //example.add(new VirtualPipelineOutput("karel", "rega", Arrays.asList("line1", "Line2", "LIne3"), Arrays.asList("toherLIne", "otherline2")));
 
         VirtualPipelineFilter.saveToJSON(filterOutput, jsonCacheFile);
 
 
         // creating picture
-        VirtualPipelinePictureMaker pm = new VirtualPipelinePictureMaker(1200, 800);
-        BufferedImage image = pm.createPicture(filterOutput.get(0).getFiltered());
+        //VirtualPipelinePictureMaker pm = new VirtualPipelinePictureMaker(1200, 800);
+        //BufferedImage image = pm.createPicture(filterOutput.get(0));
 
 
-        File picturePath = new File(currentBuildFolder + File.separator + "archive" + File.separator + "picture.png");
-        picturePath.mkdirs();
-        javax.imageio.ImageIO.write(image, "png", picturePath);
+        //File picturePath = new File(currentBuildFolder + File.separator + "archive" + File.separator + "picture.png");
+        //picturePath.mkdirs();
+        //javax.imageio.ImageIO.write(image, "png", picturePath);
 
 
         // adding action to build in Jenkins
         VirtualPipelineProjectAction action =  new VirtualPipelineProjectAction(build, this.getConfigurations(), jsonCacheFile);
-        List<VirtualPipelineOutput> allFiltered = action.getAllCacheFromFile();
+        List<VirtualPipelineLineOutput> allFiltered = action.getAllCacheFromFile();
         build.addAction(action);
 
         return true;
@@ -114,9 +116,6 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
 
             for (VirtualPipelineFormInput s :
                     configurations) {
-                if (s.getName().length() == 0) {
-                    return FormValidation.error("Entry name is empty");
-                }
                 if (s.getRegex().length() == 0) {
                     return FormValidation.error("Entry Regex is empty");
                 }

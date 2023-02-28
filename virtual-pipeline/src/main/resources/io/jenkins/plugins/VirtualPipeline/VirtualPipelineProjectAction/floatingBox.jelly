@@ -2,20 +2,10 @@
          xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt">
     <h1>Virtual pipeline results</h1>
 
-    <j:set var="regexList" value="${from.allCacheFromFile}"/>
-    <j:forEach items="${regexList}" var="regexGroup">
-        <h2>Result for regex ${regexGroup.regex} with name ${regexGroup.name}</h2>
-        <h3>Filtered:</h3>
-        <ul>
-            <j:forEach items="${regexGroup.filtered}" var="filteredLine">
-                <li>${filteredLine}</li>
-            </j:forEach>
-        </ul>
-        <h3>Not filtered:</h3>
-        <ul>
-            <j:forEach items="${regexGroup.notFiltered}" var="notFilteredLine">
-                <li>${notFilteredLine}</li>
-            </j:forEach>
-        </ul>
-    </j:forEach>
+    <j:set var="linesList" value="${from.allCacheFromFile}"/>
+    <ul>
+        <j:forEach items="${linesList}" var="filteredLine">
+            <li>${filteredLine.index} ${filteredLine.line}</li>
+        </j:forEach>
+    </ul>
 </j:jelly>

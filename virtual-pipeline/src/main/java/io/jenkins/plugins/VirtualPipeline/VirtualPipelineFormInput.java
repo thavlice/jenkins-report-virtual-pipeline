@@ -3,13 +3,6 @@ package io.jenkins.plugins.VirtualPipeline;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 public class VirtualPipelineFormInput {
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getRegex() {
         return regex;
@@ -19,14 +12,33 @@ public class VirtualPipelineFormInput {
         this.regex = regex;
     }
 
-    private String name;
+
+    public Boolean getGeneratePicture() {
+        return generatePicture;
+    }
+
+    public void setGeneratePicture(Boolean generatePicture) {
+        this.generatePicture = generatePicture;
+    }
 
     private String regex;
+    private Boolean generatePicture;
+
+    private Boolean deleteMark;
+
+    public Boolean getDeleteMark() {
+        return deleteMark;
+    }
+
+    public void setDeleteMark(Boolean deleteMark) {
+        this.deleteMark = deleteMark;
+    }
 
     @DataBoundConstructor
-    public VirtualPipelineFormInput(String name, String regex){
-        this.name = name;
+    public VirtualPipelineFormInput(String regex, Boolean deleteMark, Boolean generatePicture){
         this.regex = regex;
+        this.deleteMark = deleteMark;
+        this.generatePicture = generatePicture;
     }
 
 

@@ -35,12 +35,14 @@ public class VirtualPipelineProjectAction  implements SimpleBuildStep.LastBuildA
         return cacheFile;
     }
 
-    public  List<VirtualPipelineOutput> getAllCacheFromFile(){
+    public List<String> getLogsShort() throws IOException {
+        return this.build.getLog(1000);
+    }
+
+    public  List<VirtualPipelineLineOutput> getAllCacheFromFile(){
         ObjectMapper objectMapper = new ObjectMapper();
-
-
         try {
-            List<VirtualPipelineOutput> result = objectMapper.readValue(cacheFile, new TypeReference<List<VirtualPipelineOutput>>() {});
+            List<VirtualPipelineLineOutput> result = objectMapper.readValue(cacheFile, new TypeReference<List<VirtualPipelineLineOutput>>() {});
             return result;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -58,21 +60,21 @@ public class VirtualPipelineProjectAction  implements SimpleBuildStep.LastBuildA
 
     @Override
     public String getIconFileName() {
-        return null;
+        return "some Icon";
     }
 
     /**
-     * used for displaying action in the sidebar, not needed
+     * used for displaying action in the sidebar
      * @return null because we don't use it
      */
     @Override
     public String getDisplayName() {
-        return null;
+        return "Virtual Pipeline HTML Logs";
     }
 
     @Override
     public String getUrlName() {
-        return null;
+        return "VP";
     }
 
     @Override
