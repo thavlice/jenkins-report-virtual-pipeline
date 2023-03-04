@@ -60,7 +60,7 @@ public class VirtualPipelineProjectAction  implements SimpleBuildStep.LastBuildA
 
     @Override
     public String getIconFileName() {
-        return "some Icon";
+        return "/plugin/virtual-pipeline/img/list.svg";
     }
 
     /**

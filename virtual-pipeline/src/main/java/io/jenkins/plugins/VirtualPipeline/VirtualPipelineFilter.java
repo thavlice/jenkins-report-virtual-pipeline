@@ -23,7 +23,13 @@ public class VirtualPipelineFilter {
                     configs) {
                 if(line.matches(config.getRegex())){
                     //TODO check to include mark or not
-                    result.add(new VirtualPipelineLineOutput(config.getRegex(), line, lineIndex, config.getDeleteMark()));
+                    if(config.getDeleteMark()){
+                        String lineWithoutRegex = VirtualPipelineFilter.removeRegexMark(line, config.getRegex());
+                        result.add(new VirtualPipelineLineOutput(config.getRegex(), lineWithoutRegex, lineIndex, config.getDeleteMark()));
+                    }else {
+                        result.add(new VirtualPipelineLineOutput(config.getRegex(), line, lineIndex, config.getDeleteMark()));
+                    }
+
                     break;
                 }
             }
@@ -40,5 +46,10 @@ public class VirtualPipelineFilter {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    public static String removeRegexMark(String line, String regex){
+        return  line.replaceAll(regex, "");
     }
 }

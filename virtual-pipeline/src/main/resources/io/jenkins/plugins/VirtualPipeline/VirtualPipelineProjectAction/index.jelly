@@ -7,7 +7,7 @@
         <j:set var="myInt" value="42" />
         <j:set var="logLines" value="${it.logsShort}"/>
         <j:forEach items="${logLines}" var="line" indexVar="index">
-            <p class="${index}">${index} : ${line}</p>
+            <li><a name="ID${index}">${index} : ${line}</a></li>
         </j:forEach>
     </l:main-panel>
 </l:layout>
