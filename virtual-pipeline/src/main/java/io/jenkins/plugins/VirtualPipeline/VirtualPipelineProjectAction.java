@@ -60,7 +60,7 @@ public class VirtualPipelineProjectAction  implements SimpleBuildStep.LastBuildA
 
     @Override
     public String getIconFileName() {
-        return "empty";
+        return null;
     }
 
     /**
@@ -69,7 +69,7 @@ public class VirtualPipelineProjectAction  implements SimpleBuildStep.LastBuildA
      */
     @Override
     public String getDisplayName() {
-        return "Virtual Pipeline Results";
+        return null;
     }
 
     @Override

@@ -21,7 +21,7 @@ public class VirtualPipelineFilter {
 
             for (VirtualPipelineFormInput config:
                     configs) {
-                if(line.matches(config.getRegex())){
+                if(line.matches("^"+ config.getRegex() + ".*")){
                     //TODO check to include mark or not
                     if(config.getDeleteMark()){
                         String lineWithoutRegex = VirtualPipelineFilter.removeRegexMark(line, config.getRegex());

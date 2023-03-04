@@ -20,11 +20,11 @@ public class VirtualPipelineOffsetAction implements SimpleBuildStep.LastBuildAct
 
     @Override
     public String getDisplayName() {
-        return "Offset Logs Page";
+        return "Virtual Pipeline Offset Logs";
     }
 
     @Override
     public String getUrlName() {
-        return "logsOFFSET";
+        return "logsOffset";
     }
 }

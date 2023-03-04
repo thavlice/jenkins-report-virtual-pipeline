@@ -2,7 +2,6 @@ package io.jenkins.plugins.VirtualPipeline;
 
 import hudson.Extension;
 import hudson.Launcher;
-import hudson.console.AnnotatedLargeText;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
@@ -16,10 +15,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 
 import javax.servlet.ServletException;
-import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -30,9 +26,20 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
 
     private List<VirtualPipelineFormInput> configurations;
 
+    public Boolean getGeneratePicture() {
+        return generatePicture;
+    }
+
+    public void setGeneratePicture(Boolean generatePicture) {
+        this.generatePicture = generatePicture;
+    }
+
+    private Boolean generatePicture;
+
     @DataBoundConstructor
-    public VirtualPipelinePublisher(List<VirtualPipelineFormInput> configurations) {
+    public VirtualPipelinePublisher(List<VirtualPipelineFormInput> configurations, Boolean generatePicture) {
         this.configurations = configurations;
+        this.generatePicture = generatePicture;
     }
 
     public List<VirtualPipelineFormInput> getConfigurations() {
@@ -88,7 +95,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
         // adding action to build in Jenkins
         VirtualPipelineProjectAction action =  new VirtualPipelineProjectAction(build, this.getConfigurations(), jsonCacheFile);
         build.addAction(action);
-        build.addAction(new VirtualPipelineHTMLAction());
+        build.addAction(new VirtualPipelineHTMLAction(build));
         build.addAction(new VirtualPipelineOffsetAction());
 
         return true;
@@ -101,15 +108,12 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
     @Extension
     public static final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
 
-        public FormValidation doCheckName(@QueryParameter List<VirtualPipelineFormInput> configurations)
+        public FormValidation doCheckRegex(@QueryParameter VirtualPipelineFormInput configuration)
                 throws IOException, ServletException {
 
-            for (VirtualPipelineFormInput s :
-                    configurations) {
-                if (s.getRegex().length() == 0) {
+                if (configuration.getRegex().length() == 0) {
                     return FormValidation.error("Entry Regex is empty");
                 }
-            }
             return FormValidation.ok();
         }
 

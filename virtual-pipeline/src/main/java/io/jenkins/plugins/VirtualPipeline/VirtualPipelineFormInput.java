@@ -4,6 +4,11 @@ import org.kohsuke.stapler.DataBoundConstructor;
 
 public class VirtualPipelineFormInput {
 
+    private String regex;
+
+    private Boolean deleteMark;
+
+
     public String getRegex() {
         return regex;
     }
@@ -11,20 +16,6 @@ public class VirtualPipelineFormInput {
     public void setRegex(String regex) {
         this.regex = regex;
     }
-
-
-    public Boolean getGeneratePicture() {
-        return generatePicture;
-    }
-
-    public void setGeneratePicture(Boolean generatePicture) {
-        this.generatePicture = generatePicture;
-    }
-
-    private String regex;
-    private Boolean generatePicture;
-
-    private Boolean deleteMark;
 
     public Boolean getDeleteMark() {
         return deleteMark;
@@ -35,10 +26,9 @@ public class VirtualPipelineFormInput {
     }
 
     @DataBoundConstructor
-    public VirtualPipelineFormInput(String regex, Boolean deleteMark, Boolean generatePicture){
+    public VirtualPipelineFormInput(String regex, Boolean deleteMark){
         this.regex = regex;
         this.deleteMark = deleteMark;
-        this.generatePicture = generatePicture;
     }
 
 

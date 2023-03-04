@@ -1,12 +1,12 @@
 <j:jelly xmlns:j="jelly:core" xmlns:d="jelly:define" xmlns:l="/lib/layout"
          xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt">
     <t:summary icon="null">
-        <h1>Virtual pipeline results</h1>
+        <h2>Virtual pipeline results</h2>
 
         <j:set var="linesList" value="${it.allCacheFromFile}"/>
         <ul>
         <j:forEach items="${linesList}" var="filteredLine">
-                    <li><a href="VP#ID${filteredLine.index}">${filteredLine.index} ${filteredLine.line}</a></li>
+                    <li><a href="/job/${it.build.project.name}/${it.build.number}/html#ID${filteredLine.index}">${filteredLine.index} ${filteredLine.line}</a></li>
         </j:forEach>
         </ul>
     </t:summary>

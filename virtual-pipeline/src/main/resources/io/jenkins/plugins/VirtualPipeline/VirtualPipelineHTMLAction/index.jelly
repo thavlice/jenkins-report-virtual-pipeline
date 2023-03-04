@@ -1,7 +1,12 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout">
-    <l:layout title="HTML ACTION LOGS">
+    <l:layout title="HTML LOGS">
         <l:main-panel>
-            <h2>HTML ACTION LOGS</h2>
+            <h2>HTML LOGS HERE</h2>
+            <p>${it.build.number}</p>
+            <j:set var="logLines" value="${it.logs}"/>
+            <j:forEach items="${logLines}" var="line" indexVar="index">
+                <li><a name="ID${index}">${index} : ${line}</a></li>
+            </j:forEach>
         </l:main-panel>
     </l:layout>
 </j:jelly>
