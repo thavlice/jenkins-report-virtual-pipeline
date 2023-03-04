@@ -58,25 +58,14 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
     public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) throws InterruptedException, IOException {
 
         //here is the performance part, e.g. drawing, printing itself
-        listener.getLogger().println("This is the output of Virtual Pipeline Plugin");
-
         File rootDir = build.getProject().getRootDir();
         File currentBuildFolder = new File(rootDir.getPath() + File.separator + "builds" + File.separator + build.getNumber());
-
-        // check
-        listener.getLogger().println("Path is :" + rootDir.getPath());
-        listener.getLogger().println("Path 2 is :" + currentBuildFolder.getPath());
 
         //creates necessary directories
         currentBuildFolder.mkdirs();
 
         //getting filtered lines
         List<VirtualPipelineLineOutput> filterOutput = VirtualPipelineFilter.filter(build.getLog(10000), getConfigurations());
-        listener.getLogger().println("LOGGGGGGGGGGGGGGGG");
-        for (VirtualPipelineLineOutput fO :
-                filterOutput) {
-            listener.getLogger().println("OUTPUT: "+ fO.getLine() + "||"+ fO.getRegex()+ "||"+fO.getDeleteMark() +"||"+ fO.getIndex());
-        }
 
 
         //writing in JSON format into output.json
@@ -98,8 +87,9 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
 
         // adding action to build in Jenkins
         VirtualPipelineProjectAction action =  new VirtualPipelineProjectAction(build, this.getConfigurations(), jsonCacheFile);
-        List<VirtualPipelineLineOutput> allFiltered = action.getAllCacheFromFile();
         build.addAction(action);
+        build.addAction(new VirtualPipelineHTMLAction());
+        build.addAction(new VirtualPipelineOffsetAction());
 
         return true;
     }

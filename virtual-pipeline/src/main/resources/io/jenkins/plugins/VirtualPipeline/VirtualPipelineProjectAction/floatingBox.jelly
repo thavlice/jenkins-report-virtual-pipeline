@@ -5,7 +5,7 @@
     <j:set var="linesList" value="${from.allCacheFromFile}"/>
     <ul>
         <j:forEach items="${linesList}" var="filteredLine">
-            <li>${filteredLine.index} ${filteredLine.line}</li>
+            <li><a href="VP#ID${filteredLine.index}">${filteredLine.index} ${filteredLine.line}</a></li>
         </j:forEach>
     </ul>
 </j:jelly>

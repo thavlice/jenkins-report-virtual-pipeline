@@ -1,5 +1,5 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout">
-<l:layout title="HTML LOGS">
+<l:layout title="Latest build HTML LOGS">
     <st:include it="${it.build}" page="sidepanel.jelly"/>
     <l:main-panel>
         <h2>HTML LOGS HERE</h2>
@@ -7,7 +7,7 @@
         <j:set var="myInt" value="42" />
         <j:set var="logLines" value="${it.logsShort}"/>
         <j:forEach items="${logLines}" var="line" indexVar="index">
-            <p class="${index}">${index} : ${line}</p>
+            <li><a name="ID${index}">${index} : ${line}</a></li>
         </j:forEach>
     </l:main-panel>
 </l:layout>
