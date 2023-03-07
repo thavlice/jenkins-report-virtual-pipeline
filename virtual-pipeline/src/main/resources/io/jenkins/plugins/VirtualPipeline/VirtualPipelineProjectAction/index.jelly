@@ -1,14 +1,11 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout">
-<l:layout title="HTML LOGS">
+<l:layout title="Latest build HTML LOGS">
     <st:include it="${it.build}" page="sidepanel.jelly"/>
     <l:main-panel>
-        <h2>HTML LOGS HERE</h2>
-        <p>${it.build.number}</p>
-        <j:set var="myInt" value="42" />
-        <j:set var="logLines" value="${it.logsShort}"/>
-        <j:forEach items="${logLines}" var="line" indexVar="index">
-            <li><a name="ID${index}">${index} : ${line}</a></li>
-        </j:forEach>
+
+        <span><a href="/job/${it.build.project.name}/${it.build.number}/logsOffset">OFFSET LOG PAGE</a></span>
+        <br></br>
+        <span><a href="/job/${it.build.project.name}/${it.build.number}/html">HTML LOG PAGE</a></span>
     </l:main-panel>
 </l:layout>
 </j:jelly>
