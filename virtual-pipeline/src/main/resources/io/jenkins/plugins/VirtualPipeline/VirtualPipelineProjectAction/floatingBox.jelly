@@ -3,9 +3,7 @@
     <h3>Latest build virtual pipeline results</h3>
 
     <j:set var="linesList" value="${from.allCacheFromFile}"/>
-    <ul>
         <j:forEach items="${linesList}" var="filteredLine">
-            <li><a href="/job/${from.build.project.name}/${from.build.number}/html#ID${filteredLine.index}">${filteredLine.index} ${filteredLine.line}</a></li>
+            <p><a href="/job/${from.build.project.name}/${from.build.number}/html#ID${filteredLine.index}">${filteredLine.index} ${filteredLine.line}</a></p>
         </j:forEach>
-    </ul>
 </j:jelly>

@@ -2,10 +2,8 @@
 <l:layout title="Latest build HTML LOGS">
     <st:include it="${it.build}" page="sidepanel.jelly"/>
     <l:main-panel>
-
-        <span><a href="/job/${it.build.project.name}/${it.build.number}/logsOffset">OFFSET LOG PAGE</a></span>
-        <br></br>
-        <span><a href="/job/${it.build.project.name}/${it.build.number}/html">HTML LOG PAGE</a></span>
+        <p><a href="/job/${it.build.project.name}/${it.build.number}/logsOffset">OFFSET LOG PAGE</a></p>
+        <p><a href="/job/${it.build.project.name}/${it.build.number}/html">HTML LOG PAGE</a></p>
     </l:main-panel>
 </l:layout>
 </j:jelly>

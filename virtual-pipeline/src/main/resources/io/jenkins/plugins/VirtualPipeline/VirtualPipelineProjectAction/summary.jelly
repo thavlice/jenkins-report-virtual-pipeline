@@ -4,10 +4,8 @@
         <h2>Virtual pipeline results</h2>
 
         <j:set var="linesList" value="${it.allCacheFromFile}"/>
-        <ul>
         <j:forEach items="${linesList}" var="filteredLine">
-                    <li><a href="/job/${it.build.project.name}/${it.build.number}/html#ID${filteredLine.index}">${filteredLine.index} ${filteredLine.line}</a></li>
+                    <p><a href="/job/${it.build.project.name}/${it.build.number}/html#ID${filteredLine.index}">${filteredLine.index} ${filteredLine.line}</a></p>
         </j:forEach>
-        </ul>
     </t:summary>
 </j:jelly>
