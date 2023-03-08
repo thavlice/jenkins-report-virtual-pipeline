@@ -1,0 +1,43 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout">
+    <l:layout title="HTML LOGS">
+        <style type="text/css">
+            pre{
+            counter-reset: line;
+            }
+            code{
+            counter-increment: line;
+            }
+            code:before{
+            content: counter(line);
+            }
+            code:before{
+            -webkit-user-select: none;
+            }
+
+            .lineLink{
+            pointer-events: none;
+            cursor: default;
+            text-decoration: none;
+            white-space: pre-wrap;
+            }
+
+
+        </style>
+        <l:main-panel>
+            <h2>HTML LOGS HERE</h2>
+            <p>${it.build.number}</p>
+            <j:set var="logLines" value="${it.logs}"/>
+            <div class="logsWrapper">
+                <pre>
+                    <j:forEach items="${logLines}" var="line" indexVar="index">
+                        <p class="lineParagraph">
+                            <code class="logLine">
+                                <a class="lineLink" name="ID${index}" onClick="return">: ${line}</a>
+                            </code>
+                        </p>
+                    </j:forEach>
+                </pre>
+            </div>
+        </l:main-panel>
+    </l:layout>
+</j:jelly>

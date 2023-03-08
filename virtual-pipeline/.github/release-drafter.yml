@@ -1,0 +1,2 @@
+_extends: .github
+tag-template: virtual-pipeline-$NEXT_MINOR_VERSION
