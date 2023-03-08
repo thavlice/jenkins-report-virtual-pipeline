@@ -1,15 +1,26 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout">
     <l:layout title="HTML LOGS">
         <style type="text/css">
-            .logsWrapper {
-            background-color: black;
-            color: white;
+            pre{
+            counter-reset: line;
             }
-            .logLine {
-            margin: 0;
-            padding: 0;
-            color: white;
+            code{
+            counter-increment: line;
             }
+            code:before{
+            content: counter(line);
+            }
+            code:before{
+            -webkit-user-select: none;
+            }
+
+            .lineLink{
+            pointer-events: none;
+            cursor: default;
+            text-decoration: none;
+            white-space: pre-wrap;
+            }
+
 
         </style>
         <l:main-panel>
@@ -17,9 +28,11 @@
             <p>${it.build.number}</p>
             <j:set var="logLines" value="${it.logs}"/>
             <div class="logsWrapper">
+                <pre>
             <j:forEach items="${logLines}" var="line" indexVar="index">
-                <p class="logLine"><span>${index}</span><a name="ID${index}"> : ${line}</a></p>
+                <p><code class="logLine"><a class="lineLink" name="ID${index}" onClick="return"> : ${line}</a></code></p>
             </j:forEach>
+                </pre>
             </div>
         </l:main-panel>
     </l:layout>
