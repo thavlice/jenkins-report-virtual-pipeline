@@ -13,7 +13,7 @@ import java.util.List;
 
 public class VirtualPipelineHTMLAction implements SimpleBuildStep.LastBuildAction {
 
-    private AbstractBuild<?,?> build;
+    private final AbstractBuild<?, ?> build;
 
     public VirtualPipelineHTMLAction(AbstractBuild<?, ?> build) {
         this.build = build;
@@ -30,6 +30,7 @@ public class VirtualPipelineHTMLAction implements SimpleBuildStep.LastBuildActio
             result.add(line);
             line = bufferedReader.readLine();
         }
+        bufferedReader.close();
         return result;
     }
 

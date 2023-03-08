@@ -51,9 +51,8 @@ public class VirtualPipelineLineOutput {
     }
 
 
-
     // just for the purpose of good deserialization
-    public VirtualPipelineLineOutput(){
+    public VirtualPipelineLineOutput() {
         super();
     }
 

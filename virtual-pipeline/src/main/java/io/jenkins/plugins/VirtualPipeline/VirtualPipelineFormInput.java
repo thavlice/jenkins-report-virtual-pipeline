@@ -26,11 +26,10 @@ public class VirtualPipelineFormInput {
     }
 
     @DataBoundConstructor
-    public VirtualPipelineFormInput(String regex, Boolean deleteMark){
+    public VirtualPipelineFormInput(String regex, Boolean deleteMark) {
         this.regex = regex;
         this.deleteMark = deleteMark;
     }
-
 
 
 }

@@ -1,9 +1,13 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout">
-<l:layout title="Latest build HTML LOGS">
-    <st:include it="${it.build}" page="sidepanel.jelly"/>
-    <l:main-panel>
-        <p><a href="/job/${it.build.project.name}/${it.build.number}/logsOffset">OFFSET LOG PAGE</a></p>
-        <p><a href="/job/${it.build.project.name}/${it.build.number}/html">HTML LOG PAGE</a></p>
-    </l:main-panel>
-</l:layout>
+    <l:layout title="Latest build HTML LOGS">
+        <st:include it="${it.build}" page="sidepanel.jelly"/>
+        <l:main-panel>
+            <p>
+                <a href="/job/${it.build.project.name}/${it.build.number}/logsOffset">OFFSET LOG PAGE</a>
+            </p>
+            <p>
+                <a href="/job/${it.build.project.name}/${it.build.number}/html">HTML LOG PAGE</a>
+            </p>
+        </l:main-panel>
+    </l:layout>
 </j:jelly>

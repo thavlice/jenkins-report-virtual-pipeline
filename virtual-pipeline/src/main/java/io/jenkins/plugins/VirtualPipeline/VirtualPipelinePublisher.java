@@ -16,6 +16,7 @@ import org.kohsuke.stapler.QueryParameter;
 
 import javax.servlet.ServletException;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -25,20 +26,19 @@ import java.util.List;
 public class VirtualPipelinePublisher extends Recorder implements SimpleBuildStep {
 
     private List<VirtualPipelineFormInput> configurations;
+    private Boolean generatePicture;
+
+    @DataBoundConstructor
+    public VirtualPipelinePublisher(List<VirtualPipelineFormInput> configurations, Boolean generatePicture) {
+        this.configurations = configurations;
+        this.generatePicture = generatePicture;
+    }
 
     public Boolean getGeneratePicture() {
         return generatePicture;
     }
 
     public void setGeneratePicture(Boolean generatePicture) {
-        this.generatePicture = generatePicture;
-    }
-
-    private Boolean generatePicture;
-
-    @DataBoundConstructor
-    public VirtualPipelinePublisher(List<VirtualPipelineFormInput> configurations, Boolean generatePicture) {
-        this.configurations = configurations;
         this.generatePicture = generatePicture;
     }
 
@@ -71,12 +71,26 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
         //creates necessary directories
         currentBuildFolder.mkdirs();
 
+
+        //reading log file
+        Reader reader = build.getLogReader();
+        BufferedReader bufferedReader = new BufferedReader(reader);
+        bufferedReader.readLine();
+
+        List<String> logLines = new ArrayList<>();
+        String line = bufferedReader.readLine();
+        while (line != null) {
+            logLines.add(line);
+            line = bufferedReader.readLine();
+        }
+
+        bufferedReader.close();
         //getting filtered lines
-        List<VirtualPipelineLineOutput> filterOutput = VirtualPipelineFilter.filter(build.getLog(10000), getConfigurations());
+        List<VirtualPipelineLineOutput> filterOutput = VirtualPipelineFilter.filter(logLines, getConfigurations());
 
 
         //writing in JSON format into output.json
-        File jsonCacheFile = new File( currentBuildFolder.getPath() + File.separator + "cache.json");
+        File jsonCacheFile = new File(currentBuildFolder.getPath() + File.separator + "cache.json");
         jsonCacheFile.createNewFile();
 
         VirtualPipelineFilter.saveToJSON(filterOutput, jsonCacheFile);
@@ -92,8 +106,8 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
         //javax.imageio.ImageIO.write(image, "png", picturePath);
 
 
-        // adding action to build in Jenkins
-        VirtualPipelineProjectAction action =  new VirtualPipelineProjectAction(build, this.getConfigurations(), jsonCacheFile);
+        // adding actions to build in Jenkins
+        VirtualPipelineProjectAction action = new VirtualPipelineProjectAction(build, this.getConfigurations(), jsonCacheFile);
         build.addAction(action);
         build.addAction(new VirtualPipelineHTMLAction(build));
         build.addAction(new VirtualPipelineOffsetAction());
@@ -108,13 +122,13 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
     @Extension
     public static final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
 
-        public FormValidation doCheckRegex(@QueryParameter VirtualPipelineFormInput configuration)
+        public FormValidation doCheckRegex(@QueryParameter String regex)
                 throws IOException, ServletException {
 
-                if (configuration.getRegex().length() == 0) {
-                    return FormValidation.error("Entry Regex is empty");
-                }
-            return FormValidation.ok();
+            if (regex.length() == 0) {
+                return FormValidation.error("Entry Regex is empty");
+            }
+            return FormValidation.warning("its ok");
         }
 
         @Override

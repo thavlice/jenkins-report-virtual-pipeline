@@ -29,9 +29,13 @@
             <j:set var="logLines" value="${it.logs}"/>
             <div class="logsWrapper">
                 <pre>
-            <j:forEach items="${logLines}" var="line" indexVar="index">
-                <p><code class="logLine"><a class="lineLink" name="ID${index}" onClick="return"> : ${line}</a></code></p>
-            </j:forEach>
+                    <j:forEach items="${logLines}" var="line" indexVar="index">
+                        <p class="lineParagraph">
+                            <code class="logLine">
+                                <a class="lineLink" name="ID${index}" onClick="return">: ${line}</a>
+                            </code>
+                        </p>
+                    </j:forEach>
                 </pre>
             </div>
         </l:main-panel>

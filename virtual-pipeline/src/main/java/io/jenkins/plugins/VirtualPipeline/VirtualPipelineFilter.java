@@ -19,14 +19,14 @@ public class VirtualPipelineFilter {
         for (String line :
                 lines) {
 
-            for (VirtualPipelineFormInput config:
+            for (VirtualPipelineFormInput config :
                     configs) {
-                if(line.matches("^"+ config.getRegex() + ".*")){
+                if (line.matches("^" + config.getRegex() + ".*")) {
                     //TODO check to include mark or not
-                    if(config.getDeleteMark()){
+                    if (config.getDeleteMark()) {
                         String lineWithoutRegex = VirtualPipelineFilter.removeRegexMark(line, config.getRegex());
                         result.add(new VirtualPipelineLineOutput(config.getRegex(), lineWithoutRegex, lineIndex, config.getDeleteMark()));
-                    }else {
+                    } else {
                         result.add(new VirtualPipelineLineOutput(config.getRegex(), line, lineIndex, config.getDeleteMark()));
                     }
 
@@ -49,7 +49,7 @@ public class VirtualPipelineFilter {
     }
 
 
-    public static String removeRegexMark(String line, String regex){
-        return  line.replaceAll(regex, "");
+    public static String removeRegexMark(String line, String regex) {
+        return line.replaceAll(regex, "");
     }
 }

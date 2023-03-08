@@ -16,13 +16,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class VirtualPipelineProjectAction  implements SimpleBuildStep.LastBuildAction {
+public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAction {
 
-    private AbstractBuild<?, ?> build;
+    private final AbstractBuild<?, ?> build;
 
-    private List<VirtualPipelineFormInput> configurations;
+    private final List<VirtualPipelineFormInput> configurations;
 
-    private File cacheFile;
+    private final File cacheFile;
 
 
     public VirtualPipelineProjectAction(AbstractBuild<?, ?> build, List<VirtualPipelineFormInput> configurations, File cacheFolder) {
@@ -39,10 +39,11 @@ public class VirtualPipelineProjectAction  implements SimpleBuildStep.LastBuildA
         return this.build.getLog(1000);
     }
 
-    public  List<VirtualPipelineLineOutput> getAllCacheFromFile(){
+    public List<VirtualPipelineLineOutput> getAllCacheFromFile() {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            List<VirtualPipelineLineOutput> result = objectMapper.readValue(cacheFile, new TypeReference<List<VirtualPipelineLineOutput>>() {});
+            List<VirtualPipelineLineOutput> result = objectMapper.readValue(cacheFile, new TypeReference<List<VirtualPipelineLineOutput>>() {
+            });
             return result;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -65,6 +66,7 @@ public class VirtualPipelineProjectAction  implements SimpleBuildStep.LastBuildA
 
     /**
      * used for displaying action in the sidebar
+     *
      * @return null because we don't use it
      */
     @Override
