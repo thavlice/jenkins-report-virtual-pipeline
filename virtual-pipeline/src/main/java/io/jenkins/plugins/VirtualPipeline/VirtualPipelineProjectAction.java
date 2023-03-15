@@ -20,12 +20,12 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
 
     private final AbstractBuild<?, ?> build;
 
-    private final List<VirtualPipelineFormInput> configurations;
+    private final List<VirtualPipelineInput> configurations;
 
     private final File cacheFile;
 
 
-    public VirtualPipelineProjectAction(AbstractBuild<?, ?> build, List<VirtualPipelineFormInput> configurations, File cacheFolder) {
+    public VirtualPipelineProjectAction(AbstractBuild<?, ?> build, List<VirtualPipelineInput> configurations, File cacheFolder) {
         this.build = build;
         this.configurations = configurations;
         this.cacheFile = cacheFolder;
@@ -55,7 +55,7 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
         return build;
     }
 
-    public List<VirtualPipelineFormInput> getConfigurations() {
+    public List<VirtualPipelineInput> getConfigurations() {
         return configurations;
     }
 

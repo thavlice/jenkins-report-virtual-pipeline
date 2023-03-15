@@ -1,5 +1,6 @@
 package io.jenkins.plugins.VirtualPipeline;
 
+import hudson.DescriptorExtensionList;
 import hudson.Extension;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
@@ -9,6 +10,7 @@ import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Publisher;
 import hudson.tasks.Recorder;
 import hudson.util.FormValidation;
+import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildStep;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -25,14 +27,19 @@ import java.util.List;
  */
 public class VirtualPipelinePublisher extends Recorder implements SimpleBuildStep {
 
-    private List<VirtualPipelineFormInput> configurations;
+    private List<VirtualPipelineInput> configurations;
     private Boolean generatePicture;
 
     @DataBoundConstructor
-    public VirtualPipelinePublisher(List<VirtualPipelineFormInput> configurations, Boolean generatePicture) {
+    public VirtualPipelinePublisher(List<VirtualPipelineInput> configurations, Boolean generatePicture) {
         this.configurations = configurations;
         this.generatePicture = generatePicture;
     }
+
+    public VirtualPipelineInput getFormat(){
+        return new VirtualPipelineInputSimple("some", true);
+    }
+
 
     public Boolean getGeneratePicture() {
         return generatePicture;
@@ -42,13 +49,17 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
         this.generatePicture = generatePicture;
     }
 
-    public List<VirtualPipelineFormInput> getConfigurations() {
+    public List<VirtualPipelineInput> getConfigurations() {
         return configurations;
     }
 
 
-    public void setConfigurations(List<VirtualPipelineFormInput> configurations) {
+    public void setConfigurations(List<VirtualPipelineInput> configurations) {
         this.configurations = configurations;
+    }
+
+    public DescriptorExtensionList<VirtualPipelineInput, VirtualPipelineInputDescriptor> getFormatDescriptors(){
+        return Jenkins.get().getDescriptorList(VirtualPipelineInput.class);
     }
 
     /**
