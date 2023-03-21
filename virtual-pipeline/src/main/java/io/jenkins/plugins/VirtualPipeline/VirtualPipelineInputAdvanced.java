@@ -10,15 +10,24 @@ import java.io.IOException;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-public class VirtualPipelineInputAdvanced extends VirtualPipelineInput{
+public class VirtualPipelineInputAdvanced extends VirtualPipelineInput {
 
     private static final int DEFAULT_CONTENT_LENGTH = 100;
 
-    private String startMark;
-    private String endMark;
+    private final String startMark;
+    private final String endMark;
 
-    private Boolean deleteMark;
+    private final Boolean deleteMark;
     private int maxContentLenght = DEFAULT_CONTENT_LENGTH;
+
+    @DataBoundConstructor
+    public VirtualPipelineInputAdvanced(String startMark, String endMark, Boolean deleteMark, int maxContentLenght) {
+        super();
+        this.startMark = startMark;
+        this.endMark = endMark;
+        this.deleteMark = deleteMark;
+        this.maxContentLenght = maxContentLenght;
+    }
 
     public String getStartMark() {
         return startMark;
@@ -36,26 +45,15 @@ public class VirtualPipelineInputAdvanced extends VirtualPipelineInput{
         return maxContentLenght;
     }
 
-
-
-    @DataBoundConstructor
-    public VirtualPipelineInputAdvanced(String startMark, String endMark, Boolean deleteMark, int maxContentLenght){
-        super();
-        this.startMark =  startMark;
-        this.endMark = endMark;
-        this.deleteMark = deleteMark;
-        this.maxContentLenght = maxContentLenght;
-    }
-
     @Extension
-    public static final class DescriptorImpl extends VirtualPipelineInputDescriptor{
+    public static final class DescriptorImpl extends VirtualPipelineInputDescriptor {
         public FormValidation doCheckStartMark(@QueryParameter String startMark) throws IOException, ServletException {
-            if(startMark.isEmpty()){
+            if (startMark.isEmpty()) {
                 return FormValidation.error("Regex is empty");
             }
             try {
                 Pattern.compile(startMark);
-            }catch (PatternSyntaxException exception){
+            } catch (PatternSyntaxException exception) {
                 return FormValidation.error("Regex is invalid");
             }
             return FormValidation.ok();

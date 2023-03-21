@@ -17,7 +17,10 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 
 import javax.servlet.ServletException;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +39,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
         this.generatePicture = generatePicture;
     }
 
-    public VirtualPipelineInput getFormat(){
+    public VirtualPipelineInput getFormat() {
         return new VirtualPipelineInputSimple("some", true);
     }
 
@@ -58,7 +61,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
         this.configurations = configurations;
     }
 
-    public DescriptorExtensionList<VirtualPipelineInput, VirtualPipelineInputDescriptor> getFormatDescriptors(){
+    public DescriptorExtensionList<VirtualPipelineInput, VirtualPipelineInputDescriptor> getFormatDescriptors() {
         return Jenkins.get().getDescriptorList(VirtualPipelineInput.class);
     }
 
@@ -80,7 +83,10 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
         File currentBuildFolder = new File(rootDir.getPath() + File.separator + "builds" + File.separator + build.getNumber());
 
         //creates necessary directories
-        currentBuildFolder.mkdirs();
+        boolean mkdirsResult = currentBuildFolder.mkdirs();
+        if (!mkdirsResult){
+            listener.getLogger().println("VP: cache directories were not succesfully created");
+        }
 
 
         //reading log file
@@ -102,7 +108,11 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
 
         //writing in JSON format into output.json
         File jsonCacheFile = new File(currentBuildFolder.getPath() + File.separator + "cache.json");
-        jsonCacheFile.createNewFile();
+
+        boolean createFileResult = jsonCacheFile.createNewFile();
+        if (!createFileResult){
+            listener.getLogger().println("VP: Json cacheFile was not created");
+        }
 
         VirtualPipelineFilter.saveToJSON(filterOutput, jsonCacheFile);
 
