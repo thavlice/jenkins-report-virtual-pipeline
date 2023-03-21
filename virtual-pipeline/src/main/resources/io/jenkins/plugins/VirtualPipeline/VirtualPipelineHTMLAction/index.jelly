@@ -19,9 +19,12 @@
             cursor: default;
             text-decoration: none;
             white-space: pre-wrap;
+
+            padding-top: 6rem;
+            margin-top: -6rem;
+            display: inline-block;
+
             }
-
-
         </style>
         <l:main-panel>
             <h2>HTML LOGS HERE</h2>

@@ -1,5 +1,6 @@
 package io.jenkins.plugins.VirtualPipeline;
 
+//possibly make advanced class from this
 public class VirtualPipelineLineOutput {
     private String regex;
 

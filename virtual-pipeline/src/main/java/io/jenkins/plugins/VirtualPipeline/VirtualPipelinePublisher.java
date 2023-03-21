@@ -129,7 +129,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
     /**
      * mainly used for configuration and input checks
      */
-    @Symbol("greet")
+    @Symbol("virtualPipeline")
     @Extension
     public static final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
 

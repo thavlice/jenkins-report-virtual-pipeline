@@ -1,7 +1,14 @@
 package io.jenkins.plugins.VirtualPipeline;
 
 import hudson.Extension;
+import hudson.util.FormValidation;
 import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.QueryParameter;
+
+import javax.servlet.ServletException;
+import java.io.IOException;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 public class VirtualPipelineInputAdvanced extends VirtualPipelineInput{
 
@@ -11,7 +18,7 @@ public class VirtualPipelineInputAdvanced extends VirtualPipelineInput{
     private String endMark;
 
     private Boolean deleteMark;
-    private int maxContentLenght;
+    private int maxContentLenght = DEFAULT_CONTENT_LENGTH;
 
     public String getStartMark() {
         return startMark;
@@ -42,6 +49,18 @@ public class VirtualPipelineInputAdvanced extends VirtualPipelineInput{
 
     @Extension
     public static final class DescriptorImpl extends VirtualPipelineInputDescriptor{
+        public FormValidation doCheckStartMark(@QueryParameter String startMark) throws IOException, ServletException {
+            if(startMark.isEmpty()){
+                return FormValidation.error("Regex is empty");
+            }
+            try {
+                Pattern.compile(startMark);
+            }catch (PatternSyntaxException exception){
+                return FormValidation.error("Regex is invalid");
+            }
+            return FormValidation.ok();
+        }
+
 
     }
 }
