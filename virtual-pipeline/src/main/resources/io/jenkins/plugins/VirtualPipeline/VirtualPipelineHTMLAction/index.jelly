@@ -1,8 +1,8 @@
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout">
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout">
     <l:layout title="HTML LOGS">
         <style type="text/css">
             pre{
-            counter-reset: line;
+            counter-reset: line -1;
             }
             code{
             counter-increment: line;
@@ -19,9 +19,12 @@
             cursor: default;
             text-decoration: none;
             white-space: pre-wrap;
+
+            padding-top: 6rem;
+            margin-top: -6rem;
+            display: inline-block;
+
             }
-
-
         </style>
         <l:main-panel>
             <h2>HTML LOGS HERE</h2>

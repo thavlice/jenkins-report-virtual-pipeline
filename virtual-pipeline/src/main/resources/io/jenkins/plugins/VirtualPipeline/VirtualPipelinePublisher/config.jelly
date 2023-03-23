@@ -1,19 +1,15 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
-         xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+<j:jelly xmlns:j="jelly:core"
+         xmlns:f="/lib/form">
+
     <f:section title="Input regex">
-        <f:repeatable field="configurations" minimum="1">
+        <f:block>
+            <f:repeatableHeteroProperty field="configurations" hasHeader="true"
+                                        addCaption="Add mark finder"/>
+        </f:block>
 
-            <f:entry title="Regex in the start of the line" field="regex">
-                <f:textbox/>
-            </f:entry>
-            <f:checkbox title="Delete regex part of the mark" field="deleteMark"/>
-
-            <f:repeatableDeleteButton/>
-        </f:repeatable>
+        <f:advanced>
+            <f:checkbox title="Generate picture as artifact" field="generatePicture"/>
+        </f:advanced>
     </f:section>
-    <f:advanced>
-        <f:checkbox title="Generate picture as artifact" field="generatePicture"/>
-    </f:advanced>
-
 </j:jelly>

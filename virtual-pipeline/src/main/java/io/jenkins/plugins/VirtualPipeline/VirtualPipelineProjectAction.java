@@ -1,16 +1,12 @@
 package io.jenkins.plugins.VirtualPipeline;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hudson.model.AbstractBuild;
 import hudson.model.Action;
 import jenkins.tasks.SimpleBuildStep;
 
-
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,12 +16,12 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
 
     private final AbstractBuild<?, ?> build;
 
-    private final List<VirtualPipelineFormInput> configurations;
+    private final List<VirtualPipelineInput> configurations;
 
     private final File cacheFile;
 
 
-    public VirtualPipelineProjectAction(AbstractBuild<?, ?> build, List<VirtualPipelineFormInput> configurations, File cacheFolder) {
+    public VirtualPipelineProjectAction(AbstractBuild<?, ?> build, List<VirtualPipelineInput> configurations, File cacheFolder) {
         this.build = build;
         this.configurations = configurations;
         this.cacheFile = cacheFolder;
@@ -55,7 +51,7 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
         return build;
     }
 
-    public List<VirtualPipelineFormInput> getConfigurations() {
+    public List<VirtualPipelineInput> getConfigurations() {
         return configurations;
     }
 

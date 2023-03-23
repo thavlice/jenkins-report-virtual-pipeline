@@ -2,12 +2,13 @@
 
 ## Introduction
 
-TODO Describe what your plugin does here
+Virtual Pipeline plugin allows the user to define marks and visualize them from the main log.
 
 ## Getting started
 
-TODO Tell users how to configure your plugin here, include screenshots, pipeline examples and 
-configuration-as-code examples.
+After adding the plugin as a post-built step, configure by adding Java-regex formatted marks.
+
+The result found marks is then displayed on the project page, build page.
 
 ## Issues
 

@@ -1,0 +1,18 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
+
+
+    <f:entry title="Start regex mark">
+        <f:textbox field="startMark"></f:textbox>
+    </f:entry>
+    <f:entry title="End regex mark">
+        <f:textbox field="endMark"></f:textbox>
+    </f:entry>
+    <f:entry title="Delete mark">
+        <f:checkbox field="deleteMark"></f:checkbox>
+    </f:entry>
+    <f:entry title="Content limit count (lines)">
+        <f:number field="maxContentLength"></f:number>
+    </f:entry>
+
+</j:jelly>

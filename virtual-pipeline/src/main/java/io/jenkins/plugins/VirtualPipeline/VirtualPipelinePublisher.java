@@ -1,5 +1,6 @@
 package io.jenkins.plugins.VirtualPipeline;
 
+import hudson.DescriptorExtensionList;
 import hudson.Extension;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
@@ -9,13 +10,17 @@ import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Publisher;
 import hudson.tasks.Recorder;
 import hudson.util.FormValidation;
+import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildStep;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 
 import javax.servlet.ServletException;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,14 +30,19 @@ import java.util.List;
  */
 public class VirtualPipelinePublisher extends Recorder implements SimpleBuildStep {
 
-    private List<VirtualPipelineFormInput> configurations;
+    private List<VirtualPipelineInput> configurations;
     private Boolean generatePicture;
 
     @DataBoundConstructor
-    public VirtualPipelinePublisher(List<VirtualPipelineFormInput> configurations, Boolean generatePicture) {
+    public VirtualPipelinePublisher(List<VirtualPipelineInput> configurations, Boolean generatePicture) {
         this.configurations = configurations;
         this.generatePicture = generatePicture;
     }
+
+    public VirtualPipelineInput getFormat() {
+        return new VirtualPipelineInputSimple("some", true);
+    }
+
 
     public Boolean getGeneratePicture() {
         return generatePicture;
@@ -42,13 +52,17 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
         this.generatePicture = generatePicture;
     }
 
-    public List<VirtualPipelineFormInput> getConfigurations() {
+    public List<VirtualPipelineInput> getConfigurations() {
         return configurations;
     }
 
 
-    public void setConfigurations(List<VirtualPipelineFormInput> configurations) {
+    public void setConfigurations(List<VirtualPipelineInput> configurations) {
         this.configurations = configurations;
+    }
+
+    public DescriptorExtensionList<VirtualPipelineInput, VirtualPipelineInputDescriptor> getFormatDescriptors() {
+        return Jenkins.get().getDescriptorList(VirtualPipelineInput.class);
     }
 
     /**
@@ -69,7 +83,10 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
         File currentBuildFolder = new File(rootDir.getPath() + File.separator + "builds" + File.separator + build.getNumber());
 
         //creates necessary directories
-        currentBuildFolder.mkdirs();
+        boolean mkdirsResult = currentBuildFolder.mkdirs();
+        if (!mkdirsResult){
+            listener.getLogger().println("VP: cache directories were not succesfully created");
+        }
 
 
         //reading log file
@@ -91,7 +108,11 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
 
         //writing in JSON format into output.json
         File jsonCacheFile = new File(currentBuildFolder.getPath() + File.separator + "cache.json");
-        jsonCacheFile.createNewFile();
+
+        boolean createFileResult = jsonCacheFile.createNewFile();
+        if (!createFileResult){
+            listener.getLogger().println("VP: Json cacheFile was not created");
+        }
 
         VirtualPipelineFilter.saveToJSON(filterOutput, jsonCacheFile);
 
@@ -118,18 +139,9 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
     /**
      * mainly used for configuration and input checks
      */
-    @Symbol("greet")
+    @Symbol("virtualPipeline")
     @Extension
     public static final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
-
-        public FormValidation doCheckRegex(@QueryParameter String regex)
-                throws IOException, ServletException {
-
-            if (regex.length() == 0) {
-                return FormValidation.error("Entry Regex is empty");
-            }
-            return FormValidation.warning("its ok");
-        }
 
         @Override
         public String getDisplayName() {
