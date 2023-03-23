@@ -11,7 +11,10 @@ public class VirtualPipelineFilter {
 
     public static List<VirtualPipelineLineOutput> filter(List<String> lines, List<VirtualPipelineInput> configs) throws IOException {
         List<VirtualPipelineLineOutput> result = new ArrayList<>();
+
         int lineIndex = 0;
+
+        int activeRegexCount = 0;
 
 
         //TODO bytecount for offset goes here
@@ -27,7 +30,7 @@ public class VirtualPipelineFilter {
 
             //check if advanced regex is currently active
             if (advancedRegexLock) {
-                if (line.matches(VirtualPipelineFilter.applyLineEndsToRegexMark(activeConfig.getEndMark()))) {
+                if (line.matches(VirtualPipelineFilter.wrapRegexMark(activeConfig.getEndMark()))) {
                     //end mark found
 
                     if(activeConfig.getDeleteMark()){
@@ -40,14 +43,27 @@ public class VirtualPipelineFilter {
                     advancedRegexLock = false;
 
                     //todo could cause errors
+                    activeRegexCount = 0;
                     activeConfig = null;
                 } else {
                     // filling content of an advanced regex
                     result.add(new VirtualPipelineLineOutput(activeConfig.getStartMark(), line, lineIndex, activeConfig.getDeleteMark()));
+                    if (activeRegexCount >=  activeConfig.getMaxContentLengthToInt()){
+                        //end regex because of reaching the max limit
+
+                        advancedRegexLock = false;
+
+                        //todo could cause errors
+                        activeConfig = null;
+
+                        activeRegexCount = 0;
+                    }
                 }
+                activeRegexCount++;
                 lineIndex++;
                 continue; //skipping to next line
             }
+
 
 
             //matching first config, first come, first served principal
@@ -59,7 +75,7 @@ public class VirtualPipelineFilter {
                 if (config instanceof VirtualPipelineInputSimple) {
                     VirtualPipelineInputSimple simpleConfig = (VirtualPipelineInputSimple) config;
 
-                    if (line.matches(VirtualPipelineFilter.applyLineEndsToRegexMark(simpleConfig.getRegex()))) {
+                    if (line.matches(VirtualPipelineFilter.wrapRegexMark(simpleConfig.getRegex()))) {
                         //check to include mark or not
                         if (simpleConfig.getDeleteMark()) {
                             String lineWithoutRegex = VirtualPipelineFilter.removeRegexMark(line, simpleConfig.getRegex());
@@ -75,7 +91,7 @@ public class VirtualPipelineFilter {
                     VirtualPipelineInputAdvanced advancedConfig = (VirtualPipelineInputAdvanced) config;
                     //TODO advanced filtering
 
-                    if (line.matches(VirtualPipelineFilter.applyLineEndsToRegexMark(advancedConfig.getStartMark()))) {
+                    if (line.matches(VirtualPipelineFilter.wrapRegexMark(advancedConfig.getStartMark()))) {
                         if (advancedConfig.getDeleteMark()) {
                             String lineWithoutRegex = VirtualPipelineFilter.removeRegexMark(line, advancedConfig.getStartMark());
                             result.add(new VirtualPipelineLineOutput(advancedConfig.getStartMark(), lineWithoutRegex, lineIndex, advancedConfig.getDeleteMark()));
@@ -116,7 +132,7 @@ public class VirtualPipelineFilter {
         return line.replaceAll(regex, "");
     }
 
-    public static String applyLineEndsToRegexMark(String regex){
+    public static String wrapRegexMark(String regex){
         // behaviour on start and end line can be modified here
         return "^" + regex + ".*";
     }

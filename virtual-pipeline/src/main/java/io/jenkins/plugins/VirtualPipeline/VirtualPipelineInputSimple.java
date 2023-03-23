@@ -65,5 +65,6 @@ public class VirtualPipelineInputSimple extends VirtualPipelineInput {
             return FormValidation.ok();
         }
 
+
     }
 }

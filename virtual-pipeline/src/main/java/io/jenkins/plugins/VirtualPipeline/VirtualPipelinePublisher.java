@@ -143,15 +143,6 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
     @Extension
     public static final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
 
-        public FormValidation doCheckRegex(@QueryParameter String regex)
-                throws IOException, ServletException {
-
-            if (regex.length() == 0) {
-                return FormValidation.error("Entry Regex is empty");
-            }
-            return FormValidation.warning("its ok");
-        }
-
         @Override
         public String getDisplayName() {
             return "Add virtual pipeline";

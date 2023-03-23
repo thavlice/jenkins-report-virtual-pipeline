@@ -18,15 +18,15 @@ public class VirtualPipelineInputAdvanced extends VirtualPipelineInput {
     private final String endMark;
 
     private final Boolean deleteMark;
-    private int maxContentLenght = DEFAULT_CONTENT_LENGTH;
+    private String maxContentLength = String.valueOf(DEFAULT_CONTENT_LENGTH);
 
     @DataBoundConstructor
-    public VirtualPipelineInputAdvanced(String startMark, String endMark, Boolean deleteMark, int maxContentLenght) {
+    public VirtualPipelineInputAdvanced(String startMark, String endMark, Boolean deleteMark, String maxContentLength) {
         super();
         this.startMark = startMark;
         this.endMark = endMark;
         this.deleteMark = deleteMark;
-        this.maxContentLenght = maxContentLenght;
+        this.maxContentLength = maxContentLength;
     }
 
     public String getStartMark() {
@@ -41,8 +41,11 @@ public class VirtualPipelineInputAdvanced extends VirtualPipelineInput {
         return deleteMark;
     }
 
-    public int getMaxContentLength() {
-        return maxContentLenght;
+    public String getMaxContentLength() {
+        return maxContentLength;
+    }
+    public int getMaxContentLengthToInt() {
+        return Integer.parseInt(maxContentLength);
     }
 
     @Extension
@@ -58,7 +61,6 @@ public class VirtualPipelineInputAdvanced extends VirtualPipelineInput {
             }
             return FormValidation.ok();
         }
-
 
     }
 }
