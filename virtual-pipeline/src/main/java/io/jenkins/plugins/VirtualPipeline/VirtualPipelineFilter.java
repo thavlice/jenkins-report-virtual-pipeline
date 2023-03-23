@@ -25,18 +25,28 @@ public class VirtualPipelineFilter {
         for (String line :
                 lines) {
 
+            //check if advanced regex is currently active
             if (advancedRegexLock) {
-                if (line.matches("^" + activeConfig.getEndMark() + ".*")) {
-                    //end found, stop advanced lock
-                    String lineWithoutRegex = VirtualPipelineFilter.removeRegexMark(line, activeConfig.getStartMark());
-                    result.add(new VirtualPipelineLineOutput(activeConfig.getEndMark(), lineWithoutRegex, lineIndex, activeConfig.getDeleteMark()));
+                if (line.matches(VirtualPipelineFilter.applyLineEndsToRegexMark(activeConfig.getEndMark()))) {
+                    //end mark found
+
+                    if(activeConfig.getDeleteMark()){
+                        String lineWithoutRegex = VirtualPipelineFilter.removeRegexMark(line, activeConfig.getStartMark());
+                        result.add(new VirtualPipelineLineOutput(activeConfig.getEndMark(), lineWithoutRegex, lineIndex, activeConfig.getDeleteMark()));
+                    } else {
+                        result.add(new VirtualPipelineLineOutput(activeConfig.getEndMark(), line, lineIndex, activeConfig.getDeleteMark()));
+                    }
 
                     advancedRegexLock = false;
+
+                    //todo could cause errors
+                    activeConfig = null;
                 } else {
+                    // filling content of an advanced regex
                     result.add(new VirtualPipelineLineOutput(activeConfig.getStartMark(), line, lineIndex, activeConfig.getDeleteMark()));
                 }
                 lineIndex++;
-                continue;
+                continue; //skipping to next line
             }
 
 
@@ -49,7 +59,7 @@ public class VirtualPipelineFilter {
                 if (config instanceof VirtualPipelineInputSimple) {
                     VirtualPipelineInputSimple simpleConfig = (VirtualPipelineInputSimple) config;
 
-                    if (line.matches("^" + simpleConfig.getRegex() + ".*")) {
+                    if (line.matches(VirtualPipelineFilter.applyLineEndsToRegexMark(simpleConfig.getRegex()))) {
                         //check to include mark or not
                         if (simpleConfig.getDeleteMark()) {
                             String lineWithoutRegex = VirtualPipelineFilter.removeRegexMark(line, simpleConfig.getRegex());
@@ -57,7 +67,6 @@ public class VirtualPipelineFilter {
                         } else {
                             result.add(new VirtualPipelineLineOutput(simpleConfig.getRegex(), line, lineIndex, simpleConfig.getDeleteMark()));
                         }
-                        lineIndex++;
                         break;
                     }
 
@@ -66,7 +75,7 @@ public class VirtualPipelineFilter {
                     VirtualPipelineInputAdvanced advancedConfig = (VirtualPipelineInputAdvanced) config;
                     //TODO advanced filtering
 
-                    if (line.matches("^" + advancedConfig.getStartMark() + ".*")) {
+                    if (line.matches(VirtualPipelineFilter.applyLineEndsToRegexMark(advancedConfig.getStartMark()))) {
                         if (advancedConfig.getDeleteMark()) {
                             String lineWithoutRegex = VirtualPipelineFilter.removeRegexMark(line, advancedConfig.getStartMark());
                             result.add(new VirtualPipelineLineOutput(advancedConfig.getStartMark(), lineWithoutRegex, lineIndex, advancedConfig.getDeleteMark()));
@@ -75,6 +84,7 @@ public class VirtualPipelineFilter {
                         }
                         activeConfig = advancedConfig;
                         advancedRegexLock = true;
+                        break;
                     }
 
                 } else {
@@ -84,6 +94,8 @@ public class VirtualPipelineFilter {
                 }
 
             }
+
+
             lineIndex++;
         }
         return result;
@@ -102,5 +114,10 @@ public class VirtualPipelineFilter {
 
     public static String removeRegexMark(String line, String regex) {
         return line.replaceAll(regex, "");
+    }
+
+    public static String applyLineEndsToRegexMark(String regex){
+        // behaviour on start and end line can be modified here
+        return "^" + regex + ".*";
     }
 }

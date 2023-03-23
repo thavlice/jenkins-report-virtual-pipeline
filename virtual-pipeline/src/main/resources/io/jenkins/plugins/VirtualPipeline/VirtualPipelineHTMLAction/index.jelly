@@ -2,7 +2,7 @@
     <l:layout title="HTML LOGS">
         <style type="text/css">
             pre{
-            counter-reset: line;
+            counter-reset: line -1;
             }
             code{
             counter-increment: line;
