@@ -2,15 +2,14 @@
     <l:layout title="OFFSET LOGS">
         <l:main-panel>
             <h2>OFFSET LOGS HERE</h2>
-
-            <f:form action="get-offset-search" method="GET" name="Offset search">
-                <f:entry title="Offset from">
-                    <f:textbox field="offsetFrom"></f:textbox>
+            <f:form action="get-search-offset" method="GET" name="Get the offset">
+                <f:entry>
+                    <f:textbox name="from"></f:textbox>
                 </f:entry>
-                <f:entry title="Offset to">
-                    <f:textbox field="offsetTo"></f:textbox>
+                <f:entry>
+                    <f:textbox name="to"></f:textbox>
                 </f:entry>
-                <f:submit value="Submit"></f:submit>
+                <f:submit value="Search" name="Search123"></f:submit>
             </f:form>
         </l:main-panel>
     </l:layout>
