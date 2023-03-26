@@ -32,10 +32,6 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
         return cacheFile;
     }
 
-    public List<String> getLogsShort() throws IOException {
-        return this.build.getLog(1000);
-    }
-
     public List<VirtualPipelineLineOutput> getAllCacheFromFile() {
         ObjectMapper objectMapper = new ObjectMapper();
         try {

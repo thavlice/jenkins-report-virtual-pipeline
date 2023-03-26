@@ -11,20 +11,26 @@
         p {
         margin: 0px;
         }
-        .START_MARK{
-        background-color: var(--medium-grey);
+        a.START_MARK{
+        color: var(--dark-grey);
         }
-        .END_MARK{
-        background-color: var(--light-grey);
+        a.END_MARK{
+        color: var(--medium-grey);
         }
         .ONE_LINE{
-        background-color: var(--success);
+        color: var(--success);
         }
-        .LIMIT_REACHED_LINE{
-        background-color: var(--warning);
+        a.LIMIT_REACHED_LINE{
+        color: var(--warning);
         }
-        .CONTENT_LINE{
-        background-color: lightyellow;
+        a.CONTENT_LINE{
+        color: var(--primary);
+        }
+        .DIFFERENT_PREVIOUS{
+        background-color: var(--danger-hover);
+        }
+        .DIFFERENT_CURRENT{
+        background-color: var(--line-green);
         }
     </style>
     <h3>Latest build virtual pipeline results</h3>
@@ -34,9 +40,11 @@
         <div class="codeWrapper">
             <p>
                 <code>
-                    <a class="${historyLine.type}" href="/job/${from.build.project.name}/${from.build.number}/html#ID${historyLine.index}">
-                        ${historyLine.historyType} ${historyLine.index} ${historyLine.line}
-                    </a>
+                    <div class="${historyLine.historyType}">
+                        <a class="${historyLine.type}" href="/job/${from.build.project.name}/${from.build.number}/html#ID${historyLine.index}">
+                            ${historyLine.index} ${historyLine.line}
+                        </a>
+                    </div>
                 </code>
             </p>
         </div>
