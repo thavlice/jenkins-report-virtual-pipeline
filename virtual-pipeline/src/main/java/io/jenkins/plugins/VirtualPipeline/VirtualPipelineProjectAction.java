@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAction {
 
@@ -31,14 +32,67 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
         return cacheFile;
     }
 
-    public List<String> getLogsShort() throws IOException {
-        return this.build.getLog(1000);
-    }
-
     public List<VirtualPipelineLineOutput> getAllCacheFromFile() {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             List<VirtualPipelineLineOutput> result = objectMapper.readValue(cacheFile, new TypeReference<List<VirtualPipelineLineOutput>>() {
+            });
+            return result;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public List<VirtualPipelineOutputHistoryMarked> getHistoryMarkedLines(){
+
+        File comparingFile = this.getPreviousBuildFile(); // build File can be changed here
+
+
+        List<VirtualPipelineLineOutput> currentBuildLines = getAllCacheFromFile();
+        List<VirtualPipelineLineOutput> previousBuildLines = getAllCacheFromNamedFile(comparingFile);
+
+        List<VirtualPipelineOutputHistoryMarked> result = new ArrayList<>();
+
+        //comparing
+        for (int lineIndex = 0; lineIndex < currentBuildLines.size(); lineIndex++) {
+            VirtualPipelineLineOutput currentLine = currentBuildLines.get(lineIndex);
+            VirtualPipelineLineOutput previousLine = previousBuildLines.get(lineIndex);
+            if(Objects.equals(currentLine.getLine(), previousLine.getLine())){
+                result.add(new VirtualPipelineOutputHistoryMarked(currentLine.getRegex(), currentLine.getLine(),
+                        currentLine.getIndex(), currentLine.getDeleteMark(),  currentLine.getType(),
+                        HistoryType.SAME));
+            }else {
+                result.add(new VirtualPipelineOutputHistoryMarked(currentLine.getRegex(), currentLine.getLine(),
+                        currentLine.getIndex(), currentLine.getDeleteMark(),  currentLine.getType(),
+                        HistoryType.DIFFERENT_CURRENT));
+                result.add(new VirtualPipelineOutputHistoryMarked(previousLine.getRegex(), previousLine.getLine(),
+                        previousLine.getIndex(), previousLine.getDeleteMark(),  previousLine.getType(),
+                        HistoryType.DIFFERENT_PREVIOUS));
+            }
+
+        }
+
+        return result;
+
+    }
+    private File getPreviousBuildFile(){
+        File buildFolder = getBuildFolderFromBuildNumber(this.getBuild().getPreviousBuild().getNumber());
+        return new File(buildFolder + File.separator + "cache.json");
+    }
+
+    public File getProjectDirFile(){
+        return build.getProject().getRootDir();
+    }
+
+    public File getBuildFolderFromBuildNumber(int buildNumber){
+        return new File(this.getProjectDirFile() + File.separator + "builds" + File.separator + buildNumber);
+    }
+
+    private List<VirtualPipelineLineOutput> getAllCacheFromNamedFile(File file){
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            List<VirtualPipelineLineOutput> result = objectMapper.readValue(file, new TypeReference<List<VirtualPipelineLineOutput>>() {
             });
             return result;
         } catch (IOException e) {
@@ -81,4 +135,6 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
         list.add(new VirtualPipelineProjectAction(this.getBuild(), this.getConfigurations(), this.getCacheFile()));
         return list;
     }
+
+
 }

@@ -33,16 +33,21 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
     private List<VirtualPipelineInput> configurations;
     private Boolean generatePicture;
 
+    private Boolean generateAgainstLastStableBuild;
     @DataBoundConstructor
-    public VirtualPipelinePublisher(List<VirtualPipelineInput> configurations, Boolean generatePicture) {
+    public VirtualPipelinePublisher(List<VirtualPipelineInput> configurations, Boolean generatePicture, Boolean generateAgainstLastStableBuild) {
         this.configurations = configurations;
         this.generatePicture = generatePicture;
+        this.generateAgainstLastStableBuild = generateAgainstLastStableBuild;
     }
 
-    public VirtualPipelineInput getFormat() {
-        return new VirtualPipelineInputSimple("some", true);
+    public void setGenerateAgainstLastStableBuild(Boolean generateAgainstLastStableBuild) {
+        this.generateAgainstLastStableBuild = generateAgainstLastStableBuild;
     }
 
+    public Boolean getGenerateAgainstLastStableBuild() {
+        return generateAgainstLastStableBuild;
+    }
 
     public Boolean getGeneratePicture() {
         return generatePicture;

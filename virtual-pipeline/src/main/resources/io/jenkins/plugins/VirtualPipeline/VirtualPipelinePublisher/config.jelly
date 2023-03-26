@@ -10,6 +10,7 @@
 
         <f:advanced>
             <f:checkbox title="Generate picture as artifact" field="generatePicture"/>
+            <f:checkbox title="Compare against last stable build" field="compareAgainstLastStableBuild"/>
         </f:advanced>
     </f:section>
 </j:jelly>
