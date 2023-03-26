@@ -10,13 +10,20 @@ public class VirtualPipelineLineOutput {
 
     private Boolean deleteMark;
 
+    private LineType type;
+
     //private OFFSET TODO
 
-    public VirtualPipelineLineOutput(String regex, String line, int index, Boolean deleteMark) {
+    public LineType getType() {
+        return type;
+    }
+
+    public VirtualPipelineLineOutput(String regex, String line, int index, Boolean deleteMark, LineType type) {
         this.regex = regex;
         this.line = line;
         this.index = index;
         this.deleteMark = deleteMark;
+        this.type = type;
     }
 
     // just for the purpose of good deserialization

@@ -1,12 +1,39 @@
 <j:jelly xmlns:j="jelly:core"
 >
+    <style type="text/css">
+        .codeWrapper{
+        word-wrap: break-word;
+        }
+        a:hover, a:visited, a:link, a:active{
+        text-decoration: none;
+        font-weight: normal;
+        }
+        p {
+        margin: 0px;
+        }
+        .START_MARK{
+        background-color: var(--medium-grey);
+        }
+        .END_MARK{
+        background-color: var(--light-grey);
+        }
+        .ONE_LINE{
+        background-color: var(--success);
+        }
+        .LIMIT_REACHED_LINE{
+        background-color: var(--warning);
+        }
+        .CONTENT_LINE{
+        background-color: lightyellow;
+        }
+    </style>
     <h3>Latest build virtual pipeline results</h3>
 
     <j:set var="linesList" value="${from.allCacheFromFile}"/>
     <j:forEach items="${linesList}" var="filteredLine">
         <p>
             <code>
-                <a href="/job/${from.build.project.name}/${from.build.number}/html#ID${filteredLine.index}">
+                <a class="${filteredLine.type}" href="/job/${from.build.project.name}/${from.build.number}/html#ID${filteredLine.index}">
                     ${filteredLine.index} ${filteredLine.line}
                 </a>
             </code>

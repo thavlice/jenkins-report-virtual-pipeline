@@ -1,17 +1,46 @@
 <j:jelly xmlns:j="jelly:core"
          xmlns:t="/lib/hudson">
-    <t:summary icon="null">
+    <t:summary icon="symbol-cube">
+        <style type="text/css">
+            .codeWrapper{
+            word-wrap: break-word;
+            }
+            a:hover, a:visited, a:link, a:active{
+            text-decoration: none;
+            font-weight: normal;
+            }
+            p {
+            margin: 0px;
+            }
+            .START_MARK{
+            background-color: var(--medium-grey);
+            }
+            .END_MARK{
+            background-color: var(--light-grey);
+            }
+            .ONE_LINE{
+            background-color: var(--success);
+            }
+            .LIMIT_REACHED_LINE{
+            background-color: var(--warning);
+            }
+            .CONTENT_LINE{
+            background-color: lightyellow;
+            }
+        </style>
         <h2>Virtual pipeline results</h2>
 
         <j:set var="linesList" value="${it.allCacheFromFile}"/>
         <j:forEach items="${linesList}" var="filteredLine">
-            <p>
-                <code>
-                    <a href="/job/${it.build.project.name}/${it.build.number}/html#ID${filteredLine.index}">
-                        ${filteredLine.index} ${filteredLine.line}
-                    </a>
-                </code>
-            </p>
+            <div class="codeWrapper">
+                <p>
+                    <code>
+                        <a class="${filteredLine.type}" href="/job/${it.build.project.name}/${it.build.number}/html#ID${filteredLine.index}">
+                            ${filteredLine.index} ${filteredLine.line}
+                        </a>
+                    </code>
+                </p>
+            </div>
         </j:forEach>
     </t:summary>
 </j:jelly>
