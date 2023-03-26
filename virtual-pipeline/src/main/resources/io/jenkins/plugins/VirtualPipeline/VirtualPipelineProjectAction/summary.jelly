@@ -30,13 +30,13 @@
         </style>
         <h2>Virtual pipeline results</h2>
 
-        <j:set var="linesList" value="${it.allCacheFromFile}"/>
-        <j:forEach items="${linesList}" var="filteredLine">
+        <j:set var="linesHistory" value="${it.historyMarkedLines}"/>
+        <j:forEach items="${linesHistory}" var="historyLine">
             <div class="codeWrapper">
                 <p>
                     <code>
-                        <a class="${filteredLine.type}" href="/job/${it.build.project.name}/${it.build.number}/html#ID${filteredLine.index}">
-                            ${filteredLine.index} ${filteredLine.line}
+                        <a class="${historyLine.type}" href="/job/${it.build.project.name}/${it.build.number}/html#ID${historyLine.index}">
+                            ${historyLine.historyType} ${historyLine.index} ${historyLine.line}
                         </a>
                     </code>
                 </p>

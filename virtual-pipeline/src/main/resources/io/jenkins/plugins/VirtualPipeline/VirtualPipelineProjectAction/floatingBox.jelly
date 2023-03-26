@@ -29,14 +29,16 @@
     </style>
     <h3>Latest build virtual pipeline results</h3>
 
-    <j:set var="linesList" value="${from.allCacheFromFile}"/>
-    <j:forEach items="${linesList}" var="filteredLine">
-        <p>
-            <code>
-                <a class="${filteredLine.type}" href="/job/${from.build.project.name}/${from.build.number}/html#ID${filteredLine.index}">
-                    ${filteredLine.index} ${filteredLine.line}
-                </a>
-            </code>
-        </p>
+    <j:set var="linesHistory" value="${from.historyMarkedLines}"/>
+    <j:forEach items="${linesHistory}" var="historyLine">
+        <div class="codeWrapper">
+            <p>
+                <code>
+                    <a class="${historyLine.type}" href="/job/${from.build.project.name}/${from.build.number}/html#ID${historyLine.index}">
+                        ${historyLine.historyType} ${historyLine.index} ${historyLine.line}
+                    </a>
+                </code>
+            </p>
+        </div>
     </j:forEach>
 </j:jelly>
