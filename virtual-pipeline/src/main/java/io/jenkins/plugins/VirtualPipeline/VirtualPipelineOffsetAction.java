@@ -19,16 +19,33 @@ import org.kohsuke.stapler.json.JsonHttpResponse;
 import org.kohsuke.stapler.json.SubmittedForm;
 import org.kohsuke.stapler.verb.GET;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Extension
-public class VirtualPipelineOffsetAction implements SimpleBuildStep.LastBuildAction, RootAction{
 
+public class VirtualPipelineOffsetAction implements SimpleBuildStep.LastBuildAction{
+    private final AbstractBuild<?,?> build;
+
+    public VirtualPipelineOffsetAction(AbstractBuild<?, ?> build) {
+        this.build = build;
+    }
+
+    public List<String> getLogs() throws IOException {
+        Reader reader = build.getLogReader();
+        BufferedReader bufferedReader = new BufferedReader(reader);
+        bufferedReader.readLine();
+
+        List<String> result = new ArrayList<>();
+        String line = bufferedReader.readLine();
+        while (line != null) {
+            result.add(line);
+            line = bufferedReader.readLine();
+        }
+        bufferedReader.close();
+        return result;
+    }
 
     @GET
     @WebMethod(name = "get-search-offset")
@@ -36,7 +53,6 @@ public class VirtualPipelineOffsetAction implements SimpleBuildStep.LastBuildAct
         String from = req.getParameter("from");
         String to = req.getParameter("to");
 
-        String someLine = "LOREM IPSUM";
         res.setContentType("text/html;charset=UTF-8");
 
         PrintWriter out = res.getWriter();
@@ -45,7 +61,11 @@ public class VirtualPipelineOffsetAction implements SimpleBuildStep.LastBuildAct
         out.println("<head></head>");
         out.println("<body>");
         out.println("<h1>Here are lines between from offset " + from + "to offset " + to+ " </h1>");
-        out.println("<p>" + someLine + "</p>");
+        for (String line :
+                this.getLogs()) {
+            out.println("<p>" + line+ "</p>");
+        }
+
         out.println("</body>");
         out.println("</html>");
         out.flush();

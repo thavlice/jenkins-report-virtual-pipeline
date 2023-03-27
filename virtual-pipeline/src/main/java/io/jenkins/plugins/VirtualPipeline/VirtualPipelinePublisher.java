@@ -136,7 +136,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
         VirtualPipelineProjectAction action = new VirtualPipelineProjectAction(build, this.getConfigurations(), jsonCacheFile);
         build.addAction(action);
         build.addAction(new VirtualPipelineHTMLAction(build));
-        build.addAction(new VirtualPipelineOffsetAction());
+        build.addAction(new VirtualPipelineOffsetAction(build));
 
         return true;
     }
