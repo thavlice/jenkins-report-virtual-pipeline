@@ -27,8 +27,7 @@
             }
         </style>
         <l:main-panel>
-            <h2>HTML LOGS HERE</h2>
-            <p>${it.build.number}</p>
+            <h2>HTML LOGS</h2>
             <j:set var="logLines" value="${it.logs}"/>
             <div class="logsWrapper">
                 <pre>

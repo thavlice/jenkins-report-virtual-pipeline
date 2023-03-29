@@ -12,18 +12,23 @@ public class VirtualPipelineLineOutput {
 
     private LineType type;
 
-    //private OFFSET TODO
+    private long lineStartOffset;
 
     public LineType getType() {
         return type;
     }
 
-    public VirtualPipelineLineOutput(String regex, String line, int index, Boolean deleteMark, LineType type) {
+    public long getLineStartOffset() {
+        return lineStartOffset;
+    }
+
+    public VirtualPipelineLineOutput(String regex, String line, int index, Boolean deleteMark, LineType type, long lineStartOffset) {
         this.regex = regex;
         this.line = line;
         this.index = index;
         this.deleteMark = deleteMark;
         this.type = type;
+        this.lineStartOffset = lineStartOffset;
     }
 
     // just for the purpose of good deserialization

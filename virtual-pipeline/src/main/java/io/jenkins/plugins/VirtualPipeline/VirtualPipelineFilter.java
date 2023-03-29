@@ -16,6 +16,8 @@ public class VirtualPipelineFilter {
 
         int activeRegexCount = 0;
 
+        int currentOffset = 0;
+
 
         //TODO bytecount for offset goes here
 
@@ -35,9 +37,9 @@ public class VirtualPipelineFilter {
 
                     if(activeConfig.getDeleteMark()){
                         String lineWithoutRegex = VirtualPipelineFilter.removeRegexMark(line, activeConfig.getStartMark());
-                        result.add(new VirtualPipelineLineOutput(activeConfig.getEndMark(), lineWithoutRegex, lineIndex, activeConfig.getDeleteMark(), LineType.END_MARK));
+                        result.add(new VirtualPipelineLineOutput(activeConfig.getEndMark(), lineWithoutRegex, lineIndex, activeConfig.getDeleteMark(), LineType.END_MARK, currentOffset));
                     } else {
-                        result.add(new VirtualPipelineLineOutput(activeConfig.getEndMark(), line, lineIndex, activeConfig.getDeleteMark(), LineType.END_MARK));
+                        result.add(new VirtualPipelineLineOutput(activeConfig.getEndMark(), line, lineIndex, activeConfig.getDeleteMark(), LineType.END_MARK, currentOffset));
                     }
 
                     advancedRegexLock = false;
@@ -50,7 +52,8 @@ public class VirtualPipelineFilter {
 
                     if (activeRegexCount >=  activeConfig.getMaxContentLengthToInt()){
                         //end regex because of reaching the max limit
-                        result.add(new VirtualPipelineLineOutput(activeConfig.getStartMark(), line, lineIndex, activeConfig.getDeleteMark(), LineType.LIMIT_REACHED_LINE));
+                        result.add(new VirtualPipelineLineOutput(activeConfig.getStartMark(), line, lineIndex, activeConfig.getDeleteMark(), LineType.LIMIT_REACHED_LINE, currentOffset));
+                        currentOffset += line.length();
 
                         advancedRegexLock = false;
 
@@ -59,7 +62,8 @@ public class VirtualPipelineFilter {
 
                         activeRegexCount = 0;
                     }else {
-                        result.add(new VirtualPipelineLineOutput(activeConfig.getStartMark(), line, lineIndex, activeConfig.getDeleteMark(), LineType.CONTENT_LINE));
+                        result.add(new VirtualPipelineLineOutput(activeConfig.getStartMark(), line, lineIndex, activeConfig.getDeleteMark(), LineType.CONTENT_LINE, currentOffset));
+                        currentOffset += line.length();
                     }
 
                 }
@@ -83,25 +87,27 @@ public class VirtualPipelineFilter {
                         //check to include mark or not
                         if (simpleConfig.getDeleteMark()) {
                             String lineWithoutRegex = VirtualPipelineFilter.removeRegexMark(line, simpleConfig.getRegex());
-                            result.add(new VirtualPipelineLineOutput(simpleConfig.getRegex(), lineWithoutRegex, lineIndex, simpleConfig.getDeleteMark(), LineType.ONE_LINE));
+                            result.add(new VirtualPipelineLineOutput(simpleConfig.getRegex(), lineWithoutRegex, lineIndex, simpleConfig.getDeleteMark(), LineType.ONE_LINE, currentOffset));
                         } else {
-                            result.add(new VirtualPipelineLineOutput(simpleConfig.getRegex(), line, lineIndex, simpleConfig.getDeleteMark(), LineType.ONE_LINE));
+                            result.add(new VirtualPipelineLineOutput(simpleConfig.getRegex(), line, lineIndex, simpleConfig.getDeleteMark(), LineType.ONE_LINE, currentOffset));
                         }
+                        currentOffset += line.length();
+
                         break;
                     }
 
                 } else if (config instanceof VirtualPipelineInputAdvanced) {
 
                     VirtualPipelineInputAdvanced advancedConfig = (VirtualPipelineInputAdvanced) config;
-                    //TODO advanced filtering
 
                     if (line.matches(VirtualPipelineFilter.wrapRegexMark(advancedConfig.getStartMark()))) {
                         if (advancedConfig.getDeleteMark()) {
                             String lineWithoutRegex = VirtualPipelineFilter.removeRegexMark(line, advancedConfig.getStartMark());
-                            result.add(new VirtualPipelineLineOutput(advancedConfig.getStartMark(), lineWithoutRegex, lineIndex, advancedConfig.getDeleteMark(), LineType.START_MARK));
+                            result.add(new VirtualPipelineLineOutput(advancedConfig.getStartMark(), lineWithoutRegex, lineIndex, advancedConfig.getDeleteMark(), LineType.START_MARK, currentOffset));
                         } else {
-                            result.add(new VirtualPipelineLineOutput(advancedConfig.getStartMark(), line, lineIndex, advancedConfig.getDeleteMark(), LineType.START_MARK));
+                            result.add(new VirtualPipelineLineOutput(advancedConfig.getStartMark(), line, lineIndex, advancedConfig.getDeleteMark(), LineType.START_MARK, currentOffset));
                         }
+                        currentOffset += line.length();
                         activeConfig = advancedConfig;
                         advancedRegexLock = true;
                         break;

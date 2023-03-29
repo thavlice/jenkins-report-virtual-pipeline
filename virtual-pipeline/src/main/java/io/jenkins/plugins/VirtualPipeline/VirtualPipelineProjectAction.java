@@ -33,15 +33,7 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
     }
 
     public List<VirtualPipelineLineOutput> getAllCacheFromFile() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            List<VirtualPipelineLineOutput> result = objectMapper.readValue(cacheFile, new TypeReference<List<VirtualPipelineLineOutput>>() {
-            });
-            return result;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+        return this.getAllCacheFromNamedFile(cacheFile);
     }
 
     public List<VirtualPipelineOutputHistoryMarked> getHistoryMarkedLines(){
@@ -61,14 +53,14 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
             if(Objects.equals(currentLine.getLine(), previousLine.getLine())){
                 result.add(new VirtualPipelineOutputHistoryMarked(currentLine.getRegex(), currentLine.getLine(),
                         currentLine.getIndex(), currentLine.getDeleteMark(),  currentLine.getType(),
-                        HistoryType.SAME));
+                        HistoryType.SAME, currentLine.getLineStartOffset()));
             }else {
                 result.add(new VirtualPipelineOutputHistoryMarked(currentLine.getRegex(), currentLine.getLine(),
                         currentLine.getIndex(), currentLine.getDeleteMark(),  currentLine.getType(),
-                        HistoryType.DIFFERENT_CURRENT));
+                        HistoryType.DIFFERENT_CURRENT, currentLine.getLineStartOffset()));
                 result.add(new VirtualPipelineOutputHistoryMarked(previousLine.getRegex(), previousLine.getLine(),
                         previousLine.getIndex(), previousLine.getDeleteMark(),  previousLine.getType(),
-                        HistoryType.DIFFERENT_PREVIOUS));
+                        HistoryType.DIFFERENT_PREVIOUS, previousLine.getLineStartOffset()));
             }
 
         }

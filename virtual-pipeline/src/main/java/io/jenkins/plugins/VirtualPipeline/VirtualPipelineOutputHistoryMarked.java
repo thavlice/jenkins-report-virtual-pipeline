@@ -7,8 +7,8 @@ public class VirtualPipelineOutputHistoryMarked extends VirtualPipelineLineOutpu
 
     private HistoryType historyType;
 
-    public VirtualPipelineOutputHistoryMarked(String regex, String line, int index, Boolean deleteMark, LineType type, HistoryType historyType) {
-        super(regex, line, index, deleteMark, type);
+    public VirtualPipelineOutputHistoryMarked(String regex, String line, int index, Boolean deleteMark, LineType type, HistoryType historyType, long lineOffset) {
+        super(regex, line, index, deleteMark, type, lineOffset);
         this.historyType = historyType;
     }
 }
