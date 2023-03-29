@@ -57,19 +57,11 @@ public class VirtualPipelineOffsetAction implements SimpleBuildStep.LastBuildAct
 
         PrintWriter out = res.getWriter();
 
-        out.println("<html>");
-        out.println("<head></head>");
-        out.println("<body>");
-        out.println("<h1>Here are lines between from offset " + from + "to offset " + to+ " </h1>");
-        for (String line :
-                this.getLogs()) {
-            out.println("<p>" + line+ "</p>");
-        }
+        List<String> contentLines = this.getLogs();
 
-        out.println("</body>");
-        out.println("</html>");
+        this.writeBasicHtml(out, contentLines);
+
         out.flush();
-
     }
     @Override
     public Collection<? extends Action> getProjectActions() {
@@ -90,6 +82,22 @@ public class VirtualPipelineOffsetAction implements SimpleBuildStep.LastBuildAct
     @Override
     public String getUrlName() {
         return "logsOffset";
+    }
+
+
+    private void writeBasicHtml(PrintWriter out, List<String> contentLines){
+        out.println("<html>");
+        out.println("<head></head>");
+        out.println("<body>");
+        out.println("<h1>Offset logs</h1>");
+
+        for (String contentLine:
+             contentLines) {
+            out.println("<p>"+ contentLine +"</p>");
+        }
+
+        out.println("</body>");
+        out.println("</html>");
     }
 
 }

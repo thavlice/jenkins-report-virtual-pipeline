@@ -1,15 +1,15 @@
 <j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:f="/lib/form">
     <l:layout title="OFFSET LOGS">
         <l:main-panel>
-            <h2>OFFSET LOGS HERE</h2>
+            <h2>Offset logs</h2>
             <f:form action="get-search-offset" method="GET" name="Get the offset">
-                <f:entry>
-                    <f:textbox name="from"></f:textbox>
+                <f:entry title="Offset from">
+                    <f:number name="from"></f:number>
                 </f:entry>
-                <f:entry>
-                    <f:textbox name="to"></f:textbox>
+                <f:entry title="Offset to">
+                    <f:number name="to"></f:number>
                 </f:entry>
-                <f:submit value="Search" name="Search123"></f:submit>
+                <f:submit value="Search" name="Search"></f:submit>
             </f:form>
         </l:main-panel>
     </l:layout>
