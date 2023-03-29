@@ -57,6 +57,7 @@ public class VirtualPipelineOffsetAction implements SimpleBuildStep.LastBuildAct
 
         PrintWriter out = res.getWriter();
 
+        //filtering log by offset goes here todo
         List<String> contentLines = this.getLogs();
 
         this.writeBasicHtml(out, contentLines);
