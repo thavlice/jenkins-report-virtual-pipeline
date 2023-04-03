@@ -14,12 +14,10 @@ import jenkins.tasks.SimpleBuildStep;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.RandomAccess;
 
 
 /**
@@ -68,7 +66,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
     }
 
     /**
-     * every event from plugin is performed at this function as it is the main extention point for the plugin
+     * every event from plugin is performed at this function as it is the main extension point for the plugin
      *
      * @param build
      * @param launcher
@@ -83,27 +81,27 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
         //here is the performance part, e.g. drawing, printing itself
         File rootDir = build.getProject().getRootDir();
         File currentBuildFolder = new File(rootDir.getPath() + File.separator + "builds" + File.separator + build.getNumber());
+        File defaultLogs = new File(currentBuildFolder + File.separator + "log");
 
         //creates necessary directories
         boolean mkdirsResult = currentBuildFolder.mkdirs();
         if (!mkdirsResult){
-            listener.getLogger().println("VP: cache directories were not succesfully created");
+            listener.getLogger().println("VP: cache directories were not successfully created");
         }
 
+        RandomAccessFile raf = new RandomAccessFile(defaultLogs, "r");
 
         //reading log file
-        Reader reader = build.getLogReader();
-        BufferedReader bufferedReader = new BufferedReader(reader);
-        bufferedReader.readLine();
 
-        List<String> logLines = new ArrayList<>();
-        String line = bufferedReader.readLine();
+        List<LineWithOffset> logLines = new ArrayList<>();
+        long currentOffset = raf.getFilePointer();
+        String line = raf.readLine();
         while (line != null) {
-            logLines.add(line);
-            line = bufferedReader.readLine();
+            logLines.add(new LineWithOffset(line, currentOffset));
+            currentOffset = raf.getFilePointer();
+            line = raf.readLine();
         }
-
-        bufferedReader.close();
+        raf.close();
         //getting filtered lines
         List<VirtualPipelineLineOutput> filterOutput = VirtualPipelineFilter.filter(logLines, getConfigurations());
 
@@ -137,6 +135,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
 
         return true;
     }
+
 
     /**
      * mainly used for configuration and input checks
