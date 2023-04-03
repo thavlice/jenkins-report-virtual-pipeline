@@ -49,8 +49,8 @@ public class VirtualPipelineHTMLAction implements SimpleBuildStep.LastBuildActio
         VirtualPipelineLineOutput currentMarkedLine = iteratorMarked.next();
         for (int index = 0; index < fullLogs.size(); index++) {
 
-            // indexes are off by one, thus comparing them this way
-            if(iteratorMarked.hasNext() && (index == currentMarkedLine.getIndex() -1)){
+            // indexes are off by one, thus comparing them this way, TODO Fix for the case when first line is matched
+            if(iteratorMarked.hasNext() && (index == currentMarkedLine.getIndex()-1)){
                 result.add(currentMarkedLine);
                 currentMarkedLine = iteratorMarked.next();
             }else {
