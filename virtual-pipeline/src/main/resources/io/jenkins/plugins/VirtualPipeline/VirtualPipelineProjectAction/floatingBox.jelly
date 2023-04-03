@@ -1,15 +1,17 @@
 <j:jelly xmlns:j="jelly:core"
 >
     <style type="text/css">
+        .codeSection{
+        width: 500px;
+        height:500px;
+        overflow: auto;
+        overflow-wrap: anywhere;
+        word-break: break-all;
+        }
         .codeWrapper{
-        word-wrap: break-word;
         }
-        a:hover, a:visited, a:link, a:active{
+        .codeWrapper a{
         text-decoration: none;
-        font-weight: normal;
-        }
-        p {
-        margin: 0px;
         }
         a.START_MARK{
         color: var(--dark-grey);
@@ -17,8 +19,8 @@
         a.END_MARK{
         color: var(--medium-grey);
         }
-        .ONE_LINE{
-        color: var(--success);
+        a.ONE_LINE{
+        color: var(--green);
         }
         a.LIMIT_REACHED_LINE{
         color: var(--warning);
@@ -34,19 +36,18 @@
         }
     </style>
     <h3>Latest build virtual pipeline results</h3>
-
-    <j:set var="linesHistory" value="${from.historyMarkedLines}"/>
-    <j:forEach items="${linesHistory}" var="historyLine">
+    <div class="codeSection">
+    <j:set var="lines" value="${from.onlyMarkedLinesToDisplay}"/>
+    <j:forEach items="${lines}" var="line">
         <div class="codeWrapper">
-            <p>
                 <code>
-                    <div class="${historyLine.historyType}">
-                        <a class="${historyLine.type}" href="/job/${from.build.project.name}/${from.build.number}/html#ID${historyLine.index}">
-                            ${historyLine.index} ${historyLine.line}
+                    <div class="${line.historyType}">
+                        <a class="${line.type}" href="/job/${from.build.project.name}/${from.build.number}/html#ID${line.index}">
+                            ${line.index} ${line.line}
                         </a>
                     </div>
                 </code>
-            </p>
         </div>
     </j:forEach>
+    </div>
 </j:jelly>

@@ -9,14 +9,11 @@ import hudson.model.BuildListener;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Publisher;
 import hudson.tasks.Recorder;
-import hudson.util.FormValidation;
 import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildStep;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.QueryParameter;
 
-import javax.servlet.ServletException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -135,7 +132,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
         // adding actions to build in Jenkins
         VirtualPipelineProjectAction action = new VirtualPipelineProjectAction(build, this.getConfigurations(), jsonCacheFile);
         build.addAction(action);
-        build.addAction(new VirtualPipelineHTMLAction(build));
+        build.addAction(new VirtualPipelineHTMLAction(build, jsonCacheFile));
         build.addAction(new VirtualPipelineOffsetAction(build));
 
         return true;

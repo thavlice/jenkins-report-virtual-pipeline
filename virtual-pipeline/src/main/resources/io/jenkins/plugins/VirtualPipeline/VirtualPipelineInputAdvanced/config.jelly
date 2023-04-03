@@ -14,5 +14,7 @@
     <f:entry title="Content limit count (lines)">
         <f:number field="maxContentLength"></f:number>
     </f:entry>
-
+    <f:entry title="Index of line to display from content">
+        <f:number field="numberOfLineToDisplay"></f:number>
+    </f:entry>
 </j:jelly>
