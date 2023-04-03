@@ -14,16 +14,14 @@
             -webkit-user-select: none;
             }
 
-            .lineLink{
+            .lineLink a{
             pointer-events: none;
             cursor: default;
             text-decoration: none;
             white-space: pre-wrap;
 
-            padding-top: 6rem;
-            margin-top: -6rem;
-            display: inline-block;
-            word-wrap: break-word;
+            scroll-margin-top: 100px;
+
             }
 
             .codeWrapper{
