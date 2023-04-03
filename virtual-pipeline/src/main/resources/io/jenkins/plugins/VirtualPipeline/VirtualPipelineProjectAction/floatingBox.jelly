@@ -1,12 +1,17 @@
 <j:jelly xmlns:j="jelly:core"
 >
     <style type="text/css">
+        .codeSection{
+        width: 500px;
+        height:500px;
+        overflow: auto;
+        overflow-wrap: anywhere;
+        word-break: break-all;
+        }
         .codeWrapper{
-        word-wrap: break-word;
         }
         a:hover, a:visited, a:link, a:active{
         text-decoration: none;
-        font-weight: normal;
         }
         p {
         margin: 0px;
@@ -18,7 +23,7 @@
         color: var(--medium-grey);
         }
         .ONE_LINE{
-        color: var(--success);
+        color: var(--green);
         }
         a.LIMIT_REACHED_LINE{
         color: var(--warning);
@@ -34,11 +39,10 @@
         }
     </style>
     <h3>Latest build virtual pipeline results</h3>
-
+    <div class="codeSection">
     <j:set var="lines" value="${from.onlyMarkedLines}"/>
     <j:forEach items="${lines}" var="line">
         <div class="codeWrapper">
-            <p>
                 <code>
                     <div class="${line.historyType}">
                         <a class="${line.type}" href="/job/${from.build.project.name}/${from.build.number}/html#ID${line.index}">
@@ -46,7 +50,7 @@
                         </a>
                     </div>
                 </code>
-            </p>
         </div>
     </j:forEach>
+    </div>
 </j:jelly>

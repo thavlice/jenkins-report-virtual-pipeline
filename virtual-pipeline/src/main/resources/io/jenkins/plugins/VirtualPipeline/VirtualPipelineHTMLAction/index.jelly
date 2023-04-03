@@ -3,9 +3,14 @@
         <style type="text/css">
             pre{
             counter-reset: line -1;
+            white-space: pre;
+            overflow: auto;
+            overflow-wrap: anywhere;
+            word-break: break-all;
             }
             code{
             counter-increment: line;
+            display: inline-flex;
             }
             code:before{
             content: counter(line);
@@ -13,20 +18,19 @@
             code:before{
             -webkit-user-select: none;
             }
+            .logsWrapper{
+            overflow: auto;
+            overflow-wrap: anywhere;
+            word-break: break-all;
+            }
 
             .lineLink a{
             pointer-events: none;
             cursor: default;
             text-decoration: none;
-            white-space: pre-wrap;
-
             scroll-margin-top: 100px;
-
             }
 
-            .codeWrapper{
-            word-wrap: break-word;
-            }
             a:hover, a:visited, a:link, a:active, a:selection{
             text-decoration: none;
             font-weight: normal;

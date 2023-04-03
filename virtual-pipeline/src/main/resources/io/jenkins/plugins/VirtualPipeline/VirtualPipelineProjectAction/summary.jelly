@@ -2,24 +2,31 @@
          xmlns:t="/lib/hudson">
     <t:summary icon="symbol-cube">
         <style type="text/css">
+            .codeSection{
+            overflow: auto;
+            overflow-wrap: anywhere;
+            word-break: break-all;
+            }
             .codeWrapper{
             word-wrap: break-word;
+            font-size: var(--font-size-sm);
             }
             a:hover, a:visited, a:link, a:active{
             text-decoration: none;
-            font-weight: normal;
             }
             p {
             margin: 0px;
             }
             a.START_MARK{
             color: var(--dark-grey);
+            font-size: var(--font-size-sm);
             }
             a.END_MARK{
             color: var(--medium-grey);
             }
             .ONE_LINE{
-            color: var(--success);
+            color: var(--green);
+            font-size: var(--font-size-sm);
             }
             a.LIMIT_REACHED_LINE{
             color: var(--warning);
@@ -35,7 +42,7 @@
             }
         </style>
         <h2>Virtual pipeline results</h2>
-
+        <div class="codeSection">
         <j:set var="lines" value="${it.onlyMarkedLines}"/>
         <j:forEach items="${lines}" var="line">
             <div class="codeWrapper">
@@ -50,5 +57,6 @@
                 </p>
             </div>
         </j:forEach>
+        </div>
     </t:summary>
 </j:jelly>

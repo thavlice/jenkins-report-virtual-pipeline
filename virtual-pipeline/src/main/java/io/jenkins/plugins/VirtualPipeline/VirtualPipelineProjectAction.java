@@ -69,12 +69,14 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
 
     }
 
+
+    // for shortened summary on build and project page
     public List<VirtualPipelineLineOutput> getOnlyMarkedLines(){
         List<VirtualPipelineLineOutput> list = this.getAllCacheFromFile();
         List<VirtualPipelineLineOutput> result = new ArrayList<>();
         for (VirtualPipelineLineOutput line :
                 list) {
-            if (line.getType() != LineType.CONTENT_LINE) {
+            if (line.getType() == LineType.ONE_LINE || line.getType() == LineType.START_MARK) {
                 result.add(line);
             }
             }
