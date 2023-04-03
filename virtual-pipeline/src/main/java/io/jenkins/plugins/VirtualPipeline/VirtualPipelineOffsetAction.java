@@ -50,18 +50,25 @@ public class VirtualPipelineOffsetAction implements SimpleBuildStep.LastBuildAct
     @GET
     @WebMethod(name = "get-search-offset")
     public void doSearchOffset(StaplerRequest req, StaplerResponse res) throws IOException {
-        String from = req.getParameter("from");
-        String to = req.getParameter("to");
+        long from = Long.parseLong(req.getParameter("from"));
+        long to = Long.parseLong(req.getParameter("to"));
 
-        res.setContentType("text/html;charset=UTF-8");
+        RandomAccessFile logs = new RandomAccessFile(this.build.getRootDir() + File.separator +  "log", "r");
+
+        logs.seek(from);
+        long offsetDiff = to - from;
+
+        byte[]  buffer = new byte[(int) offsetDiff];
+        logs.read(buffer);
+
+        String result = new String(buffer);
+
+
+        res.setContentType("text/plaintext");
+        res.setCharacterEncoding("UTF-8");
 
         PrintWriter out = res.getWriter();
-
-        //filtering log by offset goes here todo
-        List<String> contentLines = this.getLogs();
-
-        this.writeBasicHtml(out, contentLines);
-
+        out.print(result);
         out.flush();
     }
     @Override
