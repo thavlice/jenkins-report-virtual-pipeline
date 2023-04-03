@@ -10,11 +10,8 @@
         }
         .codeWrapper{
         }
-        a:hover, a:visited, a:link, a:active{
+        .codeWrapper a{
         text-decoration: none;
-        }
-        p {
-        margin: 0px;
         }
         a.START_MARK{
         color: var(--dark-grey);
@@ -22,7 +19,7 @@
         a.END_MARK{
         color: var(--medium-grey);
         }
-        .ONE_LINE{
+        a.ONE_LINE{
         color: var(--green);
         }
         a.LIMIT_REACHED_LINE{
@@ -40,7 +37,7 @@
     </style>
     <h3>Latest build virtual pipeline results</h3>
     <div class="codeSection">
-    <j:set var="lines" value="${from.onlyMarkedLines}"/>
+    <j:set var="lines" value="${from.onlyMarkedLinesToDisplay}"/>
     <j:forEach items="${lines}" var="line">
         <div class="codeWrapper">
                 <code>

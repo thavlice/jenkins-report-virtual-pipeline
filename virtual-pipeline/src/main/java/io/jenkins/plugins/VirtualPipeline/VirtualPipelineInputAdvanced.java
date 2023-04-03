@@ -15,18 +15,26 @@ public class VirtualPipelineInputAdvanced extends VirtualPipelineInput {
     private static final int DEFAULT_CONTENT_LENGTH = 100;
 
     private final String startMark;
+
+    // to find specified mark in content of mark private final String namedMark;
     private final String endMark;
 
     private final Boolean deleteMark;
     private String maxContentLength = String.valueOf(DEFAULT_CONTENT_LENGTH);
 
+    private int numberOfLineToDisplay = 0;
+
+    public int getNumberOfLineToDisplay() {
+        return numberOfLineToDisplay;
+    }
+
     @DataBoundConstructor
-    public VirtualPipelineInputAdvanced(String startMark, String endMark, Boolean deleteMark, String maxContentLength) {
-        super();
+    public VirtualPipelineInputAdvanced(String startMark, String endMark, Boolean deleteMark, String maxContentLength, int numberOfLineToDisplay) {
         this.startMark = startMark;
         this.endMark = endMark;
         this.deleteMark = deleteMark;
         this.maxContentLength = maxContentLength;
+        this.numberOfLineToDisplay = numberOfLineToDisplay;
     }
 
     public String getStartMark() {

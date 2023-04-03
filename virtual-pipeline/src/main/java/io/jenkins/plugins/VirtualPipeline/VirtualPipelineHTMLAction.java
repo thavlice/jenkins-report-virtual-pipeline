@@ -53,7 +53,7 @@ public class VirtualPipelineHTMLAction implements SimpleBuildStep.LastBuildActio
                 currentMarkedLine = iteratorMarked.next();
             }else {
                 //default for line with no marked meaning
-                result.add(new VirtualPipelineLineOutput("", fullLogs.get(index), index, false, LineType.DEFAULT,0 ));
+                result.add(new VirtualPipelineLineOutput("", fullLogs.get(index), index, false, LineType.DEFAULT,0 , false));
             }
         }
         return result;

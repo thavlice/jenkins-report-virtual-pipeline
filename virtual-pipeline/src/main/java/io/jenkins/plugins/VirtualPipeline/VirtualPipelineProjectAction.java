@@ -53,14 +53,14 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
             if(Objects.equals(currentLine.getLine(), previousLine.getLine())){
                 result.add(new VirtualPipelineOutputHistoryMarked(currentLine.getRegex(), currentLine.getLine(),
                         currentLine.getIndex(), currentLine.getDeleteMark(),  currentLine.getType(),
-                        HistoryType.SAME, currentLine.getLineStartOffset()));
+                        HistoryType.SAME, currentLine.getLineStartOffset(), currentLine.getDisplay()));
             }else {
                 result.add(new VirtualPipelineOutputHistoryMarked(currentLine.getRegex(), currentLine.getLine(),
                         currentLine.getIndex(), currentLine.getDeleteMark(),  currentLine.getType(),
-                        HistoryType.DIFFERENT_CURRENT, currentLine.getLineStartOffset()));
+                        HistoryType.DIFFERENT_CURRENT, currentLine.getLineStartOffset(), currentLine.getDisplay()));
                 result.add(new VirtualPipelineOutputHistoryMarked(previousLine.getRegex(), previousLine.getLine(),
                         previousLine.getIndex(), previousLine.getDeleteMark(),  previousLine.getType(),
-                        HistoryType.DIFFERENT_PREVIOUS, previousLine.getLineStartOffset()));
+                        HistoryType.DIFFERENT_PREVIOUS, previousLine.getLineStartOffset(), previousLine.getDisplay()));
             }
 
         }
@@ -71,12 +71,12 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
 
 
     // for shortened summary on build and project page
-    public List<VirtualPipelineLineOutput> getOnlyMarkedLines(){
+    public List<VirtualPipelineLineOutput> getOnlyMarkedLinesToDisplay(){
         List<VirtualPipelineLineOutput> list = this.getAllCacheFromFile();
         List<VirtualPipelineLineOutput> result = new ArrayList<>();
         for (VirtualPipelineLineOutput line :
                 list) {
-            if (line.getType() == LineType.ONE_LINE || line.getType() == LineType.START_MARK) {
+            if (line.getDisplay()) {
                 result.add(line);
             }
             }
