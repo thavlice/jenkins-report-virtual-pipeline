@@ -35,14 +35,14 @@
     </style>
     <h3>Latest build virtual pipeline results</h3>
 
-    <j:set var="linesHistory" value="${from.historyMarkedLines}"/>
-    <j:forEach items="${linesHistory}" var="historyLine">
+    <j:set var="lines" value="${from.onlyMarkedLines}"/>
+    <j:forEach items="${lines}" var="line">
         <div class="codeWrapper">
             <p>
                 <code>
-                    <div class="${historyLine.historyType}">
-                        <a class="${historyLine.type}" href="/job/${from.build.project.name}/${from.build.number}/html#ID${historyLine.index}">
-                            ${historyLine.index} ${historyLine.line}
+                    <div class="${line.historyType}">
+                        <a class="${line.type}" href="/job/${from.build.project.name}/${from.build.number}/html#ID${line.index}">
+                            ${line.index} ${line.line}
                         </a>
                     </div>
                 </code>

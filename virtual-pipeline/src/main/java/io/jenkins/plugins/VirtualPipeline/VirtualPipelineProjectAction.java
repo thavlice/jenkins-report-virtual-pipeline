@@ -68,6 +68,18 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
         return result;
 
     }
+
+    public List<VirtualPipelineLineOutput> getOnlyMarkedLines(){
+        List<VirtualPipelineLineOutput> list = this.getAllCacheFromFile();
+        List<VirtualPipelineLineOutput> result = new ArrayList<>();
+        for (VirtualPipelineLineOutput line :
+                list) {
+            if (line.getType() != LineType.CONTENT_LINE) {
+                result.add(line);
+            }
+            }
+        return result;
+    }
     private File getPreviousBuildFile(){
         File buildFolder = getBuildFolderFromBuildNumber(this.getBuild().getPreviousBuild().getNumber());
         return new File(buildFolder + File.separator + "cache.json");
