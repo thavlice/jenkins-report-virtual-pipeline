@@ -23,20 +23,53 @@
             padding-top: 6rem;
             margin-top: -6rem;
             display: inline-block;
+            word-wrap: break-word;
+            }
 
+            .codeWrapper{
+            word-wrap: break-word;
+            }
+            a:hover, a:visited, a:link, a:active, a:selection{
+            text-decoration: none;
+            font-weight: normal;
+            }
+            div a {
+            text-decoration: none;
+            display: inline-block;
+            width: 100%;
+            }
+            p {
+            margin: 0px;
+            }
+            a.START_MARK{
+            color: var(--dark-grey);
+            }
+            a.END_MARK{
+            color: var(--medium-grey);
+            }
+            .ONE_LINE{
+            color: var(--success);
+            }
+            a.LIMIT_REACHED_LINE{
+            color: var(--warning);
+            }
+            a.CONTENT_LINE{
+            color: var(--primary);
             }
         </style>
         <l:main-panel>
             <h2>HTML LOGS</h2>
-            <j:set var="logLines" value="${it.logs}"/>
+            <j:set var="logLines" value="${it.markedLogs}"/>
             <div class="logsWrapper">
                 <pre>
-                    <j:forEach items="${logLines}" var="line" indexVar="index">
-                        <p class="lineParagraph">
+                    <j:forEach items="${logLines}" var="markedLine" indexVar="index">
+                        <div class="codeWrapper">
                             <code class="logLine">
-                                <a class="lineLink" name="ID${index}" onClick="return">: ${line}</a>
+                                <div class="lineLink">
+                                <a class="${markedLine.type}"  name="ID${markedLine.index}">: ${markedLine.line}</a>
+                                </div>
                             </code>
-                        </p>
+                        </div>
                     </j:forEach>
                 </pre>
             </div>

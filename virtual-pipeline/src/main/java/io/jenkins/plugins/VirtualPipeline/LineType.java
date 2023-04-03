@@ -5,5 +5,6 @@ public enum LineType {
     START_MARK, // for lines matching startMark
     CONTENT_LINE, // for lines that are part of the advanced regex content
     END_MARK, // for lines matching startMark
-    LIMIT_REACHED_LINE // same as CONTENT_LINE, but marking reached limit of lines
+    LIMIT_REACHED_LINE, // same as CONTENT_LINE, but marking reached limit of lines
+    DEFAULT // used for lines with no marking meaning
 }
