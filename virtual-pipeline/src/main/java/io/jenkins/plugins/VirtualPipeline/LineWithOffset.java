@@ -1,8 +1,8 @@
 package io.jenkins.plugins.VirtualPipeline;
 
 public class LineWithOffset {
-    private String line;
-    private long offset;
+    private final String line;
+    private final long offset;
 
     public String getLine() {
         return line;

@@ -12,7 +12,7 @@ import java.util.regex.PatternSyntaxException;
 
 public class VirtualPipelineInputAdvanced extends VirtualPipelineInput {
 
-    private static final int DEFAULT_CONTENT_LENGTH = 100;
+    private static final int DEFAULT_CONTENT_LENGTH = 30;
 
     private final String startMark;
 
@@ -20,16 +20,12 @@ public class VirtualPipelineInputAdvanced extends VirtualPipelineInput {
     private final String endMark;
 
     private final Boolean deleteMark;
-    private String maxContentLength = String.valueOf(DEFAULT_CONTENT_LENGTH);
+    private int maxContentLength = DEFAULT_CONTENT_LENGTH;
 
     private int numberOfLineToDisplay = 0;
 
-    public int getNumberOfLineToDisplay() {
-        return numberOfLineToDisplay;
-    }
-
     @DataBoundConstructor
-    public VirtualPipelineInputAdvanced(String startMark, String endMark, Boolean deleteMark, String maxContentLength, int numberOfLineToDisplay) {
+    public VirtualPipelineInputAdvanced(String startMark, String endMark, Boolean deleteMark, int maxContentLength, int numberOfLineToDisplay) {
         this.startMark = startMark;
         this.endMark = endMark;
         this.deleteMark = deleteMark;
@@ -49,12 +45,14 @@ public class VirtualPipelineInputAdvanced extends VirtualPipelineInput {
         return deleteMark;
     }
 
-    public String getMaxContentLength() {
+    public int getMaxContentLength() {
         return maxContentLength;
     }
-    public int getMaxContentLengthToInt() {
-        return Integer.parseInt(maxContentLength);
+
+    public int getNumberOfLineToDisplay() {
+        return numberOfLineToDisplay;
     }
+
 
     @Extension
     public static final class DescriptorImpl extends VirtualPipelineInputDescriptor {

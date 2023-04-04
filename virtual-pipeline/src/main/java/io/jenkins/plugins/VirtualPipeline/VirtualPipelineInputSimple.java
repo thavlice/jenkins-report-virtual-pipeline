@@ -14,9 +14,9 @@ import java.util.regex.PatternSyntaxException;
 
 public class VirtualPipelineInputSimple extends VirtualPipelineInput {
 
-    private String regex;
+    private final String regex;
 
-    private Boolean deleteMark;
+    private final Boolean deleteMark;
 
 
     @DataBoundConstructor
@@ -30,25 +30,16 @@ public class VirtualPipelineInputSimple extends VirtualPipelineInput {
         return regex;
     }
 
-    public void setRegex(String regex) {
-        this.regex = regex;
-    }
 
     public Boolean getDeleteMark() {
         return deleteMark;
     }
 
-    public void setDeleteMark(Boolean deleteMark) {
-        this.deleteMark = deleteMark;
-    }
 
     public DescriptorExtensionList<VirtualPipelineInput, VirtualPipelineInputDescriptor> getFormatDescriptors() {
         return Jenkins.get().getDescriptorList(VirtualPipelineInput.class);
     }
 
-    public VirtualPipelineInput getFormat() {
-        return null;
-    }
 
     @Extension
     public static final class DescriptorImpl extends VirtualPipelineInputDescriptor {

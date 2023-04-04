@@ -16,9 +16,6 @@ public class VirtualPipelineFilter {
 
         int activeRegexCount = 0;
 
-
-        //TODO bytecount for offset goes here
-
         //advanced setup
         Boolean advancedRegexLock = false;
         VirtualPipelineInputAdvanced activeConfig = null;
@@ -50,7 +47,7 @@ public class VirtualPipelineFilter {
                     // filling content of an advanced regex
 
                     boolean display = activeConfig.getNumberOfLineToDisplay() == activeRegexCount + 1; // line 0 is start mark
-                    if (activeRegexCount >=  activeConfig.getMaxContentLengthToInt()){
+                    if (activeRegexCount >=  activeConfig.getMaxContentLength()){
                         //end regex because of reaching the max limit
                         result.add(new VirtualPipelineLineOutput(activeConfig.getStartMark(), line, lineIndex, activeConfig.getDeleteMark(), LineType.LIMIT_REACHED_LINE, lineWithOffset.getOffset(), display));
 
@@ -70,8 +67,6 @@ public class VirtualPipelineFilter {
                 lineIndex++;
                 continue; //skipping to next line
             }
-
-
 
             //matching first config, first come, first served principal
             for (VirtualPipelineInput config :
@@ -121,7 +116,6 @@ public class VirtualPipelineFilter {
                 }
 
             }
-
 
             lineIndex++;
         }

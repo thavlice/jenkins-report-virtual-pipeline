@@ -14,10 +14,11 @@ import jenkins.tasks.SimpleBuildStep;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.RandomAccess;
 
 
 /**
@@ -29,6 +30,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
     private Boolean generatePicture;
 
     private Boolean generateAgainstLastStableBuild;
+
     @DataBoundConstructor
     public VirtualPipelinePublisher(List<VirtualPipelineInput> configurations, Boolean generatePicture, Boolean generateAgainstLastStableBuild) {
         this.configurations = configurations;
@@ -85,7 +87,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
 
         //creates necessary directories
         boolean mkdirsResult = currentBuildFolder.mkdirs();
-        if (!mkdirsResult){
+        if (!mkdirsResult) {
             listener.getLogger().println("VP: cache directories were not successfully created");
         }
 
@@ -110,7 +112,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
         File jsonCacheFile = new File(currentBuildFolder.getPath() + File.separator + "cache.json");
 
         boolean createFileResult = jsonCacheFile.createNewFile();
-        if (!createFileResult){
+        if (!createFileResult) {
             listener.getLogger().println("VP: Json cacheFile was not created");
         }
 

@@ -98,9 +98,8 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
     private List<VirtualPipelineLineOutput> getAllCacheFromNamedFile(File file){
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            List<VirtualPipelineLineOutput> result = objectMapper.readValue(file, new TypeReference<List<VirtualPipelineLineOutput>>() {
+            return objectMapper.readValue(file, new TypeReference<List<VirtualPipelineLineOutput>>() {
             });
-            return result;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -55,24 +55,14 @@ public class VirtualPipelineLineOutput {
         return regex;
     }
 
-    public void setRegex(String regex) {
-        this.regex = regex;
-    }
-
     public int getIndex() {
         return index;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
-    }
 
     public Boolean getDeleteMark() {
         return deleteMark;
     }
 
-    public void setDeleteMark(Boolean deleteMark) {
-        this.deleteMark = deleteMark;
-    }
 
 }
