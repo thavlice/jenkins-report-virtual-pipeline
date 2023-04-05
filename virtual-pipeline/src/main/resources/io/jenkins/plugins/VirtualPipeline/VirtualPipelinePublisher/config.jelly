@@ -8,9 +8,11 @@
                                         addCaption="Add mark finder"/>
         </f:block>
 
-        <f:advanced>
-            <f:checkbox title="Generate picture as artifact" field="generatePicture"/>
-            <f:checkbox title="Compare against last stable build" field="compareAgainstLastStableBuild"/>
-        </f:advanced>
+        <f:block>
+            <f:advanced>
+                <f:checkbox title="Generate picture as artifact" field="generatePicture"/>
+                <f:checkbox title="Compare against last stable build" field="compareAgainstLastStableBuild"/>
+            </f:advanced>
+        </f:block>
     </f:section>
 </j:jelly>

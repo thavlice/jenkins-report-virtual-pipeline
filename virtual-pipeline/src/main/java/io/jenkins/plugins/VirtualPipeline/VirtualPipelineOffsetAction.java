@@ -23,6 +23,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 
 public class VirtualPipelineOffsetAction implements SimpleBuildStep.LastBuildAction{
@@ -53,22 +54,32 @@ public class VirtualPipelineOffsetAction implements SimpleBuildStep.LastBuildAct
         long from = Long.parseLong(req.getParameter("from"));
         long to = Long.parseLong(req.getParameter("to"));
 
+
         RandomAccessFile logs = new RandomAccessFile(this.build.getRootDir() + File.separator +  "log", "r");
-
-        logs.seek(from);
-        long offsetDiff = to - from;
-
-        byte[]  buffer = new byte[(int) offsetDiff];
-        logs.read(buffer);
-
-        String result = new String(buffer);
-
 
         res.setContentType("text/plaintext");
         res.setCharacterEncoding("UTF-8");
-
         PrintWriter out = res.getWriter();
-        out.print(result);
+
+        Long checkFrom = from;
+        Long checkTo = to;
+
+
+        if(from > to | from < 0 | to < 0 ){
+            res.setStatus(404);
+            out.print("Invalid parameters");
+        }else {
+            logs.seek(from);
+            long offsetDiff = to - from;
+
+            byte[]  buffer = new byte[(int) offsetDiff];
+            logs.read(buffer);
+
+            String result = new String(buffer);
+
+            out.print(result);
+
+        }
         out.flush();
     }
     @Override
