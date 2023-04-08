@@ -26,7 +26,7 @@ public class VirtualPipelinePictureMaker {
     }
 
 
-    public BufferedImage createPicture(List<String> lines) {
+    public BufferedImage createPicture(List<VirtualPipelineLineOutput> lines) {
 
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D graphics2D = image.createGraphics();
@@ -37,9 +37,33 @@ public class VirtualPipelinePictureMaker {
 
         int lineHeight = graphics2D.getFontMetrics().getHeight();
         int y = (height - lineHeight * lines.size()) / 2;
-        for (String lineText : lines) {
-            int x = (width - graphics2D.getFontMetrics().stringWidth(lineText)) / 2;
-            graphics2D.drawString(lineText, x, y);
+        for (VirtualPipelineLineOutput line : lines) {
+            if(!line.getDisplay()){
+                continue;
+            }
+            graphics2D.setColor(textColor);
+            switch (line.getType()){
+                case ONE_LINE:
+                    graphics2D.setColor(Color.green);
+                    break;
+                case START_MARK:
+                    graphics2D.setColor(Color.darkGray);
+                    break;
+                case END_MARK:
+                    graphics2D.setColor(Color.lightGray);
+                    break;
+                case LIMIT_REACHED_LINE:
+                    graphics2D.setColor(Color.orange);
+                    break;
+                case CONTENT_LINE:
+                    graphics2D.setColor(Color.blue);
+                    break;
+                default:
+                    graphics2D.setColor(textColor);
+                    break;
+            }
+            int x = (width - graphics2D.getFontMetrics().stringWidth(line.getLine())) / 2;
+            graphics2D.drawString(line.getIndex() + " " + line.getLine(), x, y);
             y += lineHeight;
         }
         return image;
