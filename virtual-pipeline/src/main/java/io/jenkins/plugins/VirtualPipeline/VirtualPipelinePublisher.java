@@ -14,6 +14,7 @@ import jenkins.tasks.SimpleBuildStep;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -120,13 +121,16 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
 
 
         // creating picture
-        //VirtualPipelinePictureMaker pm = new VirtualPipelinePictureMaker(1200, 800);
-        //BufferedImage image = pm.createPicture(filterOutput.get(0));
+        if(generatePicture){
+            int width = 1200;
+            int height = 800;
+            VirtualPipelinePictureMaker pm = new VirtualPipelinePictureMaker(width, height);
+            BufferedImage image = pm.createPicture(filterOutput);
+            File picturePath = new File(currentBuildFolder + File.separator + "archive" + File.separator + "picture.png");
+            picturePath.mkdirs();
+            javax.imageio.ImageIO.write(image, "png", picturePath);
+        }
 
-
-        //File picturePath = new File(currentBuildFolder + File.separator + "archive" + File.separator + "picture.png");
-        //picturePath.mkdirs();
-        //javax.imageio.ImageIO.write(image, "png", picturePath);
 
 
         // adding actions to build in Jenkins
