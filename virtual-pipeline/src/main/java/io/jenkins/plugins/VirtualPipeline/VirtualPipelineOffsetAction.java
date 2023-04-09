@@ -23,6 +23,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 
 public class VirtualPipelineOffsetAction implements SimpleBuildStep.LastBuildAction{
@@ -32,37 +33,57 @@ public class VirtualPipelineOffsetAction implements SimpleBuildStep.LastBuildAct
         this.build = build;
     }
 
-    public List<String> getLogs() throws IOException {
-        Reader reader = build.getLogReader();
-        BufferedReader bufferedReader = new BufferedReader(reader);
-        bufferedReader.readLine();
-
-        List<String> result = new ArrayList<>();
-        String line = bufferedReader.readLine();
-        while (line != null) {
-            result.add(line);
-            line = bufferedReader.readLine();
-        }
-        bufferedReader.close();
-        return result;
-    }
 
     @GET
     @WebMethod(name = "get-search-offset")
     public void doSearchOffset(StaplerRequest req, StaplerResponse res) throws IOException {
-        String from = req.getParameter("from");
-        String to = req.getParameter("to");
-
-        res.setContentType("text/html;charset=UTF-8");
-
+        res.setContentType("text/plain");
+        res.setCharacterEncoding("UTF-8");
         PrintWriter out = res.getWriter();
 
-        //filtering log by offset goes here todo
-        List<String> contentLines = this.getLogs();
+        try {
+            long from = Long.parseLong(req.getParameter("from"));
+            long to = Long.parseLong(req.getParameter("to"));
+        }catch (NumberFormatException e){
+            res.setStatus(404);
+            out.print("Couldn't parse input");
+            return;
+        }
 
-        this.writeBasicHtml(out, contentLines);
+        long from = Long.parseLong(req.getParameter("from"));
+        long to = Long.parseLong(req.getParameter("to"));
 
+        RandomAccessFile logs = new RandomAccessFile(this.build.getRootDir() + File.separator +  "log", "r");
+
+        Long checkFrom = from;
+        Long checkTo = to;
+
+        List<String> resultLines = new ArrayList<>();
+
+        if(from > to | from < 0 | to < 0 | checkFrom == null | checkTo == null){
+            res.setStatus(404);
+            out.print("Invalid parameters");
+        }else {
+            logs.seek(from);
+            String line;
+            // always prints the rest of the line of given offset
+            while((line = logs.readLine()) != null){
+                resultLines.add(line);
+
+                //checking the upper limit
+                if(logs.getFilePointer() >= to){
+                    break;
+                }
+            }
+
+            for (String resultLine :
+                    resultLines) {
+                out.println(resultLine);
+            }
+
+        }
         out.flush();
+        logs.close();
     }
     @Override
     public Collection<? extends Action> getProjectActions() {
@@ -83,22 +104,6 @@ public class VirtualPipelineOffsetAction implements SimpleBuildStep.LastBuildAct
     @Override
     public String getUrlName() {
         return "logsOffset";
-    }
-
-
-    private void writeBasicHtml(PrintWriter out, List<String> contentLines){
-        out.println("<html>");
-        out.println("<head></head>");
-        out.println("<body>");
-        out.println("<h1>Offset logs</h1>");
-
-        for (String contentLine:
-             contentLines) {
-            out.println("<p>"+ contentLine +"</p>");
-        }
-
-        out.println("</body>");
-        out.println("</html>");
     }
 
 }

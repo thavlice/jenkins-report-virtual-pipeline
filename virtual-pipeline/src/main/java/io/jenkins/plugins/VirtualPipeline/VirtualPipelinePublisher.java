@@ -14,10 +14,10 @@ import jenkins.tasks.SimpleBuildStep;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 
-import java.io.BufferedReader;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.Reader;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +31,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
     private Boolean generatePicture;
 
     private Boolean generateAgainstLastStableBuild;
+
     @DataBoundConstructor
     public VirtualPipelinePublisher(List<VirtualPipelineInput> configurations, Boolean generatePicture, Boolean generateAgainstLastStableBuild) {
         this.configurations = configurations;
@@ -68,7 +69,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
     }
 
     /**
-     * every event from plugin is performed at this function as it is the main extention point for the plugin
+     * every event from plugin is performed at this function as it is the main extension point for the plugin
      *
      * @param build
      * @param launcher
@@ -83,27 +84,27 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
         //here is the performance part, e.g. drawing, printing itself
         File rootDir = build.getProject().getRootDir();
         File currentBuildFolder = new File(rootDir.getPath() + File.separator + "builds" + File.separator + build.getNumber());
+        File defaultLogs = new File(currentBuildFolder + File.separator + "log");
 
         //creates necessary directories
         boolean mkdirsResult = currentBuildFolder.mkdirs();
-        if (!mkdirsResult){
-            listener.getLogger().println("VP: cache directories were not succesfully created");
+        if (!mkdirsResult) {
+            listener.getLogger().println("VP: cache directories were not successfully created");
         }
 
+        RandomAccessFile raf = new RandomAccessFile(defaultLogs, "r");
 
         //reading log file
-        Reader reader = build.getLogReader();
-        BufferedReader bufferedReader = new BufferedReader(reader);
-        bufferedReader.readLine();
 
-        List<String> logLines = new ArrayList<>();
-        String line = bufferedReader.readLine();
+        List<LineWithOffset> logLines = new ArrayList<>();
+        long currentOffset = raf.getFilePointer();
+        String line = raf.readLine();
         while (line != null) {
-            logLines.add(line);
-            line = bufferedReader.readLine();
+            logLines.add(new LineWithOffset(line, currentOffset));
+            currentOffset = raf.getFilePointer();
+            line = raf.readLine();
         }
-
-        bufferedReader.close();
+        raf.close();
         //getting filtered lines
         List<VirtualPipelineLineOutput> filterOutput = VirtualPipelineFilter.filter(logLines, getConfigurations());
 
@@ -112,7 +113,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
         File jsonCacheFile = new File(currentBuildFolder.getPath() + File.separator + "cache.json");
 
         boolean createFileResult = jsonCacheFile.createNewFile();
-        if (!createFileResult){
+        if (!createFileResult) {
             listener.getLogger().println("VP: Json cacheFile was not created");
         }
 
@@ -120,13 +121,16 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
 
 
         // creating picture
-        //VirtualPipelinePictureMaker pm = new VirtualPipelinePictureMaker(1200, 800);
-        //BufferedImage image = pm.createPicture(filterOutput.get(0));
+        if(generatePicture){
+            int width = 1200;
+            int height = 800;
+            VirtualPipelinePictureMaker pm = new VirtualPipelinePictureMaker(width, height);
+            BufferedImage image = pm.createPicture(filterOutput);
+            File picturePath = new File(currentBuildFolder + File.separator + "archive" + File.separator + "picture.png");
+            picturePath.mkdirs();
+            javax.imageio.ImageIO.write(image, "png", picturePath);
+        }
 
-
-        //File picturePath = new File(currentBuildFolder + File.separator + "archive" + File.separator + "picture.png");
-        //picturePath.mkdirs();
-        //javax.imageio.ImageIO.write(image, "png", picturePath);
 
 
         // adding actions to build in Jenkins
@@ -137,6 +141,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
 
         return true;
     }
+
 
     /**
      * mainly used for configuration and input checks
