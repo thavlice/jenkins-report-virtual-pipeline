@@ -2,7 +2,7 @@
     <l:layout title="OFFSET LOGS">
         <l:main-panel>
             <h2>Offset logs</h2>
-            <f:form action="get-search-offset" method="GET" name="Get the offset">
+            <f:form id="offsetForm" action="get-search-offset" method="GET" name="Get the offset">
                 <f:entry title="Offset from">
                     <f:number name="from" min="0"></f:number>
                 </f:entry>
@@ -11,6 +11,12 @@
                 </f:entry>
                 <f:submit value="Search" name="Search"></f:submit>
             </f:form>
+            <script>
+                const urlParameters = new URLSearchParams(window.location.search);
+                const fromParameter = urlParameters.get('from');
+                const elemFrom = document.getElementsByName('from')[0];
+                elemFrom.value = fromParameter;
+            </script>
         </l:main-panel>
     </l:layout>
 </j:jelly>

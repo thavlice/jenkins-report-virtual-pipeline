@@ -7,7 +7,9 @@ import hudson.model.Action;
 import jenkins.tasks.SimpleBuildStep;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
