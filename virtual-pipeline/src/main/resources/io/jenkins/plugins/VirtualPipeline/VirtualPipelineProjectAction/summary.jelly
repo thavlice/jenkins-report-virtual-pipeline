@@ -43,7 +43,7 @@
         <j:forEach items="${lines}" var="line">
             <div class="codeWrapper">
                     <code>
-                        <div class="${line.type}">
+                        <div class="${line.historyType}">
                         <a class="${line.type}" href="/job/${it.build.project.name}/${it.build.number}/html#ID${line.index}">
                             ${line.index} ${line.line}
                         </a>
