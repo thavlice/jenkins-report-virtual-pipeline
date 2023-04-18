@@ -10,8 +10,13 @@
 
         <f:block>
             <f:advanced>
-                <f:checkbox title="Generate picture as artifact" field="generatePicture"/>
-                <f:checkbox title="Compare against last stable build" field="compareAgainstLastStableBuild"/>
+
+                <f:block>
+                    <f:checkbox title="Generate picture as artifact" field="generatePicture"/>
+                </f:block>
+                <f:block>
+                    <f:checkbox title="Compare against last stable build" field="compareAgainstLastStableBuild"/>
+                </f:block>
             </f:advanced>
         </f:block>
     </f:section>

@@ -39,7 +39,7 @@
         </style>
         <h2>Virtual pipeline results</h2>
         <div class="codeSection">
-        <j:set var="lines" value="${it.onlyMarkedLinesToDisplay}"/>
+        <j:set var="lines" value="${it.historyMarkedLines}"/>
         <j:forEach items="${lines}" var="line">
             <div class="codeWrapper">
                     <code>
