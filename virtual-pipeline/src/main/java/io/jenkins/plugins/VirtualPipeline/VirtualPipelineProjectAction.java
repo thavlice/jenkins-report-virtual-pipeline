@@ -62,11 +62,18 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
 
             if(currentLine.getDisplay() || previousLine.getDisplay()){ // comparing only lines to display
 
+                // lines are same
                 if(Objects.equals(currentLine.getLine(), previousLine.getLine())){
                     result.add(new VirtualPipelineOutputHistoryMarked(currentLine.getRegex(), currentLine.getLine(),
                             currentLine.getIndex(), currentLine.getDeleteMark(),  currentLine.getType(),
                             HistoryType.SAME, currentLine.getLineStartOffset(), currentLine.getDisplay()));
-                }else {
+
+                }else if(Objects.equals(currentLine.getRegex(), previousLine.getRegex())){ //regex is same, line not
+                    result.add(new VirtualPipelineOutputHistoryMarked(currentLine.getRegex(), currentLine.getLine(),
+                            currentLine.getIndex(), currentLine.getDeleteMark(), currentLine.getType(),
+                            HistoryType.JUST_SAME_REGEX, currentLine.getLineStartOffset(), currentLine.getDisplay()));
+
+                }else{ // different lines, different regex
                     result.add(new VirtualPipelineOutputHistoryMarked(currentLine.getRegex(), currentLine.getLine(),
                             currentLine.getIndex(), currentLine.getDeleteMark(),  currentLine.getType(),
                             HistoryType.DIFFERENT_CURRENT, currentLine.getLineStartOffset(), currentLine.getDisplay()));

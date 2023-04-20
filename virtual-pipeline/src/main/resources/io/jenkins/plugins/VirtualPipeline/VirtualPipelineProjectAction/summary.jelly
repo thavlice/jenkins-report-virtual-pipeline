@@ -36,6 +36,9 @@
             .DIFFERENT_CURRENT{
             background-color: var(--line-green);
             }
+            .JUST_SAME_REGEX{
+            background-color: var(--light-yellow);
+            }
         </style>
         <h2>Virtual pipeline results</h2>
         <div class="codeSection">
