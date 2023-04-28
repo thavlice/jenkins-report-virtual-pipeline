@@ -43,24 +43,38 @@
             p {
             margin: 0px;
             }
-            a.START_MARK{
+            .START_MARK{
             color: var(--dark-grey);
             }
-            a.END_MARK{
+            .END_MARK{
             color: var(--medium-grey);
             }
             .ONE_LINE{
             color: var(--success);
             }
-            a.LIMIT_REACHED_LINE{
+            .LIMIT_REACHED_LINE{
             color: var(--warning);
             }
-            a.CONTENT_LINE{
+            .CONTENT_LINE{
             color: var(--primary);
             }
+            h3{
+            margin-top: 2rem;
+            }
+
         </style>
         <l:main-panel>
             <h2>HTML LOGS</h2>
+            <h3 class="legendTitle">Legend</h3>
+            <div class="legend">
+            <div class="ONE_LINE">Simple oneline marks</div>
+            <div class="START_MARK">Start of the Advanced mark</div>
+            <div class="CONTENT_LINE">Line inside the Advanced mark</div>
+            <div class="END_MARK">End of the Advanced mark</div>
+            <div class="LIMIT_REACHED_LINE">The line inside Advanced mark that reached upper limit for matched lines</div>
+            <div class="DEFAULT">Line that was not matched</div>
+            </div>
+            <h3>Marked logs</h3>
             <j:set var="logLines" value="${it.markedLogs}"/>
             <div class="logsWrapper">
                 <pre>
