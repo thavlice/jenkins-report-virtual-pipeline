@@ -4,9 +4,10 @@
         .codeSection{
         width: 500px;
         height:500px;
-        overflow: auto;
+        overflow:auto;
         overflow-wrap: anywhere;
         word-break: break-all;
+        white-space: nowrap;
         }
         .codeWrapper{
         }
