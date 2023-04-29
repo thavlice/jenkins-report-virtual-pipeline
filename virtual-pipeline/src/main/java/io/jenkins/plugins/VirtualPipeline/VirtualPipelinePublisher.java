@@ -160,7 +160,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
 
         @Override
         public String getDisplayName() {
-            return "Add virtual pipeline";
+            return "Virtual Pipeline";
         }
 
         @Override
