@@ -30,22 +30,50 @@
             a.CONTENT_LINE{
             color: var(--primary);
             }
+
+            div.START_MARK{
+            color: var(--dark-grey);
+            font-size: var(--font-size-sm);
+            }
+            div.END_MARK{
+            color: var(--medium-grey);
+            }
+            div.ONE_LINE{
+            color: var(--green);
+            }
+            div.LIMIT_REACHED_LINE{
+            color: var(--warning);
+            }
+            div.CONTENT_LINE{
+            color: var(--primary);
+            }
+
             .DIFFERENT_PREVIOUS{
             background-color: var(--danger-hover);
             }
             .DIFFERENT_CURRENT{
             background-color: var(--line-green);
             }
+            .JUST_SAME_REGEX{
+            background-color: var(--light-yellow);
+            }
+
+            .legend{
+            margin-top: 2rem;
+            }
+
         </style>
-        <h2>Virtual pipeline results</h2>
+        <h2>Virtual Pipeline results</h2>
+
+
         <div class="codeSection">
-        <j:set var="lines" value="${it.onlyMarkedLinesToDisplay}"/>
+        <j:set var="lines" value="${it.historyMarkedLines}"/>
         <j:forEach items="${lines}" var="line">
             <div class="codeWrapper">
                     <code>
-                        <div class="${line.type}">
+                        <div class="${line.historyType}">
                         <a class="${line.type}" href="/job/${it.build.project.name}/${it.build.number}/html#ID${line.index}">
-                            ${line.index} ${line.line}
+                            ${line.line}
                         </a>
                             <a class="${line.type}" href="/job/${it.build.project.name}/${it.build.number}/logsOffset/?from=${line.lineStartOffset}">
                                 [offset: ${line.lineStartOffset}]
@@ -55,5 +83,12 @@
             </div>
         </j:forEach>
         </div>
+        <h3 class="legend">Legend</h3>
+        <div class="ONE_LINE">Simple oneline marks</div>
+        <div class="START_MARK">Start of the Advanced mark</div>
+        <div class="CONTENT_LINE">Line inside the Advanced mark</div>
+        <div class="END_MARK">End of the Advanced mark</div>
+        <div class="LIMIT_REACHED_LINE">The line inside Advanced mark that reached upper limit for matched lines</div>
+        <div class="DEFAULT">Line that was not matched</div>
     </t:summary>
 </j:jelly>

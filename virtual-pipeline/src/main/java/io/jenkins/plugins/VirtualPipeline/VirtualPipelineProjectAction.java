@@ -7,9 +7,7 @@ import hudson.model.Action;
 import jenkins.tasks.SimpleBuildStep;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -23,11 +21,14 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
 
     private final File cacheFile;
 
+    private final Boolean compareAgainstLastStableBuild;
 
-    public VirtualPipelineProjectAction(AbstractBuild<?, ?> build, List<VirtualPipelineInput> configurations, File cacheFolder) {
+
+    public VirtualPipelineProjectAction(AbstractBuild<?, ?> build, List<VirtualPipelineInput> configurations, File cacheFolder, Boolean compareAgainstLastStableBuild) {
         this.build = build;
         this.configurations = configurations;
         this.cacheFile = cacheFolder;
+        this.compareAgainstLastStableBuild = compareAgainstLastStableBuild;
     }
 
     public File getCacheFile() {
@@ -39,8 +40,13 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
     }
 
     public List<VirtualPipelineOutputHistoryMarked> getHistoryMarkedLines(){
+        File comparingFile;; // build File can be changed here
+        if(compareAgainstLastStableBuild){
+            comparingFile = this.getLastStableBuildFile();
+        }else {
+            comparingFile = this.getPreviousBuildFile();
+        }
 
-        File comparingFile = this.getPreviousBuildFile(); // build File can be changed here
 
 
         List<VirtualPipelineLineOutput> currentBuildLines = getAllCacheFromFile();
@@ -48,21 +54,34 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
 
         List<VirtualPipelineOutputHistoryMarked> result = new ArrayList<>();
 
+
         //comparing
         for (int lineIndex = 0; lineIndex < currentBuildLines.size(); lineIndex++) {
             VirtualPipelineLineOutput currentLine = currentBuildLines.get(lineIndex);
             VirtualPipelineLineOutput previousLine = previousBuildLines.get(lineIndex);
-            if(Objects.equals(currentLine.getLine(), previousLine.getLine())){
-                result.add(new VirtualPipelineOutputHistoryMarked(currentLine.getRegex(), currentLine.getLine(),
-                        currentLine.getIndex(), currentLine.getDeleteMark(),  currentLine.getType(),
-                        HistoryType.SAME, currentLine.getLineStartOffset(), currentLine.getDisplay()));
-            }else {
-                result.add(new VirtualPipelineOutputHistoryMarked(currentLine.getRegex(), currentLine.getLine(),
-                        currentLine.getIndex(), currentLine.getDeleteMark(),  currentLine.getType(),
-                        HistoryType.DIFFERENT_CURRENT, currentLine.getLineStartOffset(), currentLine.getDisplay()));
-                result.add(new VirtualPipelineOutputHistoryMarked(previousLine.getRegex(), previousLine.getLine(),
-                        previousLine.getIndex(), previousLine.getDeleteMark(),  previousLine.getType(),
-                        HistoryType.DIFFERENT_PREVIOUS, previousLine.getLineStartOffset(), previousLine.getDisplay()));
+
+            if(currentLine.getDisplay() || previousLine.getDisplay()){ // comparing only lines to display
+
+                // lines are same
+                if(Objects.equals(currentLine.getLine(), previousLine.getLine())){
+                    result.add(new VirtualPipelineOutputHistoryMarked(currentLine.getRegex(), currentLine.getLine(),
+                            currentLine.getIndex(), currentLine.getDeleteMark(),  currentLine.getType(),
+                            HistoryType.SAME, currentLine.getLineStartOffset(), currentLine.getDisplay()));
+
+                }else if(Objects.equals(currentLine.getRegex(), previousLine.getRegex())){ //regex is same, line not
+                    result.add(new VirtualPipelineOutputHistoryMarked(currentLine.getRegex(), currentLine.getLine(),
+                            currentLine.getIndex(), currentLine.getDeleteMark(), currentLine.getType(),
+                            HistoryType.JUST_SAME_REGEX, currentLine.getLineStartOffset(), currentLine.getDisplay()));
+
+                }else{ // different lines, different regex
+                    result.add(new VirtualPipelineOutputHistoryMarked(currentLine.getRegex(), currentLine.getLine(),
+                            currentLine.getIndex(), currentLine.getDeleteMark(),  currentLine.getType(),
+                            HistoryType.DIFFERENT_CURRENT, currentLine.getLineStartOffset(), currentLine.getDisplay()));
+                    result.add(new VirtualPipelineOutputHistoryMarked(previousLine.getRegex(), previousLine.getLine(),
+                            previousLine.getIndex(), previousLine.getDeleteMark(),  previousLine.getType(),
+                            HistoryType.DIFFERENT_PREVIOUS, previousLine.getLineStartOffset(), previousLine.getDisplay()));
+                }
+
             }
 
         }
@@ -86,6 +105,11 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
     }
     private File getPreviousBuildFile(){
         File buildFolder = getBuildFolderFromBuildNumber(this.getBuild().getPreviousBuild().getNumber());
+        return new File(buildFolder + File.separator + "cache.json");
+    }
+
+    private File getLastStableBuildFile(){
+        File buildFolder = getBuildFolderFromBuildNumber(this.getBuild().getProject().getLastStableBuild().getNumber());
         return new File(buildFolder + File.separator + "cache.json");
     }
 
@@ -139,7 +163,7 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
     @Override
     public Collection<? extends Action> getProjectActions() {
         ArrayList<Action> list = new ArrayList<>();
-        list.add(new VirtualPipelineProjectAction(this.getBuild(), this.getConfigurations(), this.getCacheFile()));
+        list.add(new VirtualPipelineProjectAction(this.getBuild(), this.getConfigurations(), this.getCacheFile(), compareAgainstLastStableBuild));
         return list;
     }
 

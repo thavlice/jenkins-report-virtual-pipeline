@@ -13,6 +13,7 @@ import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildStep;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.DataBoundSetter;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -25,35 +26,42 @@ import java.util.List;
 /**
  * responsible for performing all actions of the plugin
  */
+//@Extension
 public class VirtualPipelinePublisher extends Recorder implements SimpleBuildStep {
 
     private List<VirtualPipelineInput> configurations;
-    private Boolean generatePicture;
+    private Boolean generatePicture = false;
 
-    private Boolean generateAgainstLastStableBuild;
+    private Boolean compareAgainstLastStableBuild = false;
+
+    public VirtualPipelinePublisher(){};
 
     @DataBoundConstructor
-    public VirtualPipelinePublisher(List<VirtualPipelineInput> configurations, Boolean generatePicture, Boolean generateAgainstLastStableBuild) {
+    public VirtualPipelinePublisher(List<VirtualPipelineInput> configurations, Boolean generatePicture, Boolean compareAgainstLastStableBuild) {
         this.configurations = configurations;
         this.generatePicture = generatePicture;
-        this.generateAgainstLastStableBuild = generateAgainstLastStableBuild;
+        this.compareAgainstLastStableBuild = compareAgainstLastStableBuild;
     }
 
-    public void setGenerateAgainstLastStableBuild(Boolean generateAgainstLastStableBuild) {
-        this.generateAgainstLastStableBuild = generateAgainstLastStableBuild;
+    @DataBoundSetter
+    public void setCompareAgainstLastStableBuild(Boolean compareAgainstLastStableBuild) {
+        this.compareAgainstLastStableBuild = compareAgainstLastStableBuild;
     }
 
-    public Boolean getGenerateAgainstLastStableBuild() {
-        return generateAgainstLastStableBuild;
+    public Boolean getCompareAgainstLastStableBuild() {
+        return compareAgainstLastStableBuild;
     }
+
 
     public Boolean getGeneratePicture() {
         return generatePicture;
     }
 
+    @DataBoundSetter
     public void setGeneratePicture(Boolean generatePicture) {
         this.generatePicture = generatePicture;
     }
+
 
     public List<VirtualPipelineInput> getConfigurations() {
         return configurations;
@@ -134,7 +142,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
 
 
         // adding actions to build in Jenkins
-        VirtualPipelineProjectAction action = new VirtualPipelineProjectAction(build, this.getConfigurations(), jsonCacheFile);
+        VirtualPipelineProjectAction action = new VirtualPipelineProjectAction(build, this.getConfigurations(), jsonCacheFile, compareAgainstLastStableBuild);
         build.addAction(action);
         build.addAction(new VirtualPipelineHTMLAction(build, jsonCacheFile));
         build.addAction(new VirtualPipelineOffsetAction(build));
@@ -152,7 +160,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
 
         @Override
         public String getDisplayName() {
-            return "Add virtual pipeline";
+            return "Virtual Pipeline";
         }
 
         @Override

@@ -28,7 +28,6 @@ public class VirtualPipelineHTMLAction implements SimpleBuildStep.LastBuildActio
     public List<String> getLogs() throws IOException {
         Reader reader = build.getLogReader();
         BufferedReader bufferedReader = new BufferedReader(reader);
-        bufferedReader.readLine();
         List<String> result = new ArrayList<>();
         String line = bufferedReader.readLine();
         while (line != null) {
@@ -49,13 +48,13 @@ public class VirtualPipelineHTMLAction implements SimpleBuildStep.LastBuildActio
         VirtualPipelineLineOutput currentMarkedLine = iteratorMarked.next();
         for (int index = 0; index < fullLogs.size(); index++) {
 
-            // indexes are off by one, thus comparing them this way, TODO Fix for the case when first line is matched
-            if(iteratorMarked.hasNext() && (index == currentMarkedLine.getIndex()-1)){
+            if(iteratorMarked.hasNext() && (index == currentMarkedLine.getIndex())){
                 result.add(currentMarkedLine);
                 currentMarkedLine = iteratorMarked.next();
             }else {
                 //default for line with no marked meaning
-                result.add(new VirtualPipelineLineOutput("", fullLogs.get(index), index, false, LineType.DEFAULT,0 , false));
+                result.add(new VirtualPipelineLineOutput("", fullLogs.get(index), index, false,
+                        LineType.DEFAULT,0 , false));
             }
         }
         return result;

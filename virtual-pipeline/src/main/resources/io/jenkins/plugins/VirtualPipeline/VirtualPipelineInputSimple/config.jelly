@@ -4,5 +4,7 @@
     <f:entry title="Regex in the start of the line" field="regex">
         <f:textbox/>
     </f:entry>
-    <f:checkbox title="Delete regex part of the mark" field="deleteMark"/>
+    <f:entry title="Delete regex part of the mark" field="deleteMark">
+        <f:checkbox />
+    </f:entry>
 </j:jelly>
