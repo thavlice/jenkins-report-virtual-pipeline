@@ -68,5 +68,10 @@ public class VirtualPipelineInputAdvanced extends VirtualPipelineInput {
             return FormValidation.ok();
         }
 
+        @Override
+        public String getDisplayName() {
+            return "Advanced Regex Format";
+        }
+
     }
 }

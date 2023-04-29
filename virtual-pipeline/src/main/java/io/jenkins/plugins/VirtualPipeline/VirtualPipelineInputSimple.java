@@ -56,6 +56,11 @@ public class VirtualPipelineInputSimple extends VirtualPipelineInput {
             return FormValidation.ok();
         }
 
+        @Override
+        public String getDisplayName() {
+            return "Simple Regex Format";
+        }
+
 
     }
 }
