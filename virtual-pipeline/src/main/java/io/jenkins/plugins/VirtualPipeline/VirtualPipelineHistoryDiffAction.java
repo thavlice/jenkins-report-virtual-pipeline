@@ -109,7 +109,8 @@ public class VirtualPipelineHistoryDiffAction implements SimpleBuildStep.LastBui
 
     @Override
     public Collection<? extends Action> getProjectActions() {
-        return null;
+        ArrayList<Action> list = new ArrayList<>();
+        return list;
     }
 
     @Override
