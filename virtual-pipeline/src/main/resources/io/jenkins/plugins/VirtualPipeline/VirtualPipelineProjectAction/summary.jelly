@@ -67,11 +67,11 @@
 
 
         <div class="codeSection">
-        <j:set var="lines" value="${it.historyMarkedLines}"/>
+        <j:set var="lines" value="${it.onlyMarkedLinesToDisplay}"/>
         <j:forEach items="${lines}" var="line">
             <div class="codeWrapper">
                     <code>
-                        <div class="${line.historyType}">
+                        <div>
                         <a class="${line.type}" href="/job/${it.build.project.name}/${it.build.number}/html#ID${line.index}">
                             ${line.line}
                         </a>

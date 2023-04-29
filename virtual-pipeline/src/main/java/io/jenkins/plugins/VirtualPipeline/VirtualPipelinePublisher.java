@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * responsible for performing all actions of the plugin
  */
-//@Extension
+@Extension
 public class VirtualPipelinePublisher extends Recorder implements SimpleBuildStep {
 
     private List<VirtualPipelineInput> configurations;
@@ -146,6 +146,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
         build.addAction(action);
         build.addAction(new VirtualPipelineHTMLAction(build, jsonCacheFile));
         build.addAction(new VirtualPipelineOffsetAction(build));
+        build.addAction(new VirtualPipelineHistoryDiffAction(build, jsonCacheFile, compareAgainstLastStableBuild));
 
         return true;
     }
