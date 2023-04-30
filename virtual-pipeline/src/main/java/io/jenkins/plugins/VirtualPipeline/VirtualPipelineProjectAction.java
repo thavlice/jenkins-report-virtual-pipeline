@@ -39,6 +39,7 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
         return this.getAllCacheFromNamedFile(cacheFile);
     }
 
+
     public List<VirtualPipelineOutputHistoryMarked> getHistoryMarkedLines(){
         File comparingFile;; // build File can be changed here
         if(compareAgainstLastStableBuild){
@@ -105,12 +106,12 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
     }
     private File getPreviousBuildFile(){
         File buildFolder = getBuildFolderFromBuildNumber(this.getBuild().getPreviousBuild().getNumber());
-        return new File(buildFolder + File.separator + "cache.json");
+        return new File(buildFolder + File.separator + VirtualPipelinePublisher.cacheName);
     }
 
     private File getLastStableBuildFile(){
         File buildFolder = getBuildFolderFromBuildNumber(this.getBuild().getProject().getLastStableBuild().getNumber());
-        return new File(buildFolder + File.separator + "cache.json");
+        return new File(buildFolder + File.separator + VirtualPipelinePublisher.cacheName);
     }
 
     public File getProjectDirFile(){
