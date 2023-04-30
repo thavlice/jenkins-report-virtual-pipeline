@@ -105,12 +105,22 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
         return result;
     }
     private File getPreviousBuildFile(){
-        File buildFolder = getBuildFolderFromBuildNumber(this.getBuild().getPreviousBuild().getNumber());
+        AbstractBuild<?,?> previousBuild =  this.getBuild().getPreviousBuild();
+        if (Objects.isNull(previousBuild)){
+            return null;
+        }
+        int buildNumber = previousBuild.getNumber();
+        File buildFolder = getBuildFolderFromBuildNumber(buildNumber);
         return new File(buildFolder + File.separator + VirtualPipelinePublisher.cacheName);
     }
 
     private File getLastStableBuildFile(){
-        File buildFolder = getBuildFolderFromBuildNumber(this.getBuild().getProject().getLastStableBuild().getNumber());
+        AbstractBuild<?,?> previousLastStableBuild =  this.getBuild().getProject().getLastStableBuild();
+        if (Objects.isNull(previousLastStableBuild)){
+            return null;
+        }
+        int buildNumber = previousLastStableBuild.getNumber();
+        File buildFolder = getBuildFolderFromBuildNumber(buildNumber);
         return new File(buildFolder + File.separator + VirtualPipelinePublisher.cacheName);
     }
 
