@@ -33,6 +33,9 @@
             .CHANGE{
             background-color: var(--line-green);
             }
+            .INSERT{
+            background-color: var(--cyan);
+            }
         </style>
         <l:main-panel>
             <j:set var="diffLines" value="${it.diffLines}"/>
@@ -40,11 +43,11 @@
             <div style="width: 100%">
                 <div class="container">
                     <div class="colOne">
-                        <div >OLD BUILD MARKS</div>
+                        <div >PREVIOUS BUILD MARKS (Build #${it.compareBuildNumber})</div>
                     </div>
                     <div class="separator">  </div>
                     <div class="colTwo">
-                        <div>NEW BUILD MARKS</div>
+                        <div>CURRENT BUILD MARKS (Build #${it.currentBuildNumber})</div>
                     </div>
                 </div>
 

@@ -101,6 +101,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
         boolean mkdirsResult = currentBuildFolder.mkdirs();
         if (!mkdirsResult) {
             listener.getLogger().println("VP: cache directories were not successfully created");
+            //return false
         }
 
         RandomAccessFile raf = new RandomAccessFile(defaultLogs, "r");
@@ -126,6 +127,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
         boolean createFileResult = jsonCacheFile.createNewFile();
         if (!createFileResult) {
             listener.getLogger().println("VP: "+ cacheName +" was not created");
+            //return false
         }
 
         VirtualPipelineFilter.saveToJSON(filterOutput, jsonCacheFile);
@@ -141,6 +143,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
             Boolean pictureMkdirResult = picturePath.mkdirs();
             if (!pictureMkdirResult) {
                 listener.getLogger().println("VP: cache directories for picture were not successfully created");
+                //return false
             }
             javax.imageio.ImageIO.write(image, "png", picturePath);
         }

@@ -39,6 +39,21 @@ public class VirtualPipelineHistoryDiffAction implements SimpleBuildStep.LastBui
         this.compareAgainstLastStableBuild = compareAgainstLastStableBuild;
     }
 
+    public int getCurrentBuildNumber(){
+        return this.build.getNumber();
+    }
+    public int getCompareBuildNumber(){
+        if(compareAgainstLastStableBuild){
+            return this.build.getProject().getLastStableBuild().getNumber();
+        }
+        try {
+            return this.build.getPreviousBuild().getNumber();
+        }catch (Exception e){
+            return this.getCurrentBuildNumber();
+        }
+
+    }
+
 
     public List<DiffRow> getDiffLines(){
         File comparingFile; // build File can be changed here
