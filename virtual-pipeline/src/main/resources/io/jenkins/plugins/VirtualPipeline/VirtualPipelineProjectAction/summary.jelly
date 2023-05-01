@@ -64,14 +64,12 @@
 
         </style>
         <h2>Virtual Pipeline results</h2>
-
-
         <div class="codeSection">
-        <j:set var="lines" value="${it.historyMarkedLines}"/>
+        <j:set var="lines" value="${it.onlyMarkedLinesToDisplay}"/>
         <j:forEach items="${lines}" var="line">
             <div class="codeWrapper">
                     <code>
-                        <div class="${line.historyType}">
+                        <div>
                         <a class="${line.type}" href="/job/${it.build.project.name}/${it.build.number}/html#ID${line.index}">
                             ${line.line}
                         </a>
@@ -88,7 +86,7 @@
         <div class="START_MARK">Start of the Advanced mark</div>
         <div class="CONTENT_LINE">Line inside the Advanced mark</div>
         <div class="END_MARK">End of the Advanced mark</div>
-        <div class="LIMIT_REACHED_LINE">The line inside Advanced mark that reached upper limit for matched lines</div>
+        <div class="LIMIT_REACHED_LINE">The line that reached upper limit for matched lines</div>
         <div class="DEFAULT">Line that was not matched</div>
     </t:summary>
 </j:jelly>

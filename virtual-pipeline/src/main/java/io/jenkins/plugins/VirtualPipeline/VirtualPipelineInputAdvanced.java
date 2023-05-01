@@ -7,6 +7,7 @@ import org.kohsuke.stapler.QueryParameter;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -66,6 +67,49 @@ public class VirtualPipelineInputAdvanced extends VirtualPipelineInput {
                 return FormValidation.error("Regex is invalid");
             }
             return FormValidation.ok();
+        }
+
+        public FormValidation doCheckEndMark(@QueryParameter String endMark) throws IOException, ServletException {
+            if (endMark.isEmpty()) {
+                return FormValidation.error("Regex is empty");
+            }
+            try {
+                Pattern.compile(endMark);
+            } catch (PatternSyntaxException exception) {
+                return FormValidation.error("Regex is invalid");
+            }
+            return FormValidation.ok();
+        }
+
+        public FormValidation doCheckMaxContentLength(@QueryParameter String maxContentLength) throws IOException, ServletException {
+            try {
+                int inputNumber = Integer.parseInt(maxContentLength);
+                if(inputNumber < 1) {
+                    return FormValidation.error("Max content length should be greater than 0");
+                }
+                return FormValidation.ok();
+
+            }catch (NumberFormatException e){
+                return FormValidation.error("Couldn't parse number input");
+            }catch (Exception e){
+            return FormValidation.error("Something went wrong");
+            }
+
+        }
+
+
+        public FormValidation doCheckNumberOfLineToDisplay(@QueryParameter String numberOfLineToDisplay) throws IOException, ServletException {
+            try{
+            int inputNumber = Integer.parseInt(numberOfLineToDisplay);
+            if(inputNumber < 0) {
+                return FormValidation.error("Number of line to display should be 0 or greater");
+            }
+            return FormValidation.ok();
+            }catch (NumberFormatException e){
+                return FormValidation.error("Couldn't parse number input");
+            }catch (Exception e){
+                return FormValidation.error("Something went wrong");
+            }
         }
 
         @Override

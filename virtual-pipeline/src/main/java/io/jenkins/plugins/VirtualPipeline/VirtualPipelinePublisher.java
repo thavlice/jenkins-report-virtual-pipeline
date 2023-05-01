@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * responsible for performing all actions of the plugin
  */
-//@Extension
+@Extension
 public class VirtualPipelinePublisher extends Recorder implements SimpleBuildStep {
 
     private List<VirtualPipelineInput> configurations;
@@ -35,6 +35,9 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
     private Boolean compareAgainstLastStableBuild = false;
 
     public VirtualPipelinePublisher(){};
+
+    public static final String cacheName = "VirtualPipelineCache.json";
+    public static final String cachePictureName = "VirtualPipelineResult.png";
 
     @DataBoundConstructor
     public VirtualPipelinePublisher(List<VirtualPipelineInput> configurations, Boolean generatePicture, Boolean compareAgainstLastStableBuild) {
@@ -98,6 +101,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
         boolean mkdirsResult = currentBuildFolder.mkdirs();
         if (!mkdirsResult) {
             listener.getLogger().println("VP: cache directories were not successfully created");
+            //return false
         }
 
         RandomAccessFile raf = new RandomAccessFile(defaultLogs, "r");
@@ -118,11 +122,12 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
 
 
         //writing in JSON format into output.json
-        File jsonCacheFile = new File(currentBuildFolder.getPath() + File.separator + "cache.json");
+        File jsonCacheFile = new File(currentBuildFolder.getPath() + File.separator + cacheName);
 
         boolean createFileResult = jsonCacheFile.createNewFile();
         if (!createFileResult) {
-            listener.getLogger().println("VP: Json cacheFile was not created");
+            listener.getLogger().println("VP: "+ cacheName +" was not created");
+            //return false
         }
 
         VirtualPipelineFilter.saveToJSON(filterOutput, jsonCacheFile);
@@ -134,8 +139,12 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
             int height = 800;
             VirtualPipelinePictureMaker pm = new VirtualPipelinePictureMaker(width, height);
             BufferedImage image = pm.createPicture(filterOutput);
-            File picturePath = new File(currentBuildFolder + File.separator + "archive" + File.separator + "picture.png");
-            picturePath.mkdirs();
+            File picturePath = new File(currentBuildFolder + File.separator + "archive" + File.separator + cachePictureName);
+            Boolean pictureMkdirResult = picturePath.mkdirs();
+            if (!pictureMkdirResult) {
+                listener.getLogger().println("VP: cache directories for picture were not successfully created");
+                //return false
+            }
             javax.imageio.ImageIO.write(image, "png", picturePath);
         }
 
@@ -146,6 +155,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
         build.addAction(action);
         build.addAction(new VirtualPipelineHTMLAction(build, jsonCacheFile));
         build.addAction(new VirtualPipelineOffsetAction(build));
+        build.addAction(new VirtualPipelineHistoryDiffAction(build, jsonCacheFile, compareAgainstLastStableBuild));
 
         return true;
     }

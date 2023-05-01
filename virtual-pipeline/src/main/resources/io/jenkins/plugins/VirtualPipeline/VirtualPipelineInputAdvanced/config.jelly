@@ -12,9 +12,9 @@
         <f:checkbox field="deleteMark"></f:checkbox>
     </f:entry>
     <f:entry title="Content limit count (lines)" >
-        <f:number field="maxContentLength" min="0"></f:number>
+        <f:number field="maxContentLength" min="1" default="30"></f:number>
     </f:entry>
     <f:entry title="Index of line to display from content">
-        <f:number field="numberOfLineToDisplay" min="0"></f:number>
+        <f:number field="numberOfLineToDisplay" min="0" default="0"></f:number>
     </f:entry>
 </j:jelly>
