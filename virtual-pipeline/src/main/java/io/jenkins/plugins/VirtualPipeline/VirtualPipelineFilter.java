@@ -104,7 +104,7 @@ public class VirtualPipelineFilter {
 
                     VirtualPipelineInputAdvanced advancedConfig = (VirtualPipelineInputAdvanced) config;
 
-                    if (activeConfig.getStartMark().isEmpty() || activeConfig.getEndMark().isEmpty()){ // empty regex would match all lines
+                    if (advancedConfig.getStartMark().isEmpty() || advancedConfig.getEndMark().isEmpty()){ // empty regex would match all lines
                         continue;
                     }
 
