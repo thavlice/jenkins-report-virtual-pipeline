@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -91,6 +92,10 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
      */
     @Override
     public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) throws InterruptedException, IOException {
+        if(Objects.isNull(configurations) || configurations.isEmpty()){
+            listener.getLogger().println("VP: configurations are empty");
+            return false;
+        }
 
         //here is the performance part, e.g. drawing, printing itself
         File rootDir = build.getProject().getRootDir();
@@ -99,10 +104,10 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
 
         //creates necessary directories
         boolean mkdirsResult = currentBuildFolder.mkdirs();
-        if (!mkdirsResult) {
+        /**if (!mkdirsResult) {
             listener.getLogger().println("VP: cache directories were not successfully created");
-            //return false
-        }
+            return false;
+        }**/
 
         RandomAccessFile raf = new RandomAccessFile(defaultLogs, "r");
 
@@ -127,7 +132,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
         boolean createFileResult = jsonCacheFile.createNewFile();
         if (!createFileResult) {
             listener.getLogger().println("VP: "+ cacheName +" was not created");
-            //return false
+            return false;
         }
 
         VirtualPipelineFilter.saveToJSON(filterOutput, jsonCacheFile);
@@ -143,7 +148,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
             Boolean pictureMkdirResult = picturePath.mkdirs();
             if (!pictureMkdirResult) {
                 listener.getLogger().println("VP: cache directories for picture were not successfully created");
-                //return false
+                return false;
             }
             javax.imageio.ImageIO.write(image, "png", picturePath);
         }

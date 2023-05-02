@@ -46,7 +46,11 @@ public class VirtualPipelineHTMLAction implements SimpleBuildStep.LastBuildActio
         List<VirtualPipelineLineOutput> result = new ArrayList<>();
 
         ListIterator<VirtualPipelineLineOutput> iteratorMarked = markedLogs.listIterator();
-        VirtualPipelineLineOutput currentMarkedLine = iteratorMarked.next();
+        VirtualPipelineLineOutput currentMarkedLine = null;
+        if(iteratorMarked.hasNext()){
+            currentMarkedLine = iteratorMarked.next();
+        }
+        
         for (int index = 0; index < fullLogs.size(); index++) {
 
             if(iteratorMarked.hasNext() && (index == currentMarkedLine.getIndex())){
