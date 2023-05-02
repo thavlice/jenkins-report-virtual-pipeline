@@ -3,9 +3,12 @@
     <t:summary icon="symbol-cube">
         <style type="text/css">
             .codeSection{
-            overflow: auto;
+            width: 500px;
+            height: 400px;
+            overflow:auto;
             overflow-wrap: anywhere;
             word-break: break-all;
+            white-space: nowrap;
             }
             .codeWrapper{
             word-wrap: break-word;
@@ -61,6 +64,8 @@
             .legend{
             margin-top: 2rem;
             }
+
+
 
         </style>
         <h2>Virtual Pipeline results</h2>

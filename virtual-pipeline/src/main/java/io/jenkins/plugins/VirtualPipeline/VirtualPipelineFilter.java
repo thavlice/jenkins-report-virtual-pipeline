@@ -12,6 +12,11 @@ public class VirtualPipelineFilter {
     public static List<VirtualPipelineLineOutput> filter(List<LineWithOffset> lines, List<VirtualPipelineInput> configs) throws IOException {
         List<VirtualPipelineLineOutput> result = new ArrayList<>();
 
+        if(configs.isEmpty()){
+            return result;
+        }
+
+
         int lineIndex = 0;
 
         int activeRegexCount = 0;
@@ -19,6 +24,7 @@ public class VirtualPipelineFilter {
         //advanced setup
         Boolean advancedRegexLock = false;
         VirtualPipelineInputAdvanced activeConfig = null;
+
 
 
         //going through every line
@@ -40,7 +46,6 @@ public class VirtualPipelineFilter {
 
                     advancedRegexLock = false;
 
-                    //todo could cause errors
                     activeRegexCount = 0;
                     activeConfig = null;
                 } else {
@@ -54,7 +59,6 @@ public class VirtualPipelineFilter {
 
                         advancedRegexLock = false;
 
-                        //todo could cause errors
                         activeConfig = null;
 
                         activeRegexCount = 0;
@@ -79,6 +83,10 @@ public class VirtualPipelineFilter {
                     // SIMPLE
                     VirtualPipelineInputSimple simpleConfig = (VirtualPipelineInputSimple) config;
 
+                    if (simpleConfig.getRegex().isEmpty()){ // empty regex would match all lines
+                        continue;
+                    }
+
                     if (line.matches(VirtualPipelineFilter.wrapRegexMark(simpleConfig.getRegex()))) {
                         //check to include mark or not
                         if (simpleConfig.getDeleteMark()) {
@@ -95,6 +103,10 @@ public class VirtualPipelineFilter {
                     // ADVANCED
 
                     VirtualPipelineInputAdvanced advancedConfig = (VirtualPipelineInputAdvanced) config;
+
+                    if (advancedConfig.getStartMark().isEmpty() || advancedConfig.getEndMark().isEmpty()){ // empty regex would match all lines
+                        continue;
+                    }
 
                     if (line.matches(VirtualPipelineFilter.wrapRegexMark(advancedConfig.getStartMark()))) {
                         boolean display = advancedConfig.getNumberOfLineToDisplay() == 0;

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 public class VirtualPipelineHistoryDiffAction implements SimpleBuildStep.LastBuildAction{
@@ -65,10 +66,19 @@ public class VirtualPipelineHistoryDiffAction implements SimpleBuildStep.LastBui
 
 
         List<VirtualPipelineLineOutput> currentBuildLines = getAllCacheFromFile();
-        List<VirtualPipelineLineOutput> previousBuildLines = getAllCacheFromNamedFile(comparingFile);
 
-        List<String> current = extractStringFromVirtualPipelineOutput(currentBuildLines);
-        List<String> previous = extractStringFromVirtualPipelineOutput(previousBuildLines);
+        List<VirtualPipelineLineOutput> currentBuildLinesToDisplay  = currentBuildLines
+                .stream()
+                .filter(VirtualPipelineLineOutput::getDisplay)
+                .collect(Collectors.toList());
+        List<VirtualPipelineLineOutput> previousBuildLines = getAllCacheFromNamedFile(comparingFile);
+        List<VirtualPipelineLineOutput> previousBuildLinesToDisplay = previousBuildLines
+                .stream()
+                .filter(VirtualPipelineLineOutput::getDisplay)
+                .collect(Collectors.toList());
+
+        List<String> current = extractStringFromVirtualPipelineOutput(currentBuildLinesToDisplay);
+        List<String> previous = extractStringFromVirtualPipelineOutput(previousBuildLinesToDisplay);
 
         DiffRowGenerator generator = DiffRowGenerator.create()
                 .showInlineDiffs(true)
