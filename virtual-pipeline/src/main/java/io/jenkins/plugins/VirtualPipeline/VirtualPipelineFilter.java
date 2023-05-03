@@ -34,7 +34,7 @@ public class VirtualPipelineFilter {
 
             //check if advanced regex is currently active
             if (advancedRegexLock) {
-                if (line.matches(VirtualPipelineFilter.wrapRegexMark(activeConfig.getEndMark()))) {
+                if (line.matches(activeConfig.getEndMark())) {
                     //end mark found
                     boolean display = activeConfig.getNumberOfLineToDisplay() == activeRegexCount + 1 ; // line 0 is start mark
                     if(activeConfig.getDeleteMark()){
@@ -87,7 +87,7 @@ public class VirtualPipelineFilter {
                         continue;
                     }
 
-                    if (line.matches(VirtualPipelineFilter.wrapRegexMark(simpleConfig.getRegex()))) {
+                    if (line.matches(simpleConfig.getRegex())) {
                         //check to include mark or not
                         if (simpleConfig.getDeleteMark()) {
                             String lineWithoutRegex = VirtualPipelineFilter.removeRegexMark(line, simpleConfig.getRegex());
@@ -108,7 +108,7 @@ public class VirtualPipelineFilter {
                         continue;
                     }
 
-                    if (line.matches(VirtualPipelineFilter.wrapRegexMark(advancedConfig.getStartMark()))) {
+                    if (line.matches(advancedConfig.getStartMark())) {
                         boolean display = advancedConfig.getNumberOfLineToDisplay() == 0;
                         if (advancedConfig.getDeleteMark()) {
                             String lineWithoutRegex = VirtualPipelineFilter.removeRegexMark(line, advancedConfig.getStartMark());
@@ -149,8 +149,4 @@ public class VirtualPipelineFilter {
         return line.replaceAll(regex, "");
     }
 
-    public static String wrapRegexMark(String regex){
-        // behaviour on start and end line can be modified here
-        return "^" + regex + ".*";
-    }
 }
