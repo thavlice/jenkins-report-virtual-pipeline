@@ -104,10 +104,6 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
 
         //creates necessary directories
         boolean mkdirsResult = currentBuildFolder.mkdirs();
-        /**if (!mkdirsResult) {
-            listener.getLogger().println("VP: cache directories were not successfully created");
-            return false;
-        }**/
 
         RandomAccessFile raf = new RandomAccessFile(defaultLogs, "r");
 
