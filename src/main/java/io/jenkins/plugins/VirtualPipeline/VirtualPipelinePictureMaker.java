@@ -6,27 +6,11 @@ import java.util.List;
 
 public class VirtualPipelinePictureMaker {
 
-    private int width;
+    private final int width;
     private int height;
     private Font font = new Font("Arial", Font.PLAIN, 20);
     private Color backColor = Color.WHITE;
     private Color textColor = Color.BLACK;
-
-    public Font getFont() {
-        return font;
-    }
-
-    public Color getBackColor() {
-        return backColor;
-    }
-
-    public Color getTextColor() {
-        return textColor;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
 
     public VirtualPipelinePictureMaker(int width, int height, Font font, Color backColor, Color textColor) {
         this.width = width;
@@ -41,6 +25,18 @@ public class VirtualPipelinePictureMaker {
         this.height = height;
     }
 
+    public Font getFont() {
+        return font;
+    }
+
+    public Color getBackColor() {
+        return backColor;
+    }
+
+    public Color getTextColor() {
+        return textColor;
+    }
+
     public int getWidth() {
         return width;
     }
@@ -49,11 +45,15 @@ public class VirtualPipelinePictureMaker {
         return height;
     }
 
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
     public BufferedImage createPicture(List<VirtualPipelineLineOutput> lines) {
         int toDisplayCounter = 0;
         for (VirtualPipelineLineOutput line :
                 lines) {
-            if(line.getDisplay()){
+            if (line.getDisplay()) {
                 toDisplayCounter += 1;
             }
         }
@@ -62,18 +62,18 @@ public class VirtualPipelinePictureMaker {
         BufferedImage image = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics2D graphics2D = image.createGraphics();
         graphics2D.setColor(this.getBackColor());
-        graphics2D.fillRect(0, 0, this.getWidth(),this.getHeight());
+        graphics2D.fillRect(0, 0, this.getWidth(), this.getHeight());
         graphics2D.setColor(this.getTextColor());
         graphics2D.setFont(this.getFont());
 
         int lineHeight = graphics2D.getFontMetrics().getHeight();
         int y = 25;
         for (VirtualPipelineLineOutput line : lines) {
-            if(!line.getDisplay()){
+            if (!line.getDisplay()) {
                 continue;
             }
             graphics2D.setColor(this.getTextColor());
-            switch (line.getType()){
+            switch (line.getType()) {
                 case ONE_LINE:
                     graphics2D.setColor(Color.green);
                     break;

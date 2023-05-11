@@ -6,6 +6,6 @@
         <f:textbox/>
     </f:entry>
     <f:entry title="Delete regex part of the mark" field="deleteMark">
-        <f:checkbox />
+        <f:checkbox/>
     </f:entry>
 </j:jelly>

@@ -8,7 +8,7 @@
                 <f:entry title="Offset from">
                     <f:number name="from" min="0"/>
                 </f:entry>
-                <f:entry title="Offset to" >
+                <f:entry title="Offset to">
                     <f:number name="to" min="0"/>
                 </f:entry>
                 <f:submit value="Search" name="Search"/>
@@ -21,7 +21,7 @@
                 const elemFrom = document.getElementsByName('from')[0];
                 const elemTo = document.getElementsByName('to')[0];
                 elemFrom.value = fromParameter;
-                if (!elemFrom.value.empty()){
+                if (!elemFrom.value.empty()) {
                     elemTo.value = Number(fromParameter) + 2000;
                 }
 

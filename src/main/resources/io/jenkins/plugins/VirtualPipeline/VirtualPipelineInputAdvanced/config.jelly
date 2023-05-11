@@ -12,7 +12,7 @@
     <f:entry title="Delete mark">
         <f:checkbox field="deleteMark"/>
     </f:entry>
-    <f:entry title="Content limit count (lines)" >
+    <f:entry title="Content limit count (lines)">
         <f:number field="maxContentLength" min="1" default="30"/>
     </f:entry>
     <f:entry title="Index of line to display from content">

@@ -40,20 +40,22 @@
     </style>
     <h3>Latest build virtual pipeline results</h3>
     <div class="codeSection">
-    <j:set var="lines" value="${from.onlyMarkedLinesToDisplay}"/>
-    <j:forEach items="${lines}" var="line">
-        <div class="codeWrapper">
+        <j:set var="lines" value="${from.onlyMarkedLinesToDisplay}"/>
+        <j:forEach items="${lines}" var="line">
+            <div class="codeWrapper">
                 <code>
                     <div class="${line.historyType}">
-                        <a class="${line.type}" href="/job/${from.build.project.name}/${from.build.number}/html#ID${line.index}">
+                        <a class="${line.type}"
+                           href="/job/${from.build.project.name}/${from.build.number}/html#ID${line.index}">
                             ${line.line}
                         </a>
-                        <a class="${line.type}" href="/job/${from.build.project.name}/${from.build.number}/logsOffset/?from=${line.lineStartOffset}">
+                        <a class="${line.type}"
+                           href="/job/${from.build.project.name}/${from.build.number}/logsOffset/?from=${line.lineStartOffset}">
                             [offset: ${line.lineStartOffset}]
                         </a>
                     </div>
                 </code>
-        </div>
-    </j:forEach>
+            </div>
+        </j:forEach>
     </div>
 </j:jelly>

@@ -69,12 +69,12 @@
             <h2>HTML LOGS</h2>
             <h3 class="legendTitle">Legend</h3>
             <div class="legend">
-            <div class="ONE_LINE">Simple oneline marks</div>
-            <div class="START_MARK">Start of the Advanced mark</div>
-            <div class="CONTENT_LINE">Line inside the Advanced mark</div>
-            <div class="END_MARK">End of the Advanced mark</div>
-            <div class="LIMIT_REACHED_LINE">The line that reached upper limit for matched lines</div>
-            <div class="DEFAULT">Line that was not matched</div>
+                <div class="ONE_LINE">Simple oneline marks</div>
+                <div class="START_MARK">Start of the Advanced mark</div>
+                <div class="CONTENT_LINE">Line inside the Advanced mark</div>
+                <div class="END_MARK">End of the Advanced mark</div>
+                <div class="LIMIT_REACHED_LINE">The line that reached upper limit for matched lines</div>
+                <div class="DEFAULT">Line that was not matched</div>
             </div>
             <h3>Marked logs</h3>
             <j:set var="logLines" value="${it.markedLogs}"/>
@@ -84,7 +84,7 @@
                         <div class="codeWrapper">
                             <code class="logLine">
                                 <div class="lineLink">
-                                <a class="${markedLine.type}"  name="ID${markedLine.index}">: ${markedLine.line}</a>
+                                    <a class="${markedLine.type}" name="ID${markedLine.index}">: ${markedLine.line}</a>
                                 </div>
                             </code>
                         </div>

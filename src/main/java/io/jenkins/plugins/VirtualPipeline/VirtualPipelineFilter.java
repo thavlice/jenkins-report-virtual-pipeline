@@ -12,7 +12,7 @@ public class VirtualPipelineFilter {
     public static List<VirtualPipelineLineOutput> filter(List<LineWithOffset> lines, List<VirtualPipelineInput> configs) {
         List<VirtualPipelineLineOutput> result = new ArrayList<>();
 
-        if(configs.isEmpty()){
+        if (configs.isEmpty()) {
             return result;
         }
 
@@ -26,7 +26,6 @@ public class VirtualPipelineFilter {
         VirtualPipelineInputAdvanced activeConfig = null;
 
 
-
         //going through every line
         for (LineWithOffset lineWithOffset :
                 lines) {
@@ -36,8 +35,8 @@ public class VirtualPipelineFilter {
             if (advancedRegexLock) {
                 if (line.matches(activeConfig.getEndMark())) {
                     //end mark found
-                    boolean display = activeConfig.getNumberOfLineToDisplay() == activeRegexCount + 1 ; // line 0 is start mark
-                    if(activeConfig.getDeleteMark()){
+                    boolean display = activeConfig.getNumberOfLineToDisplay() == activeRegexCount + 1; // line 0 is start mark
+                    if (activeConfig.getDeleteMark()) {
                         String lineWithoutRegex = VirtualPipelineFilter.removeRegexMark(line, activeConfig.getStartMark());
                         result.add(new VirtualPipelineLineOutput(activeConfig.getEndMark(), lineWithoutRegex, lineIndex, activeConfig.getDeleteMark(), LineType.END_MARK, lineWithOffset.getOffset(), display));
                     } else {
@@ -52,7 +51,7 @@ public class VirtualPipelineFilter {
                     // filling content of an advanced regex
 
                     boolean display = activeConfig.getNumberOfLineToDisplay() == activeRegexCount + 1; // line 0 is start mark
-                    if (activeRegexCount >=  activeConfig.getMaxContentLength()){
+                    if (activeRegexCount >= activeConfig.getMaxContentLength()) {
                         //end regex because of reaching the max limit
                         result.add(new VirtualPipelineLineOutput(activeConfig.getStartMark(), line, lineIndex, activeConfig.getDeleteMark(), LineType.LIMIT_REACHED_LINE, lineWithOffset.getOffset(), display));
 
@@ -62,7 +61,7 @@ public class VirtualPipelineFilter {
                         activeConfig = null;
 
                         activeRegexCount = 0;
-                    }else {
+                    } else {
                         result.add(new VirtualPipelineLineOutput(activeConfig.getStartMark(), line, lineIndex, activeConfig.getDeleteMark(), LineType.CONTENT_LINE, lineWithOffset.getOffset(), display));
                     }
 
@@ -83,7 +82,7 @@ public class VirtualPipelineFilter {
                     // SIMPLE
                     VirtualPipelineInputSimple simpleConfig = (VirtualPipelineInputSimple) config;
 
-                    if (simpleConfig.getRegex().isEmpty()){ // empty regex would match all lines
+                    if (simpleConfig.getRegex().isEmpty()) { // empty regex would match all lines
                         continue;
                     }
 
@@ -104,7 +103,7 @@ public class VirtualPipelineFilter {
 
                     VirtualPipelineInputAdvanced advancedConfig = (VirtualPipelineInputAdvanced) config;
 
-                    if (advancedConfig.getStartMark().isEmpty() || advancedConfig.getEndMark().isEmpty()){ // empty regex would match all lines
+                    if (advancedConfig.getStartMark().isEmpty() || advancedConfig.getEndMark().isEmpty()) { // empty regex would match all lines
                         continue;
                     }
 

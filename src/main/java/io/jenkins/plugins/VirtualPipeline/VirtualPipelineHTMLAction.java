@@ -37,34 +37,34 @@ public class VirtualPipelineHTMLAction implements SimpleBuildStep.LastBuildActio
         bufferedReader.close();
         return result;
     }
-    
+
     public List<VirtualPipelineLineOutput> getMarkedLogs() throws IOException {
         List<String> fullLogs = this.getLogs();
         List<VirtualPipelineLineOutput> markedLogs = this.getAllCacheFromNamedFile(this.cacheFile);
-        
+
         List<VirtualPipelineLineOutput> result = new ArrayList<>();
 
         ListIterator<VirtualPipelineLineOutput> iteratorMarked = markedLogs.listIterator();
         VirtualPipelineLineOutput currentMarkedLine = null;
-        if(iteratorMarked.hasNext()){
+        if (iteratorMarked.hasNext()) {
             currentMarkedLine = iteratorMarked.next();
         }
-        
+
         for (int index = 0; index < fullLogs.size(); index++) {
 
-            if(iteratorMarked.hasNext() && (index == currentMarkedLine.getIndex())){
+            if (iteratorMarked.hasNext() && (index == currentMarkedLine.getIndex())) {
                 result.add(currentMarkedLine);
                 currentMarkedLine = iteratorMarked.next();
-            }else {
+            } else {
                 //default for line with no marked meaning
                 result.add(new VirtualPipelineLineOutput("", fullLogs.get(index), index, false,
-                        LineType.DEFAULT,0 , false));
+                        LineType.DEFAULT, 0, false));
             }
         }
         return result;
     }
 
-    private List<VirtualPipelineLineOutput> getAllCacheFromNamedFile(File file){
+    private List<VirtualPipelineLineOutput> getAllCacheFromNamedFile(File file) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             return objectMapper.readValue(file, new TypeReference<List<VirtualPipelineLineOutput>>() {

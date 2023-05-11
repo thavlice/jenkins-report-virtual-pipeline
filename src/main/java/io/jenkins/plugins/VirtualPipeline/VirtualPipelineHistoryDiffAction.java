@@ -2,7 +2,8 @@ package io.jenkins.plugins.VirtualPipeline;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.difflib.text.*;
+import com.github.difflib.text.DiffRow;
+import com.github.difflib.text.DiffRowGenerator;
 import hudson.model.AbstractBuild;
 import hudson.model.Action;
 import jenkins.tasks.SimpleBuildStep;
@@ -16,11 +17,17 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 
-public class VirtualPipelineHistoryDiffAction implements SimpleBuildStep.LastBuildAction{
+public class VirtualPipelineHistoryDiffAction implements SimpleBuildStep.LastBuildAction {
     private final AbstractBuild<?, ?> build;
     private final File cacheFile;
 
     private Boolean compareAgainstLastStableBuild = false;
+
+    public VirtualPipelineHistoryDiffAction(AbstractBuild<?, ?> build, File cacheFile, Boolean compareAgainstLastStableBuild) {
+        this.build = build;
+        this.cacheFile = cacheFile;
+        this.compareAgainstLastStableBuild = compareAgainstLastStableBuild;
+    }
 
     public AbstractBuild<?, ?> getBuild() {
         return build;
@@ -34,39 +41,34 @@ public class VirtualPipelineHistoryDiffAction implements SimpleBuildStep.LastBui
         return compareAgainstLastStableBuild;
     }
 
-    public VirtualPipelineHistoryDiffAction(AbstractBuild<?, ?> build, File cacheFile, Boolean compareAgainstLastStableBuild) {
-        this.build = build;
-        this.cacheFile = cacheFile;
-        this.compareAgainstLastStableBuild = compareAgainstLastStableBuild;
-    }
-
-    public int getCurrentBuildNumber(){
+    public int getCurrentBuildNumber() {
         return this.build.getNumber();
     }
-    public int getCompareBuildNumber(){
-        if(compareAgainstLastStableBuild){
+
+    public int getCompareBuildNumber() {
+        if (compareAgainstLastStableBuild) {
             return this.build.getProject().getLastStableBuild().getNumber();
         }
-        AbstractBuild<?,?> previousBuild = this.build.getPreviousBuild();
-        if(Objects.isNull(previousBuild)){
+        AbstractBuild<?, ?> previousBuild = this.build.getPreviousBuild();
+        if (Objects.isNull(previousBuild)) {
             return this.getCurrentBuildNumber();
         }
         return previousBuild.getNumber();
     }
 
 
-    public List<DiffRow> getDiffLines(){
+    public List<DiffRow> getDiffLines() {
         File comparingFile; // build File can be changed here
-        if(compareAgainstLastStableBuild){
+        if (compareAgainstLastStableBuild) {
             comparingFile = this.getLastStableBuildFile();
-        }else {
+        } else {
             comparingFile = this.getPreviousBuildFile();
         }
 
 
         List<VirtualPipelineLineOutput> currentBuildLines = getAllCacheFromFile();
 
-        List<VirtualPipelineLineOutput> currentBuildLinesToDisplay  = currentBuildLines
+        List<VirtualPipelineLineOutput> currentBuildLinesToDisplay = currentBuildLines
                 .stream()
                 .filter(VirtualPipelineLineOutput::getDisplay)
                 .collect(Collectors.toList());
@@ -89,10 +91,10 @@ public class VirtualPipelineHistoryDiffAction implements SimpleBuildStep.LastBui
         return generator.generateDiffRows(previous, current);
     }
 
-    private List<String> extractStringFromVirtualPipelineOutput(List<VirtualPipelineLineOutput> inputList){
+    private List<String> extractStringFromVirtualPipelineOutput(List<VirtualPipelineLineOutput> inputList) {
         List<String> result = new ArrayList<>();
         for (VirtualPipelineLineOutput input :
-             inputList) {
+                inputList) {
             result.add(input.getLine());
         }
         return result;
@@ -102,9 +104,9 @@ public class VirtualPipelineHistoryDiffAction implements SimpleBuildStep.LastBui
         return this.getAllCacheFromNamedFile(cacheFile);
     }
 
-    private File getPreviousBuildFile(){
-        AbstractBuild<?,?> previousBuild =  this.getBuild().getPreviousBuild();
-        if (Objects.isNull(previousBuild)){
+    private File getPreviousBuildFile() {
+        AbstractBuild<?, ?> previousBuild = this.getBuild().getPreviousBuild();
+        if (Objects.isNull(previousBuild)) {
             return null;
         }
         int buildNumber = previousBuild.getNumber();
@@ -112,9 +114,9 @@ public class VirtualPipelineHistoryDiffAction implements SimpleBuildStep.LastBui
         return new File(buildFolder + File.separator + VirtualPipelinePublisher.cacheName);
     }
 
-    private File getLastStableBuildFile(){
-        AbstractBuild<?,?> previousLastStableBuild =  this.getBuild().getProject().getLastStableBuild();
-        if (Objects.isNull(previousLastStableBuild)){
+    private File getLastStableBuildFile() {
+        AbstractBuild<?, ?> previousLastStableBuild = this.getBuild().getProject().getLastStableBuild();
+        if (Objects.isNull(previousLastStableBuild)) {
             return null;
         }
         int buildNumber = previousLastStableBuild.getNumber();
@@ -122,14 +124,15 @@ public class VirtualPipelineHistoryDiffAction implements SimpleBuildStep.LastBui
         return new File(buildFolder + File.separator + VirtualPipelinePublisher.cacheName);
     }
 
-    public File getProjectDirFile(){
+    public File getProjectDirFile() {
         return build.getProject().getRootDir();
     }
 
-    public File getBuildFolderFromBuildNumber(int buildNumber){
+    public File getBuildFolderFromBuildNumber(int buildNumber) {
         return new File(this.getProjectDirFile() + File.separator + "builds" + File.separator + buildNumber);
     }
-    private List<VirtualPipelineLineOutput> getAllCacheFromNamedFile(File file){
+
+    private List<VirtualPipelineLineOutput> getAllCacheFromNamedFile(File file) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             return objectMapper.readValue(file, new TypeReference<List<VirtualPipelineLineOutput>>() {

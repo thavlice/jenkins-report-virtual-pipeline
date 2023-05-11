@@ -40,14 +40,13 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
     }
 
 
-    public List<VirtualPipelineOutputHistoryMarked> getHistoryMarkedLines(){
+    public List<VirtualPipelineOutputHistoryMarked> getHistoryMarkedLines() {
         File comparingFile; // build File can be changed here
-        if(compareAgainstLastStableBuild){
+        if (compareAgainstLastStableBuild) {
             comparingFile = this.getLastStableBuildFile();
-        }else {
+        } else {
             comparingFile = this.getPreviousBuildFile();
         }
-
 
 
         List<VirtualPipelineLineOutput> currentBuildLines = getAllCacheFromFile();
@@ -61,25 +60,25 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
             VirtualPipelineLineOutput currentLine = currentBuildLines.get(lineIndex);
             VirtualPipelineLineOutput previousLine = previousBuildLines.get(lineIndex);
 
-            if(currentLine.getDisplay() || previousLine.getDisplay()){ // comparing only lines to display
+            if (currentLine.getDisplay() || previousLine.getDisplay()) { // comparing only lines to display
 
                 // lines are same
-                if(Objects.equals(currentLine.getLine(), previousLine.getLine())){
+                if (Objects.equals(currentLine.getLine(), previousLine.getLine())) {
                     result.add(new VirtualPipelineOutputHistoryMarked(currentLine.getRegex(), currentLine.getLine(),
-                            currentLine.getIndex(), currentLine.getDeleteMark(),  currentLine.getType(),
+                            currentLine.getIndex(), currentLine.getDeleteMark(), currentLine.getType(),
                             HistoryType.SAME, currentLine.getLineStartOffset(), currentLine.getDisplay()));
 
-                }else if(Objects.equals(currentLine.getRegex(), previousLine.getRegex())){ //regex is same, line not
+                } else if (Objects.equals(currentLine.getRegex(), previousLine.getRegex())) { //regex is same, line not
                     result.add(new VirtualPipelineOutputHistoryMarked(currentLine.getRegex(), currentLine.getLine(),
                             currentLine.getIndex(), currentLine.getDeleteMark(), currentLine.getType(),
                             HistoryType.JUST_SAME_REGEX, currentLine.getLineStartOffset(), currentLine.getDisplay()));
 
-                }else{ // different lines, different regex
+                } else { // different lines, different regex
                     result.add(new VirtualPipelineOutputHistoryMarked(currentLine.getRegex(), currentLine.getLine(),
-                            currentLine.getIndex(), currentLine.getDeleteMark(),  currentLine.getType(),
+                            currentLine.getIndex(), currentLine.getDeleteMark(), currentLine.getType(),
                             HistoryType.DIFFERENT_CURRENT, currentLine.getLineStartOffset(), currentLine.getDisplay()));
                     result.add(new VirtualPipelineOutputHistoryMarked(previousLine.getRegex(), previousLine.getLine(),
-                            previousLine.getIndex(), previousLine.getDeleteMark(),  previousLine.getType(),
+                            previousLine.getIndex(), previousLine.getDeleteMark(), previousLine.getType(),
                             HistoryType.DIFFERENT_PREVIOUS, previousLine.getLineStartOffset(), previousLine.getDisplay()));
                 }
 
@@ -93,7 +92,7 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
 
 
     // for shortened summary on build and project page
-    public List<VirtualPipelineLineOutput> getOnlyMarkedLinesToDisplay(){
+    public List<VirtualPipelineLineOutput> getOnlyMarkedLinesToDisplay() {
         List<VirtualPipelineLineOutput> list = this.getAllCacheFromFile();
         List<VirtualPipelineLineOutput> result = new ArrayList<>();
         for (VirtualPipelineLineOutput line :
@@ -101,12 +100,13 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
             if (line.getDisplay()) {
                 result.add(line);
             }
-            }
+        }
         return result;
     }
-    private File getPreviousBuildFile(){
-        AbstractBuild<?,?> previousBuild =  this.getBuild().getPreviousBuild();
-        if (Objects.isNull(previousBuild)){
+
+    private File getPreviousBuildFile() {
+        AbstractBuild<?, ?> previousBuild = this.getBuild().getPreviousBuild();
+        if (Objects.isNull(previousBuild)) {
             return null;
         }
         int buildNumber = previousBuild.getNumber();
@@ -114,9 +114,9 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
         return new File(buildFolder + File.separator + VirtualPipelinePublisher.cacheName);
     }
 
-    private File getLastStableBuildFile(){
-        AbstractBuild<?,?> previousLastStableBuild =  this.getBuild().getProject().getLastStableBuild();
-        if (Objects.isNull(previousLastStableBuild)){
+    private File getLastStableBuildFile() {
+        AbstractBuild<?, ?> previousLastStableBuild = this.getBuild().getProject().getLastStableBuild();
+        if (Objects.isNull(previousLastStableBuild)) {
             return null;
         }
         int buildNumber = previousLastStableBuild.getNumber();
@@ -124,15 +124,15 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
         return new File(buildFolder + File.separator + VirtualPipelinePublisher.cacheName);
     }
 
-    public File getProjectDirFile(){
+    public File getProjectDirFile() {
         return build.getProject().getRootDir();
     }
 
-    public File getBuildFolderFromBuildNumber(int buildNumber){
+    public File getBuildFolderFromBuildNumber(int buildNumber) {
         return new File(this.getProjectDirFile() + File.separator + "builds" + File.separator + buildNumber);
     }
 
-    private List<VirtualPipelineLineOutput> getAllCacheFromNamedFile(File file){
+    private List<VirtualPipelineLineOutput> getAllCacheFromNamedFile(File file) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             return objectMapper.readValue(file, new TypeReference<List<VirtualPipelineLineOutput>>() {

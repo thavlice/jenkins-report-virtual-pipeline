@@ -84,35 +84,36 @@ public class VirtualPipelineInputAdvanced extends VirtualPipelineInput {
         public FormValidation doCheckMaxContentLength(@QueryParameter String maxContentLength) {
             try {
                 int inputNumber = Integer.parseInt(maxContentLength);
-                if(inputNumber < 1) {
+                if (inputNumber < 1) {
                     return FormValidation.error("Max content length should be greater than 0");
                 }
                 return FormValidation.ok();
 
-            }catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 return FormValidation.error("Couldn't parse number input");
-            }catch (Exception e){
-            return FormValidation.error("Something went wrong");
+            } catch (Exception e) {
+                return FormValidation.error("Something went wrong");
             }
 
         }
 
 
         public FormValidation doCheckNumberOfLineToDisplay(@QueryParameter String numberOfLineToDisplay) {
-            try{
-            int inputNumber = Integer.parseInt(numberOfLineToDisplay);
-            if(inputNumber < 0) {
-                return FormValidation.error("Number of line to display should be 0 or greater");
-            }
-            return FormValidation.ok();
-            }catch (NumberFormatException e){
+            try {
+                int inputNumber = Integer.parseInt(numberOfLineToDisplay);
+                if (inputNumber < 0) {
+                    return FormValidation.error("Number of line to display should be 0 or greater");
+                }
+                return FormValidation.ok();
+            } catch (NumberFormatException e) {
                 return FormValidation.error("Couldn't parse number input");
-            }catch (Exception e){
+            } catch (Exception e) {
                 return FormValidation.error("Something went wrong");
             }
         }
 
-        @Override @NonNull
+        @Override
+        @NonNull
         public String getDisplayName() {
             return "Advanced Regex Format";
         }

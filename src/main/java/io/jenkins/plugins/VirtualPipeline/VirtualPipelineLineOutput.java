@@ -16,18 +16,6 @@ public class VirtualPipelineLineOutput {
 
     private long lineStartOffset;
 
-    public LineType getType() {
-        return type;
-    }
-
-    public long getLineStartOffset() {
-        return lineStartOffset;
-    }
-
-    public Boolean getDisplay() {
-        return display;
-    }
-
     public VirtualPipelineLineOutput(String regex, String line, int index, Boolean deleteMark, LineType type, long lineStartOffset, Boolean display) {
         this.regex = regex;
         this.line = line;
@@ -41,6 +29,18 @@ public class VirtualPipelineLineOutput {
     // just for the purpose of good deserialization
     public VirtualPipelineLineOutput() {
         super();
+    }
+
+    public LineType getType() {
+        return type;
+    }
+
+    public long getLineStartOffset() {
+        return lineStartOffset;
+    }
+
+    public Boolean getDisplay() {
+        return display;
     }
 
     public String getLine() {

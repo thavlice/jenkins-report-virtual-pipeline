@@ -8,8 +8,6 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.springframework.lang.NonNull;
 
-import javax.servlet.ServletException;
-import java.io.IOException;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -57,7 +55,8 @@ public class VirtualPipelineInputSimple extends VirtualPipelineInput {
             return FormValidation.ok();
         }
 
-        @Override @NonNull
+        @Override
+        @NonNull
         public String getDisplayName() {
             return "Simple Regex Format";
         }

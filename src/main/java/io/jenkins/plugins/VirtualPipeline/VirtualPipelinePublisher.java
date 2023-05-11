@@ -31,15 +31,14 @@ import java.util.Objects;
 @Extension
 public class VirtualPipelinePublisher extends Recorder implements SimpleBuildStep {
 
-    private List<VirtualPipelineInput> configurations;
-    private Boolean generatePicture = false;
-
-    private Boolean compareAgainstLastStableBuild = false;
-
-    public VirtualPipelinePublisher(){}
-
     public static final String cacheName = "VirtualPipelineCache.json";
     public static final String cachePictureName = "VirtualPipelineResult.png";
+    private List<VirtualPipelineInput> configurations;
+    private Boolean generatePicture = false;
+    private Boolean compareAgainstLastStableBuild = false;
+
+    public VirtualPipelinePublisher() {
+    }
 
     @DataBoundConstructor
     public VirtualPipelinePublisher(List<VirtualPipelineInput> configurations, Boolean generatePicture, Boolean compareAgainstLastStableBuild) {
@@ -48,15 +47,14 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
         this.compareAgainstLastStableBuild = compareAgainstLastStableBuild;
     }
 
-    @DataBoundSetter
-    public void setCompareAgainstLastStableBuild(Boolean compareAgainstLastStableBuild) {
-        this.compareAgainstLastStableBuild = compareAgainstLastStableBuild;
-    }
-
     public Boolean getCompareAgainstLastStableBuild() {
         return compareAgainstLastStableBuild;
     }
 
+    @DataBoundSetter
+    public void setCompareAgainstLastStableBuild(Boolean compareAgainstLastStableBuild) {
+        this.compareAgainstLastStableBuild = compareAgainstLastStableBuild;
+    }
 
     public Boolean getGeneratePicture() {
         return generatePicture;
@@ -84,16 +82,16 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
     /**
      * every event from plugin is performed at this function as it is the main extension point for the plugin
      *
-     * @param build current build
+     * @param build    current build
      * @param launcher launcher
      * @param listener current listener, can be used to log
      * @return true if build is marked as successful, false otherwise
      * @throws InterruptedException exception for being interrupted
-     * @throws IOException exception for IO operations
+     * @throws IOException          exception for IO operations
      */
     @Override
     public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) throws InterruptedException, IOException {
-        if(Objects.isNull(configurations) || configurations.isEmpty()){
+        if (Objects.isNull(configurations) || configurations.isEmpty()) {
             listener.getLogger().println("VP: configurations are empty");
             return false;
         }
@@ -105,7 +103,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
 
         //creates necessary directories
         boolean mkdirsResult = currentBuildFolder.mkdirs();
-        if(mkdirsResult){
+        if (mkdirsResult) {
             listener.getLogger().println("VP: Created new directories");
         }
 
@@ -131,7 +129,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
 
         boolean createFileResult = jsonCacheFile.createNewFile();
         if (!createFileResult) {
-            listener.getLogger().println("VP: "+ cacheName +" was not created");
+            listener.getLogger().println("VP: " + cacheName + " was not created");
             return false;
         }
 
@@ -139,7 +137,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
 
 
         // creating picture
-        if(generatePicture){
+        if (generatePicture) {
             int width = 1200;
             int height = 800;
             VirtualPipelinePictureMaker pm = new VirtualPipelinePictureMaker(width, height);
@@ -152,7 +150,6 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
             }
             javax.imageio.ImageIO.write(image, "png", picturePath);
         }
-
 
 
         // adding actions to build in Jenkins
@@ -173,7 +170,8 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
     @Extension
     public static final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
 
-        @Override @NonNull
+        @Override
+        @NonNull
         public String getDisplayName() {
             return "Virtual Pipeline";
         }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form" xmlns:l="/lib/layout">
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout">
     <l:layout title="Virtual Pipeline History Difference">
         <style>
             .container {
@@ -43,9 +43,9 @@
             <div style="width: 100%">
                 <div class="container">
                     <div class="colOne">
-                        <div >PREVIOUS BUILD MARKS (Build #${it.compareBuildNumber})</div>
+                        <div>PREVIOUS BUILD MARKS (Build #${it.compareBuildNumber})</div>
                     </div>
-                    <div class="separator">  </div>
+                    <div class="separator"/>
                     <div class="colTwo">
                         <div>CURRENT BUILD MARKS (Build #${it.currentBuildNumber})</div>
                     </div>
@@ -53,13 +53,13 @@
 
                 <j:forEach items="${diffLines}" var="row" indexVar="index">
                     <div class="container">
-                    <div class="colOne">
-                        <div class="${row.tag}">${row.oldLine}</div>
-                    </div>
+                        <div class="colOne">
+                            <div class="${row.tag}">${row.oldLine}</div>
+                        </div>
                         <div class="separator">||</div>
-                    <div class="colTwo">
-                        <div class="${row.tag}">${row.newLine}</div>
-                    </div>
+                        <div class="colTwo">
+                            <div class="${row.tag}">${row.newLine}</div>
+                        </div>
                     </div>
                 </j:forEach>
             </div>
