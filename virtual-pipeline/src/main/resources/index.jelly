@@ -1,4 +1,4 @@
 <?jelly escape-by-default='true'?>
 <div>
-    Virtual pipeline plugin for viewing the log marks created by user.
+    Virtual pipeline plugin for viewing log marks created by the user.
 </div>
