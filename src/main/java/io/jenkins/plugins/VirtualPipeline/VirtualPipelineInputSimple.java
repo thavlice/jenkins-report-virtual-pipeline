@@ -6,6 +6,7 @@ import hudson.util.FormValidation;
 import jenkins.model.Jenkins;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
+import org.springframework.lang.NonNull;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
@@ -44,7 +45,7 @@ public class VirtualPipelineInputSimple extends VirtualPipelineInput {
     @Extension
     public static final class DescriptorImpl extends VirtualPipelineInputDescriptor {
 
-        public FormValidation doCheckRegex(@QueryParameter String regex) throws IOException, ServletException {
+        public FormValidation doCheckRegex(@QueryParameter String regex) {
             if (regex.isEmpty()) {
                 return FormValidation.error("Regex is empty");
             }
@@ -56,7 +57,7 @@ public class VirtualPipelineInputSimple extends VirtualPipelineInput {
             return FormValidation.ok();
         }
 
-        @Override
+        @Override @NonNull
         public String getDisplayName() {
             return "Simple Regex Format";
         }

@@ -9,7 +9,7 @@ import java.util.List;
 
 public class VirtualPipelineFilter {
 
-    public static List<VirtualPipelineLineOutput> filter(List<LineWithOffset> lines, List<VirtualPipelineInput> configs) throws IOException {
+    public static List<VirtualPipelineLineOutput> filter(List<LineWithOffset> lines, List<VirtualPipelineInput> configs) {
         List<VirtualPipelineLineOutput> result = new ArrayList<>();
 
         if(configs.isEmpty()){
@@ -22,7 +22,7 @@ public class VirtualPipelineFilter {
         int activeRegexCount = 0;
 
         //advanced setup
-        Boolean advancedRegexLock = false;
+        boolean advancedRegexLock = false;
         VirtualPipelineInputAdvanced activeConfig = null;
 
 

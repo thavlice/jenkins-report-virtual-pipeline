@@ -1,5 +1,6 @@
 package io.jenkins.plugins.VirtualPipeline;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import hudson.DescriptorExtensionList;
 import hudson.Extension;
 import hudson.Launcher;
@@ -35,7 +36,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
 
     private Boolean compareAgainstLastStableBuild = false;
 
-    public VirtualPipelinePublisher(){};
+    public VirtualPipelinePublisher(){}
 
     public static final String cacheName = "VirtualPipelineCache.json";
     public static final String cachePictureName = "VirtualPipelineResult.png";
@@ -83,12 +84,12 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
     /**
      * every event from plugin is performed at this function as it is the main extension point for the plugin
      *
-     * @param build
-     * @param launcher
-     * @param listener
-     * @return
-     * @throws InterruptedException
-     * @throws IOException
+     * @param build current build
+     * @param launcher launcher
+     * @param listener current listener, can be used to log
+     * @return true if build is marked as successful, false otherwise
+     * @throws InterruptedException exception for being interrupted
+     * @throws IOException exception for IO operations
      */
     @Override
     public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) throws InterruptedException, IOException {
@@ -172,7 +173,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
     @Extension
     public static final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
 
-        @Override
+        @Override @NonNull
         public String getDisplayName() {
             return "Virtual Pipeline";
         }

@@ -67,9 +67,8 @@ public class VirtualPipelineHTMLAction implements SimpleBuildStep.LastBuildActio
     private List<VirtualPipelineLineOutput> getAllCacheFromNamedFile(File file){
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            List<VirtualPipelineLineOutput> result = objectMapper.readValue(file, new TypeReference<List<VirtualPipelineLineOutput>>() {
+            return objectMapper.readValue(file, new TypeReference<List<VirtualPipelineLineOutput>>() {
             });
-            return result;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -78,8 +77,7 @@ public class VirtualPipelineHTMLAction implements SimpleBuildStep.LastBuildActio
 
     @Override
     public Collection<? extends Action> getProjectActions() {
-        ArrayList<Action> list = new ArrayList<>();
-        return list;
+        return new ArrayList<>();
     }
 
     @Override

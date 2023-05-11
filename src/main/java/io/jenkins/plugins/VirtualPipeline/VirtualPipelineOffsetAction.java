@@ -79,8 +79,7 @@ public class VirtualPipelineOffsetAction implements SimpleBuildStep.LastBuildAct
     }
     @Override
     public Collection<? extends Action> getProjectActions() {
-        ArrayList<Action> list = new ArrayList<>();
-        return list;
+        return new ArrayList<>();
     }
 
     @Override

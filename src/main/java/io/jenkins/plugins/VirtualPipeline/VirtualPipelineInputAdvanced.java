@@ -4,6 +4,7 @@ import hudson.Extension;
 import hudson.util.FormValidation;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
+import org.springframework.lang.NonNull;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
@@ -80,7 +81,7 @@ public class VirtualPipelineInputAdvanced extends VirtualPipelineInput {
             return FormValidation.ok();
         }
 
-        public FormValidation doCheckMaxContentLength(@QueryParameter String maxContentLength) throws IOException, ServletException {
+        public FormValidation doCheckMaxContentLength(@QueryParameter String maxContentLength) {
             try {
                 int inputNumber = Integer.parseInt(maxContentLength);
                 if(inputNumber < 1) {
@@ -97,7 +98,7 @@ public class VirtualPipelineInputAdvanced extends VirtualPipelineInput {
         }
 
 
-        public FormValidation doCheckNumberOfLineToDisplay(@QueryParameter String numberOfLineToDisplay) throws IOException, ServletException {
+        public FormValidation doCheckNumberOfLineToDisplay(@QueryParameter String numberOfLineToDisplay) {
             try{
             int inputNumber = Integer.parseInt(numberOfLineToDisplay);
             if(inputNumber < 0) {
@@ -111,7 +112,7 @@ public class VirtualPipelineInputAdvanced extends VirtualPipelineInput {
             }
         }
 
-        @Override
+        @Override @NonNull
         public String getDisplayName() {
             return "Advanced Regex Format";
         }

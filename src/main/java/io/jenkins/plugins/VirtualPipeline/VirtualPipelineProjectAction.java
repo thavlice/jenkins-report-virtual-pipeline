@@ -41,7 +41,7 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
 
 
     public List<VirtualPipelineOutputHistoryMarked> getHistoryMarkedLines(){
-        File comparingFile;; // build File can be changed here
+        File comparingFile; // build File can be changed here
         if(compareAgainstLastStableBuild){
             comparingFile = this.getLastStableBuildFile();
         }else {
