@@ -104,6 +104,9 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
 
         //creates necessary directories
         boolean mkdirsResult = currentBuildFolder.mkdirs();
+        if(mkdirsResult){
+            listener.getLogger().println("VP: Created new directories");
+        }
 
         RandomAccessFile raf = new RandomAccessFile(defaultLogs, "r");
 
@@ -141,7 +144,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
             VirtualPipelinePictureMaker pm = new VirtualPipelinePictureMaker(width, height);
             BufferedImage image = pm.createPicture(filterOutput);
             File picturePath = new File(currentBuildFolder + File.separator + "archive" + File.separator + cachePictureName);
-            Boolean pictureMkdirResult = picturePath.mkdirs();
+            boolean pictureMkdirResult = picturePath.mkdirs();
             if (!pictureMkdirResult) {
                 listener.getLogger().println("VP: cache directories for picture were not successfully created");
                 return false;

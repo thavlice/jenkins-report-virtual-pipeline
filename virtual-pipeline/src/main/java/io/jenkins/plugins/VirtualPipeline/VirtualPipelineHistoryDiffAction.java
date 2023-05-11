@@ -47,12 +47,11 @@ public class VirtualPipelineHistoryDiffAction implements SimpleBuildStep.LastBui
         if(compareAgainstLastStableBuild){
             return this.build.getProject().getLastStableBuild().getNumber();
         }
-        try {
-            return this.build.getPreviousBuild().getNumber();
-        }catch (Exception e){
+        AbstractBuild<?,?> previousBuild = this.build.getPreviousBuild();
+        if(Objects.isNull(previousBuild)){
             return this.getCurrentBuildNumber();
         }
-
+        return previousBuild.getNumber();
     }
 
 
