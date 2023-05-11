@@ -1,27 +1,35 @@
-# virtual-pipeline
+# Virtual Pipeline
 
 ## Introduction
 
-Virtual Pipeline plugin allows the user to define marks and visualize them from the main log.
+Virtual Pipeline Jenkins plugin allows the user to define marks (using regular expressions) that can be found in the main log and them visualize them on the Project and Job Page.
+
+
+
+Two configurations for a mark are available at the moment:
+* Simple - oneline, single regex
+* Advanced - start and end regex, option to match lines between
+
+Found marks will be displayed after each Build on the Project page and the Build page with the possibility to:
+* jump to the exact position in the log with highlighted marks
+* request part of the log based on the marks offset
+* compare the marks against previous build
+* generate picture of marks as an artifact
 
 ## Getting started
 
-After adding the plugin as a post-built step, configure by adding Java-regex formatted marks.
+The plugin can be built using the command:
+```
+mvn clean install
+```
+Created `.hpi` file in the target directory can be imported into a running Jenkins instance in the Manage Jenkins Section.
 
-The result found marks is then displayed on the project page, build page.
+---
+To use the plugin in Jenkins instance, add it to your project as a  `Virtual Pipeline` post-build step and setup the configuration according to your needs.
 
-## Issues
 
-TODO Decide where you're going to host your issues, the default is Jenkins JIRA, but you can also enable GitHub issues,
-If you use GitHub issues there's no need for this section; else add the following line:
 
-Report issues and enhancements in the [Jenkins issue tracker](https://issues.jenkins-ci.org/).
 
-## Contributing
-
-TODO review the default [CONTRIBUTING](https://github.com/jenkinsci/.github/blob/master/CONTRIBUTING.md) file and make sure it is appropriate for your plugin, if not then add your own one adapted from the base file
-
-Refer to our [contribution guidelines](https://github.com/jenkinsci/.github/blob/master/CONTRIBUTING.md)
 
 ## LICENSE
 
