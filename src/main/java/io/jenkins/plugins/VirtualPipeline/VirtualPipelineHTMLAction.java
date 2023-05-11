@@ -2,7 +2,6 @@ package io.jenkins.plugins.VirtualPipeline;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hudson.Extension;
 import hudson.model.AbstractBuild;
 import hudson.model.Action;
 import jenkins.tasks.SimpleBuildStep;
