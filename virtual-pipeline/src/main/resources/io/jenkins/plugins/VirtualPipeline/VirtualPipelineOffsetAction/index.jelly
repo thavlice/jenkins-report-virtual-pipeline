@@ -6,12 +6,12 @@
             <h2>Offset logs</h2>
             <f:form id="offsetForm" action="get-search-offset" method="GET" name="Get the offset">
                 <f:entry title="Offset from">
-                    <f:number name="from" min="0"></f:number>
+                    <f:number name="from" min="0"/>
                 </f:entry>
                 <f:entry title="Offset to" >
-                    <f:number name="to" min="0"></f:number>
+                    <f:number name="to" min="0"/>
                 </f:entry>
-                <f:submit value="Search" name="Search"></f:submit>
+                <f:submit value="Search" name="Search"/>
             </f:form>
             <script>
                 const urlParameters = new URLSearchParams(window.location.search);
