@@ -77,11 +77,11 @@
                     <code>
                         <div>
                             <a class="${line.type}"
-                               href="/job/${it.build.project.name}/${it.build.number}/html#ID${line.index}">
+                               href="${it.jenkinsRootUrl}job/${it.build.project.name}/${it.build.number}/html#ID${line.index}">
                                 ${line.line}
                             </a>
                             <a class="${line.type}"
-                               href="/job/${it.build.project.name}/${it.build.number}/logsOffset/?from=${line.lineStartOffset}">
+                               href="${it.jenkinsRootUrl}job/${it.build.project.name}/${it.build.number}/logsOffset/?from=${line.lineStartOffset}">
                                 [offset: ${line.lineStartOffset}]
                             </a>
                         </div>

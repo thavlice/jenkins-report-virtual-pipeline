@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hudson.model.AbstractBuild;
 import hudson.model.Action;
+import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildStep;
 
 import java.io.File;
@@ -141,6 +142,14 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
             throw new RuntimeException(e);
         }
 
+    }
+
+    public String getJenkinsRootUrl(){
+        Jenkins instance = Jenkins.getInstanceOrNull();
+        if(instance == null){
+            return "";
+        }
+        return instance.getRootUrlFromRequest();
     }
 
     public AbstractBuild<?, ?> getBuild() {
