@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core"
+>
+    <style type="text/css">
+        .codeSection{
+        width: 500px;
+        height: 400px;
+        overflow:auto;
+        overflow-wrap: anywhere;
+        word-break: break-all;
+        white-space: nowrap;
+        }
+        .codeWrapper{
+        }
+        .codeWrapper a{
+        text-decoration: none;
+        }
+        a.START_MARK{
+        color: var(--dark-grey);
+        }
+        a.END_MARK{
+        color: var(--medium-grey);
+        }
+        a.ONE_LINE{
+        color: var(--green);
+        }
+        a.LIMIT_REACHED_LINE{
+        color: var(--warning);
+        }
+        a.CONTENT_LINE{
+        color: var(--primary);
+        }
+        .DIFFERENT_PREVIOUS{
+        background-color: var(--danger-hover);
+        }
+        .DIFFERENT_CURRENT{
+        background-color: var(--line-green);
+        }
+    </style>
+    <h3>Latest build virtual pipeline results</h3>
+    <div class="codeSection">
+        <j:set var="lines" value="${from.onlyMarkedLinesToDisplay}"/>
+        <j:forEach items="${lines}" var="line">
+            <div class="codeWrapper">
+                <code>
+                    <div class="${line.historyType}">
+                        <a class="${line.type}"
+                           href="${from.jenkinsRootUrl}job/${from.build.project.name}/${from.build.number}/html#ID${line.index}">
+                            ${line.line}
+                        </a>
+                        <a class="${line.type}"
+                           href="${from.jenkinsRootUrl}job/${from.build.project.name}/${from.build.number}/logsOffset/?from=${line.lineStartOffset}">
+                            [offset: ${line.lineStartOffset}]
+                        </a>
+                    </div>
+                </code>
+            </div>
+        </j:forEach>
+    </div>
+</j:jelly>

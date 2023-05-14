@@ -1,2 +1,77 @@
-# jenkins-report-virtual-pipeline
-Jenkins plugin which visualizes steps from build.log via user defined marks.
+# Virtual Pipeline
+
+## Introduction
+
+Virtual Pipeline Jenkins plugin allows the user to define marks (using regular expressions) that can be found in the main
+log and them visualize then on the Project and Job Page.
+
+
+
+Two configurations for a mark are available at the moment:
+* Simple - oneline, single regex
+* Advanced - start and end regex, option to match lines between
+
+Found marks will be displayed after each Build on the Project page and the Build page with the possibility to:
+* jump to the exact position in the log with highlighted marks
+* request part of the log based on the marks offset
+* compare the marks against previous build
+* generate picture of marks as an artifact
+
+## Getting started
+
+The plugin can be built using the command:
+```
+mvn clean install
+```
+Created `.hpi` file in the target directory can be imported into a running Jenkins instance in the Manage Jenkins Section.
+
+---
+To use the plugin in Jenkins instance, add it to your project as a  `Virtual Pipeline` post-build step and set up the configuration according to your needs.
+
+After next build, you should be able to see the matched marks in a summary on Project and Build page for this build.
+
+---
+For example if your log looks something like this:
+```agsl
+Executing commands during a build
+Section Build
+building command one
+building command two
+building command three
+Section Test
+testing command one
+testing command two
+testing command three
+Section Deploy
+deploy command one
+deploy command two
+End of the log 
+```
+you can define Simple mark with regex `Section.*`.  This will result in a summary:
+```agsl
+Section Build [offset: *some number*]
+Section Test [offset: *some number*]
+Section Deploy [offset: *some number*]
+```
+with links leading to the exact location of each mark match. 
+In addition, if you don't see section Deploy in the summary,
+it means it is not contained in the log and something probably went wrong in the Test section.
+
+---
+By clicking the text part of mark in summary, we get to the exact position of the mark in the page with full log.
+
+By clicking the offset part of the mark in summary, we get to the Offset page with prefilled offset of the mark area.
+This feature is meant for searching large logs.
+
+---
+All the pages (HTML Logs, Offset Logs, History Diff) can be accessed in the sidebar of Build page as well.
+
+
+
+
+
+
+## LICENSE
+
+Licensed under MIT, see [LICENSE](LICENSE.md)
+

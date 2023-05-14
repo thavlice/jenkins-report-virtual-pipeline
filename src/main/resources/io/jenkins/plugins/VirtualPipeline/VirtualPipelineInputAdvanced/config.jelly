@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
+
+
+    <f:entry title="Start regex mark">
+        <f:textbox field="startMark"/>
+    </f:entry>
+    <f:entry title="End regex mark">
+        <f:textbox field="endMark"/>
+    </f:entry>
+    <f:entry title="Delete mark">
+        <f:checkbox field="deleteMark"/>
+    </f:entry>
+    <f:entry title="Content limit count (lines)">
+        <f:number field="maxContentLength" min="1" default="30"/>
+    </f:entry>
+    <f:entry title="Index of line to display from content">
+        <f:number field="numberOfLineToDisplay" min="0" default="0"/>
+    </f:entry>
+</j:jelly>
