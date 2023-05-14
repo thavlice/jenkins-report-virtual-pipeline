@@ -52,7 +52,7 @@ public class VirtualPipelineOffsetAction implements SimpleBuildStep.LastBuildAct
 
         List<String> resultLines = new ArrayList<>();
 
-        if (from > to | from < 0 | to < 0 | checkFrom == null | checkTo == null) {
+        if (from > to || from < 0 || to < 0 || checkFrom == null || checkTo == null) {
             res.setStatus(404);
             out.print("Invalid parameters");
         } else {
