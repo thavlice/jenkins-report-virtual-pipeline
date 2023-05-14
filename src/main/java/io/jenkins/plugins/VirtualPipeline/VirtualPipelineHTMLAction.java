@@ -52,10 +52,12 @@ public class VirtualPipelineHTMLAction implements SimpleBuildStep.LastBuildActio
 
         for (int index = 0; index < fullLogs.size(); index++) {
 
-            if (iteratorMarked.hasNext() && (index == currentMarkedLine.getIndex())) {
+            if ((index == currentMarkedLine.getIndex())) {
                 result.add(currentMarkedLine);
-                currentMarkedLine = iteratorMarked.next();
-            } else {
+                if (iteratorMarked.hasNext()){ //qfor the last match
+                    currentMarkedLine = iteratorMarked.next();
+                }
+            }else {
                 //default for line with no marked meaning
                 result.add(new VirtualPipelineLineOutput("", fullLogs.get(index), index, false,
                         LineType.DEFAULT, 0, false));
