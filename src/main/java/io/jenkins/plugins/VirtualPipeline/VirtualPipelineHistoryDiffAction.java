@@ -64,6 +64,9 @@ public class VirtualPipelineHistoryDiffAction implements SimpleBuildStep.LastBui
         } else {
             comparingFile = this.getPreviousBuildFile();
         }
+        if(comparingFile == null){
+            return new ArrayList<>();
+        }
 
 
         List<VirtualPipelineLineOutput> currentBuildLines = getAllCacheFromFile();
