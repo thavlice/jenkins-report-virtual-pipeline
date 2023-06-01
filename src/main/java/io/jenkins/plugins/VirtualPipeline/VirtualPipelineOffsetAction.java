@@ -85,7 +85,7 @@ public class VirtualPipelineOffsetAction implements SimpleBuildStep.LastBuildAct
 
     @Override
     public String getIconFileName() {
-        return "empty";
+        return "symbol-logs";
     }
 
     @Override

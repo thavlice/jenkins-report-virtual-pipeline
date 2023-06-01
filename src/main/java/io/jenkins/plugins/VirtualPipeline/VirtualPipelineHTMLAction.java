@@ -84,7 +84,7 @@ public class VirtualPipelineHTMLAction implements SimpleBuildStep.LastBuildActio
 
     @Override
     public String getIconFileName() {
-        return "empty";
+        return "symbol-logs";
     }
 
     @Override

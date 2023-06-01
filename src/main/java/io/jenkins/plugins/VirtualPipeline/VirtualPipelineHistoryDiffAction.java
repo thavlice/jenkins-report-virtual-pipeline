@@ -154,7 +154,7 @@ public class VirtualPipelineHistoryDiffAction implements SimpleBuildStep.LastBui
 
     @Override
     public String getIconFileName() {
-        return "empty";
+        return "symbol-changes";
     }
 
     @Override
