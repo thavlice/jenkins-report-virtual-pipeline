@@ -2,7 +2,7 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core"
          xmlns:t="/lib/hudson">
-    <t:summary icon="symbol-cube">
+    <t:summary icon="symbol-logs">
         <style type="text/css">
             .codeSection{
             width: 500px;
