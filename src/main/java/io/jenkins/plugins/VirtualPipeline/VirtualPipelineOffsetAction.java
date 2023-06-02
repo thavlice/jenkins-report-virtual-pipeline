@@ -15,6 +15,7 @@ package io.jenkins.plugins.VirtualPipeline;
 
 import hudson.model.AbstractBuild;
 import hudson.model.Action;
+import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildStep;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
@@ -41,6 +42,7 @@ public class VirtualPipelineOffsetAction implements SimpleBuildStep.LastBuildAct
     @GET
     @WebMethod(name = "get-search-offset")
     public void doSearchOffset(StaplerRequest req, StaplerResponse res) throws IOException {
+        Jenkins.get().checkPermission(Jenkins.READ);
         res.setContentType("text/plain");
         res.setCharacterEncoding("UTF-8");
         PrintWriter out = res.getWriter();
