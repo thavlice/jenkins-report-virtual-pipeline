@@ -44,6 +44,7 @@ public class VirtualPipelineInputSimple extends VirtualPipelineInput {
     @Extension
     public static final class DescriptorImpl extends VirtualPipelineInputDescriptor {
 
+        @SuppressWarnings("lgtm[jenkins/no-permission-check]")
         @POST
         public FormValidation doCheckRegex(@QueryParameter String regex) {
             if (regex.isEmpty()) {

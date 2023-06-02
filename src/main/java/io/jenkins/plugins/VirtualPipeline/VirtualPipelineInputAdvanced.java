@@ -58,6 +58,7 @@ public class VirtualPipelineInputAdvanced extends VirtualPipelineInput {
 
     @Extension
     public static final class DescriptorImpl extends VirtualPipelineInputDescriptor {
+        @SuppressWarnings("lgtm[jenkins/no-permission-check]")
         @POST
         public FormValidation doCheckStartMark(@QueryParameter String startMark) throws IOException, ServletException {
             if (startMark.isEmpty()) {
@@ -71,6 +72,7 @@ public class VirtualPipelineInputAdvanced extends VirtualPipelineInput {
             return FormValidation.ok();
         }
 
+        @SuppressWarnings("lgtm[jenkins/no-permission-check]")
         @POST
         public FormValidation doCheckEndMark(@QueryParameter String endMark) throws IOException, ServletException {
             if (endMark.isEmpty()) {
@@ -84,6 +86,7 @@ public class VirtualPipelineInputAdvanced extends VirtualPipelineInput {
             return FormValidation.ok();
         }
 
+        @SuppressWarnings("lgtm[jenkins/no-permission-check]")
         @POST
         public FormValidation doCheckMaxContentLength(@QueryParameter String maxContentLength) {
             try {
@@ -101,6 +104,7 @@ public class VirtualPipelineInputAdvanced extends VirtualPipelineInput {
 
         }
 
+        @SuppressWarnings("lgtm[jenkins/no-permission-check]")
         @POST
         public FormValidation doCheckNumberOfLineToDisplay(@QueryParameter String numberOfLineToDisplay) {
             try {
