@@ -4,6 +4,7 @@ import hudson.Extension;
 import hudson.util.FormValidation;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
+import org.kohsuke.stapler.verb.POST;
 import org.springframework.lang.NonNull;
 
 import javax.servlet.ServletException;
@@ -57,6 +58,7 @@ public class VirtualPipelineInputAdvanced extends VirtualPipelineInput {
 
     @Extension
     public static final class DescriptorImpl extends VirtualPipelineInputDescriptor {
+        @POST
         public FormValidation doCheckStartMark(@QueryParameter String startMark) throws IOException, ServletException {
             if (startMark.isEmpty()) {
                 return FormValidation.error("Regex is empty");
@@ -69,6 +71,7 @@ public class VirtualPipelineInputAdvanced extends VirtualPipelineInput {
             return FormValidation.ok();
         }
 
+        @POST
         public FormValidation doCheckEndMark(@QueryParameter String endMark) throws IOException, ServletException {
             if (endMark.isEmpty()) {
                 return FormValidation.error("Regex is empty");
@@ -81,6 +84,7 @@ public class VirtualPipelineInputAdvanced extends VirtualPipelineInput {
             return FormValidation.ok();
         }
 
+        @POST
         public FormValidation doCheckMaxContentLength(@QueryParameter String maxContentLength) {
             try {
                 int inputNumber = Integer.parseInt(maxContentLength);
@@ -97,7 +101,7 @@ public class VirtualPipelineInputAdvanced extends VirtualPipelineInput {
 
         }
 
-
+        @POST
         public FormValidation doCheckNumberOfLineToDisplay(@QueryParameter String numberOfLineToDisplay) {
             try {
                 int inputNumber = Integer.parseInt(numberOfLineToDisplay);

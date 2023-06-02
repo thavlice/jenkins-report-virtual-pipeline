@@ -6,6 +6,7 @@ import hudson.util.FormValidation;
 import jenkins.model.Jenkins;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
+import org.kohsuke.stapler.verb.POST;
 import org.springframework.lang.NonNull;
 
 import java.util.regex.Pattern;
@@ -43,6 +44,7 @@ public class VirtualPipelineInputSimple extends VirtualPipelineInput {
     @Extension
     public static final class DescriptorImpl extends VirtualPipelineInputDescriptor {
 
+        @POST
         public FormValidation doCheckRegex(@QueryParameter String regex) {
             if (regex.isEmpty()) {
                 return FormValidation.error("Regex is empty");
