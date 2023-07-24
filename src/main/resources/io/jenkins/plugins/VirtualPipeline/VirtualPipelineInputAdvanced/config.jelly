@@ -18,4 +18,7 @@
     <f:entry title="Index of line to display from content">
         <f:number field="numberOfLineToDisplay" min="0" default="0"/>
     </f:entry>
+    <f:entry title="Ignore regex mark">
+        <f:textbox field="ignoreMark"/>
+    </f:entry>
 </j:jelly>

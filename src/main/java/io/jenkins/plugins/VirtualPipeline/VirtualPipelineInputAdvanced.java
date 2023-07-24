@@ -37,14 +37,17 @@ public class VirtualPipelineInputAdvanced extends VirtualPipelineInput {
     private int maxContentLength = DEFAULT_CONTENT_LENGTH;
 
     private int numberOfLineToDisplay = 0;
+    private String ignoreMark;
+
 
     @DataBoundConstructor
-    public VirtualPipelineInputAdvanced(String startMark, String endMark, Boolean deleteMark, int maxContentLength, int numberOfLineToDisplay) {
+    public VirtualPipelineInputAdvanced(String startMark, String endMark, Boolean deleteMark, int maxContentLength, int numberOfLineToDisplay, String ignoreMark) {
         this.startMark = startMark;
         this.endMark = endMark;
         this.deleteMark = deleteMark;
         this.maxContentLength = maxContentLength;
         this.numberOfLineToDisplay = numberOfLineToDisplay;
+        this.ignoreMark = ignoreMark;
     }
 
     public String getStartMark() {
@@ -66,6 +69,8 @@ public class VirtualPipelineInputAdvanced extends VirtualPipelineInput {
     public int getNumberOfLineToDisplay() {
         return numberOfLineToDisplay;
     }
+
+    public String getIgnoreMark() { return ignoreMark; }
 
 
     @Extension
@@ -130,6 +135,18 @@ public class VirtualPipelineInputAdvanced extends VirtualPipelineInput {
             } catch (Exception e) {
                 return FormValidation.error("Something went wrong");
             }
+        }
+
+        public FormValidation doCheckIgnoreMark(@QueryParameter String ignoreMark) throws IOException, ServletException {
+            if (ignoreMark.isEmpty()) {
+                return FormValidation.error("Regex is empty");
+            }
+            try {
+                Pattern.compile(ignoreMark);
+            } catch (PatternSyntaxException exception) {
+                return FormValidation.error("Regex is invalid");
+            }
+            return FormValidation.ok();
         }
 
         @Override

@@ -115,6 +115,13 @@ public class VirtualPipelineFilter {
 
                     VirtualPipelineInputAdvanced advancedConfig = (VirtualPipelineInputAdvanced) config;
 
+                    //checking if we want to ignore this line first
+                    if(!advancedConfig.getIgnoreMark().isEmpty()){
+                        if(line.matches(advancedConfig.getIgnoreMark())){
+                            continue;
+                        }
+                    }
+
                     if (advancedConfig.getStartMark().isEmpty() || advancedConfig.getEndMark().isEmpty()) { // empty regex would match all lines
                         continue;
                     }
