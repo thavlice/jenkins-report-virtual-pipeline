@@ -69,7 +69,9 @@ All the pages (HTML Logs, Offset Logs, History Diff) can be accessed in the side
 
 
 
+## Thesis reference
 
+More information describing the plugin can be found as a part of thesis [here](https://is.muni.cz/th/otyw7/Jenkins_Virtual_Pipeline.pdf).
 
 ## LICENSE
 
