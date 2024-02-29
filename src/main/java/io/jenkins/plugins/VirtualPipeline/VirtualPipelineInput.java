@@ -17,12 +17,10 @@ import hudson.ExtensionPoint;
 import hudson.model.Describable;
 import hudson.model.Descriptor;
 import jenkins.model.Jenkins;
+import org.kohsuke.stapler.DataBoundConstructor;
 
 public abstract class VirtualPipelineInput implements Describable<VirtualPipelineInput>, ExtensionPoint {
     //TODO change to protected
-    public VirtualPipelineInput() {
-
-    }
 
     @Override
     public Descriptor<VirtualPipelineInput> getDescriptor() {
