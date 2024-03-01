@@ -2,21 +2,22 @@ package io.jenkins.plugins.VirtualPipeline;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import hudson.Extension;
+import hudson.Launcher;
 import hudson.console.ConsoleLogFilter;
-import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
+import hudson.model.*;
 import hudson.tasks.BuildWrapper;
 import hudson.tasks.BuildWrapperDescriptor;
 import jenkins.tasks.SimpleBuildWrapper;
 import org.kohsuke.stapler.DataBoundConstructor;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.List;
 
-@Extension
-public class VirtualPipelineBuildWrapper extends SimpleBuildWrapper {
+
+public class VirtualPipelineBuildWrapper extends BuildWrapper {
 
     public static final String cacheName = "VirtualPipelineCache.json";
     public static final String cachePictureName = "VirtualPipelineResult.png";
@@ -58,14 +59,16 @@ public class VirtualPipelineBuildWrapper extends SimpleBuildWrapper {
     }
 
 
+    @Override
+    public Environment setUp(AbstractBuild build, Launcher launcher, BuildListener listener) throws IOException, InterruptedException {
+        build.addAction(new VirtualPipelineOffsetAction(build));
+        build.addAction(new VirtualPipelineOffsetAction(build));
+        build.addAction(new VirtualPipelineOffsetAction(build));
+        build.addAction(new VirtualPipelineHTMLAction(build, new File(cacheName)));
 
 
-
-    public static class VirtualPipelineLogFilterImpl extends ConsoleLogFilter {
-
-
+        return super.setUp(build, launcher, listener);
     }
-
 
 
     @Extension
