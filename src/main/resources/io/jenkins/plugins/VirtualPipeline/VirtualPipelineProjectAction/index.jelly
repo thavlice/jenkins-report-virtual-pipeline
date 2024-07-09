@@ -5,10 +5,10 @@
         <st:include it="${it.build}" page="sidepanel.jelly"/>
         <l:main-panel>
             <p>
-                <a href="${it.jenkinsRootUrl}job/${it.build.project.name}/${it.build.number}/logsOffset">OFFSET LOG PAGE</a>
+                <a href="${it.jenkinsRootUrl}job/${it.run.parent.name}/${it.run.number}/logsOffset">OFFSET LOG PAGE</a>
             </p>
             <p>
-                <a href="${it.jenkinsRootUrl}job/${it.build.project.name}/${it.build.number}/html">HTML LOG PAGE</a>
+                <a href="${it.jenkinsRootUrl}job/${it.run.parent.name}/${it.run.number}/html">HTML LOG PAGE</a>
             </p>
         </l:main-panel>
     </l:layout>
