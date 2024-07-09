@@ -13,8 +13,8 @@
 package io.jenkins.plugins.VirtualPipeline;
 ///////////////
 
-import hudson.model.AbstractBuild;
 import hudson.model.Action;
+import hudson.model.Run;
 import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildStep;
 import org.kohsuke.stapler.StaplerRequest;
@@ -32,10 +32,10 @@ import java.util.List;
 
 
 public class VirtualPipelineOffsetAction implements SimpleBuildStep.LastBuildAction {
-    private final AbstractBuild<?, ?> build;
+    private final Run run;
 
-    public VirtualPipelineOffsetAction(AbstractBuild<?, ?> build) {
-        this.build = build;
+    public VirtualPipelineOffsetAction(Run<?, ?> run) {
+        this.run = run;
     }
 
 
@@ -59,7 +59,7 @@ public class VirtualPipelineOffsetAction implements SimpleBuildStep.LastBuildAct
         long from = Long.parseLong(req.getParameter("from"));
         long to = Long.parseLong(req.getParameter("to"));
 
-        RandomAccessFile logs = new RandomAccessFile(this.build.getRootDir() + File.separator + "log", "r");
+        RandomAccessFile logs = new RandomAccessFile(this.run.getRootDir() + File.separator + "log", "r");
 
         Long checkFrom = from;
         Long checkTo = to;

@@ -14,8 +14,8 @@ package io.jenkins.plugins.VirtualPipeline;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hudson.model.AbstractBuild;
 import hudson.model.Action;
+import hudson.model.Run;
 import jenkins.tasks.SimpleBuildStep;
 
 import java.io.BufferedReader;
@@ -29,16 +29,16 @@ import java.util.ListIterator;
 
 public class VirtualPipelineHTMLAction implements SimpleBuildStep.LastBuildAction {
 
-    private final AbstractBuild<?, ?> build;
+    private final Run<?,?> run;
     private final File cacheFile;
 
-    public VirtualPipelineHTMLAction(AbstractBuild<?, ?> build, File cacheFile) {
-        this.build = build;
+    public VirtualPipelineHTMLAction(Run<?, ?> run, File cacheFile) {
+        this.run = run;
         this.cacheFile = cacheFile;
     }
 
     public List<String> getLogs() throws IOException {
-        Reader reader = build.getLogReader();
+        Reader reader = run.getLogReader();
         BufferedReader bufferedReader = new BufferedReader(reader);
         List<String> result = new ArrayList<>();
         String line = bufferedReader.readLine();
@@ -81,7 +81,7 @@ public class VirtualPipelineHTMLAction implements SimpleBuildStep.LastBuildActio
     private List<VirtualPipelineLineOutput> getAllCacheFromNamedFile(File file) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            return objectMapper.readValue(file, new TypeReference<List<VirtualPipelineLineOutput>>() {
+            return objectMapper.readValue(file, new TypeReference<>() {
             });
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -14,8 +14,8 @@ package io.jenkins.plugins.VirtualPipeline;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hudson.model.AbstractBuild;
 import hudson.model.Action;
+import hudson.model.Run;
 import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildStep;
 
@@ -28,7 +28,7 @@ import java.util.Objects;
 
 public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAction {
 
-    private final AbstractBuild<?, ?> build;
+    private final Run<?, ?> run;
 
     private final List<VirtualPipelineInput> configurations;
 
@@ -37,8 +37,8 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
     private final Boolean compareAgainstLastStableBuild;
 
 
-    public VirtualPipelineProjectAction(AbstractBuild<?, ?> build, List<VirtualPipelineInput> configurations, File cacheFolder, Boolean compareAgainstLastStableBuild) {
-        this.build = build;
+    public VirtualPipelineProjectAction(Run<?, ?> run, List<VirtualPipelineInput> configurations, File cacheFolder, Boolean compareAgainstLastStableBuild) {
+        this.run = run;
         this.configurations = configurations;
         this.cacheFile = cacheFolder;
         this.compareAgainstLastStableBuild = compareAgainstLastStableBuild;
@@ -118,7 +118,7 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
     }
 
     private File getPreviousBuildFile() {
-        AbstractBuild<?, ?> previousBuild = this.getBuild().getPreviousBuild();
+        Run<?, ?> previousBuild = this.getRun().getPreviousBuild();
         if (Objects.isNull(previousBuild)) {
             return null;
         }
@@ -128,7 +128,7 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
     }
 
     private File getLastStableBuildFile() {
-        AbstractBuild<?, ?> previousLastStableBuild = this.getBuild().getProject().getLastStableBuild();
+        Run<?, ?> previousLastStableBuild = this.getRun().getPreviousCompletedBuild();
         if (Objects.isNull(previousLastStableBuild)) {
             return null;
         }
@@ -138,7 +138,7 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
     }
 
     public File getProjectDirFile() {
-        return build.getProject().getRootDir();
+        return run.getRootDir();
     }
 
     public File getBuildFolderFromBuildNumber(int buildNumber) {
@@ -164,8 +164,8 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
         return instance.getRootUrlFromRequest();
     }
 
-    public AbstractBuild<?, ?> getBuild() {
-        return build;
+    public Run<?, ?> getRun() {
+        return run;
     }
 
     public List<VirtualPipelineInput> getConfigurations() {
@@ -195,7 +195,7 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
     @Override
     public Collection<? extends Action> getProjectActions() {
         ArrayList<Action> list = new ArrayList<>();
-        list.add(new VirtualPipelineProjectAction(this.getBuild(), this.getConfigurations(), this.getCacheFile(), compareAgainstLastStableBuild));
+        list.add(new VirtualPipelineProjectAction(this.getRun(), this.getConfigurations(), this.getCacheFile(), compareAgainstLastStableBuild));
         return list;
     }
 
