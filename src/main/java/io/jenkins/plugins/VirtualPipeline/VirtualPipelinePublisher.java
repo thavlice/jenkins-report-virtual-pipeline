@@ -87,89 +87,17 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
         return Jenkins.get().getDescriptorList(VirtualPipelineInput.class);
     }
 
-//    /**
-//     * every event from plugin is performed at this function as it is the main extension point for the plugin
-//     *
-//     * @param build    current build
-//     * @param launcher launcher
-//     * @param listener current listener, can be used to log
-//     * @return true if build is marked as successful, false otherwise
-//     * @throws InterruptedException exception for being interrupted
-//     * @throws IOException          exception for IO operations
-//     */
-//    @Override
-//    public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) throws InterruptedException, IOException {
-//        if (Objects.isNull(configurations) || configurations.isEmpty()) {
-//            listener.getLogger().println("VP: configurations are empty");
-//            return false;
-//        }
-//
-//        //here is the performance part, e.g. drawing, printing itself
-//        File rootDir = build.getProject().getRootDir();
-//        File currentBuildFolder = new File(rootDir.getPath() + File.separator + "builds" + File.separator + build.getNumber());
-//        File defaultLogs = new File(currentBuildFolder + File.separator + "log");
-//
-//        //creates necessary directories
-//        boolean mkdirsResult = currentBuildFolder.mkdirs();
-//        if (mkdirsResult) {
-//            listener.getLogger().println("VP: Created new directories");
-//        }
-//
-//        RandomAccessFile raf = new RandomAccessFile(defaultLogs, "r");
-//
-//        //reading log file
-//
-//        List<LineWithOffset> logLines = new ArrayList<>();
-//        long currentOffset = raf.getFilePointer();
-//        String line = raf.readLine();
-//        while (line != null) {
-//            logLines.add(new LineWithOffset(line, currentOffset));
-//            currentOffset = raf.getFilePointer();
-//            line = raf.readLine();
-//        }
-//        raf.close();
-//        //getting filtered lines
-//        List<VirtualPipelineLineOutput> filterOutput = VirtualPipelineFilter.filter(logLines, getConfigurations());
-//
-//
-//        //writing in JSON format into output.json
-//        File jsonCacheFile = new File(currentBuildFolder.getPath() + File.separator + cacheName);
-//
-//        boolean createFileResult = jsonCacheFile.createNewFile();
-//        if (!createFileResult) {
-//            listener.getLogger().println("VP: " + cacheName + " was not created");
-//            return false;
-//        }
-//
-//        VirtualPipelineFilter.saveToJSON(filterOutput, jsonCacheFile);
-//
-//
-//        // creating picture
-//        if (generatePicture) {
-//            int width = 1200;
-//            int height = 800;
-//            VirtualPipelinePictureMaker pm = new VirtualPipelinePictureMaker(width, height);
-//            BufferedImage image = pm.createPicture(filterOutput);
-//            File picturePath = new File(currentBuildFolder + File.separator + "archive" + File.separator + cachePictureName);
-//            boolean pictureMkdirResult = picturePath.mkdirs();
-//            if (!pictureMkdirResult) {
-//                listener.getLogger().println("VP: cache directories for picture were not successfully created");
-//                return false;
-//            }
-//            javax.imageio.ImageIO.write(image, "png", picturePath);
-//        }
-//
-//
-//        // adding actions to build in Jenkins
-//        VirtualPipelineProjectAction action = new VirtualPipelineProjectAction(build, this.getConfigurations(), jsonCacheFile, compareAgainstLastStableBuild);
-//        build.addAction(action);
-//        build.addAction(new VirtualPipelineHTMLAction(build, jsonCacheFile));
-//        build.addAction(new VirtualPipelineOffsetAction(build));
-//        build.addAction(new VirtualPipelineHistoryDiffAction(build, jsonCacheFile, compareAgainstLastStableBuild));
-//
-//        return true;
-//    }
 
+    /**
+     *
+     * @param run a build this is running as a part of
+     * @param workspace a workspace to use for any file operations
+     * @param env environment variables applicable to this step
+     * @param launcher a way to start processes
+     * @param listener a place to send output
+     * @throws InterruptedException
+     * @throws IOException
+     */
     @Override
     public void perform(@NonNull Run<?, ?> run, @NonNull FilePath workspace, @NonNull EnvVars env, @NonNull Launcher launcher, @NonNull TaskListener listener) throws InterruptedException, IOException {
         listener.getLogger().println("performed1");
