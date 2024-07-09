@@ -100,23 +100,17 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
      */
     @Override
     public void perform(@NonNull Run<?, ?> run, @NonNull FilePath workspace, @NonNull EnvVars env, @NonNull Launcher launcher, @NonNull TaskListener listener) throws InterruptedException, IOException {
-        listener.getLogger().println("performed1");
 
         if (Objects.isNull(configurations) || configurations.isEmpty()) {
             listener.getLogger().println("VP: configurations are empty");
             return ;
         }
-        listener.getLogger().println("performed2");
 
         //here is the performance part, e.g. drawing, printing itself
         File rootDir = run.getRootDir();
-        listener.getLogger().println("performed3");
         File currentBuildFolder = new File(rootDir.getPath());
         File defaultLogs = new File(currentBuildFolder + File.separator + "log");
 
-        listener.getLogger().println(currentBuildFolder.getPath());
-        listener.getLogger().println(defaultLogs);
-        listener.getLogger().println("performed4");
 
         //creates necessary directories
         boolean mkdirsResult = currentBuildFolder.mkdirs();
