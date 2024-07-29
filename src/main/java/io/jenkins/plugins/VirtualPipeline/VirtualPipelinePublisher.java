@@ -14,6 +14,7 @@ package io.jenkins.plugins.VirtualPipeline;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import hudson.*;
+import hudson.console.ConsoleNote;
 import hudson.model.*;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Publisher;
@@ -127,6 +128,7 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
         long currentOffset = raf.getFilePointer();
         String line = raf.readLine();
         while (line != null) {
+            line = ConsoleNote.removeNotes(line);
             logLines.add(new LineWithOffset(line, currentOffset));
             currentOffset = raf.getFilePointer();
             line = raf.readLine();
