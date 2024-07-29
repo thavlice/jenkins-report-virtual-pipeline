@@ -14,6 +14,7 @@ package io.jenkins.plugins.VirtualPipeline;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import hudson.console.ConsoleNote;
 import hudson.model.Action;
 import hudson.model.Run;
 import jenkins.tasks.SimpleBuildStep;
@@ -43,6 +44,8 @@ public class VirtualPipelineHTMLAction implements SimpleBuildStep.LastBuildActio
         List<String> result = new ArrayList<>();
         String line = bufferedReader.readLine();
         while (line != null) {
+            // clear user notes
+            line = ConsoleNote.removeNotes(line);
             result.add(line);
             line = bufferedReader.readLine();
         }
