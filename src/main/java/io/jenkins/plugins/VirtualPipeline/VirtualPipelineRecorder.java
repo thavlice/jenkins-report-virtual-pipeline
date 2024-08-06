@@ -171,6 +171,10 @@ public class VirtualPipelineRecorder extends Recorder implements SimpleBuildStep
             if (createPicture(listener, filterOutput, currentBuildFolder)) return;
         }
 
+        //todo remove
+        System.out.println(jsonCacheFile.getPath());
+        System.out.println(jsonCacheFile.getAbsolutePath());
+
 
         // adding actions to build in Jenkins
         VirtualPipelineProjectAction action = new VirtualPipelineProjectAction(run, this.getConfigurations(), jsonCacheFile, compareAgainstLastStableBuild);

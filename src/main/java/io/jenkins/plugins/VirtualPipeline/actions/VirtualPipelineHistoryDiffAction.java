@@ -129,8 +129,7 @@ public class VirtualPipelineHistoryDiffAction implements SimpleBuildStep.LastBui
         if (Objects.isNull(previousBuild)) {
             return null;
         }
-        int buildNumber = previousBuild.getNumber();
-        File buildFolder = getBuildFolderFromBuildNumber(buildNumber);
+        File buildFolder = previousBuild.getRootDir();
         return new File(buildFolder + File.separator + VirtualPipelineRecorder.cacheName);
     }
 
@@ -139,17 +138,8 @@ public class VirtualPipelineHistoryDiffAction implements SimpleBuildStep.LastBui
         if (Objects.isNull(previousLastStableBuild)) {
             return null;
         }
-        int buildNumber = previousLastStableBuild.getNumber();
-        File buildFolder = getBuildFolderFromBuildNumber(buildNumber);
+        File buildFolder = previousLastStableBuild.getRootDir();
         return new File(buildFolder + File.separator + VirtualPipelineRecorder.cacheName);
-    }
-
-    public File getProjectDirFile() {
-        return run.getRootDir();
-    }
-
-    public File getBuildFolderFromBuildNumber(int buildNumber) {
-        return new File(this.getProjectDirFile() + File.separator + "builds" + File.separator + buildNumber);
     }
 
     private List<VirtualPipelineLineOutput> getAllCacheFromNamedFile(File file) {
