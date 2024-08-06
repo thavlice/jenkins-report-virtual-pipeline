@@ -12,6 +12,8 @@
 
 package io.jenkins.plugins.VirtualPipeline;
 
+import io.jenkins.plugins.VirtualPipeline.model.VirtualPipelineLineOutput;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;

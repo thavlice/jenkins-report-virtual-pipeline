@@ -10,22 +10,9 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.jenkins.plugins.VirtualPipeline;
+package io.jenkins.plugins.VirtualPipeline.input;
 
-public class LineWithOffset {
-    private final String line;
-    private final long offset;
+import hudson.model.Descriptor;
 
-    public LineWithOffset(String line, long offset) {
-        this.line = line;
-        this.offset = offset;
-    }
-
-    public String getLine() {
-        return line;
-    }
-
-    public long getOffset() {
-        return offset;
-    }
+public class VirtualPipelineInputDescriptor extends Descriptor<VirtualPipelineInput> {
 }

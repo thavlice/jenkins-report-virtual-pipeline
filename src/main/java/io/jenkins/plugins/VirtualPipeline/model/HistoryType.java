@@ -10,29 +10,12 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.jenkins.plugins.VirtualPipeline;
+package io.jenkins.plugins.VirtualPipeline.model;
 
-import hudson.Extension;
-import hudson.ExtensionPoint;
-import hudson.model.Describable;
-import hudson.model.Descriptor;
-import jenkins.model.Jenkins;
-
-public abstract class VirtualPipelineInput implements Describable<VirtualPipelineInput>, ExtensionPoint {
-    //TODO change to protected
-    public VirtualPipelineInput() {
-
-    }
-
-    @Override
-    public Descriptor<VirtualPipelineInput> getDescriptor() {
-        return Jenkins.get().getDescriptorOrDie(this.getClass());
-    }
-
-    @Extension
-    public static class DescriptorImpl extends Descriptor<VirtualPipelineInput> {
-        public String getDisplayName() {
-            return "";
-        }
-    }
+public enum HistoryType {
+    SAME,
+    DIFFERENT_PREVIOUS,
+    DIFFERENT_CURRENT,
+    JUST_SAME_REGEX,
+    DEFAULT
 }

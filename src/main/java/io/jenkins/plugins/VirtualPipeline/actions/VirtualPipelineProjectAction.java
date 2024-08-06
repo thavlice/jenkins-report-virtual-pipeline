@@ -10,12 +10,17 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.jenkins.plugins.VirtualPipeline;
+package io.jenkins.plugins.VirtualPipeline.actions;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hudson.model.Action;
 import hudson.model.Run;
+import io.jenkins.plugins.VirtualPipeline.model.HistoryType;
+import io.jenkins.plugins.VirtualPipeline.model.VirtualPipelineLineOutput;
+import io.jenkins.plugins.VirtualPipeline.model.VirtualPipelineOutputHistoryMarked;
+import io.jenkins.plugins.VirtualPipeline.VirtualPipelineRecorder;
+import io.jenkins.plugins.VirtualPipeline.input.VirtualPipelineInput;
 import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildStep;
 

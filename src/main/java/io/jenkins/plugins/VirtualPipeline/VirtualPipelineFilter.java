@@ -13,6 +13,12 @@
 package io.jenkins.plugins.VirtualPipeline;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jenkins.plugins.VirtualPipeline.input.VirtualPipelineInput;
+import io.jenkins.plugins.VirtualPipeline.input.VirtualPipelineInputAdvanced;
+import io.jenkins.plugins.VirtualPipeline.input.VirtualPipelineInputSimple;
+import io.jenkins.plugins.VirtualPipeline.model.LineType;
+import io.jenkins.plugins.VirtualPipeline.model.LineWithOffset;
+import io.jenkins.plugins.VirtualPipeline.model.VirtualPipelineLineOutput;
 
 import java.io.File;
 import java.io.IOException;

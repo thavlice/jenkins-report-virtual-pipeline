@@ -10,12 +10,22 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.jenkins.plugins.VirtualPipeline;
+package io.jenkins.plugins.VirtualPipeline.model;
 
-public enum HistoryType {
-    SAME,
-    DIFFERENT_PREVIOUS,
-    DIFFERENT_CURRENT,
-    JUST_SAME_REGEX,
-    DEFAULT
+public class LineWithOffset {
+    private final String line;
+    private final long offset;
+
+    public LineWithOffset(String line, long offset) {
+        this.line = line;
+        this.offset = offset;
+    }
+
+    public String getLine() {
+        return line;
+    }
+
+    public long getOffset() {
+        return offset;
+    }
 }
