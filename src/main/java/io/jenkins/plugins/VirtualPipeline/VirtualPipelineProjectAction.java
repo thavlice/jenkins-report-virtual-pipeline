@@ -124,7 +124,7 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
         }
         int buildNumber = previousBuild.getNumber();
         File buildFolder = getBuildFolderFromBuildNumber(buildNumber);
-        return new File(buildFolder + File.separator + VirtualPipelinePublisher.cacheName);
+        return new File(buildFolder + File.separator + VirtualPipelineRecorder.cacheName);
     }
 
     private File getLastStableBuildFile() {
@@ -134,7 +134,7 @@ public class VirtualPipelineProjectAction implements SimpleBuildStep.LastBuildAc
         }
         int buildNumber = previousLastStableBuild.getNumber();
         File buildFolder = getBuildFolderFromBuildNumber(buildNumber);
-        return new File(buildFolder + File.separator + VirtualPipelinePublisher.cacheName);
+        return new File(buildFolder + File.separator + VirtualPipelineRecorder.cacheName);
     }
 
     public File getProjectDirFile() {

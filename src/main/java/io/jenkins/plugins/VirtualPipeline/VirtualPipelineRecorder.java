@@ -38,7 +38,7 @@ import java.util.Objects;
  * responsible for performing all actions of the plugin
  */
 @Extension
-public class VirtualPipelinePublisher extends Recorder implements SimpleBuildStep {
+public class VirtualPipelineRecorder extends Recorder implements SimpleBuildStep {
 
     public static final String cacheName = "VirtualPipelineCache.json";
     public static final String cachePictureName = "VirtualPipelineResult.png";
@@ -46,11 +46,11 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
     private Boolean generatePicture = false;
     private Boolean compareAgainstLastStableBuild = false;
 
-    public VirtualPipelinePublisher() {
+    public VirtualPipelineRecorder() {
     }
 
     @DataBoundConstructor
-    public VirtualPipelinePublisher(List<VirtualPipelineInput> configurations, Boolean generatePicture, Boolean compareAgainstLastStableBuild) {
+    public VirtualPipelineRecorder(List<VirtualPipelineInput> configurations, Boolean generatePicture, Boolean compareAgainstLastStableBuild) {
         this.configurations = configurations;
         this.generatePicture = generatePicture;
         this.compareAgainstLastStableBuild = compareAgainstLastStableBuild;
