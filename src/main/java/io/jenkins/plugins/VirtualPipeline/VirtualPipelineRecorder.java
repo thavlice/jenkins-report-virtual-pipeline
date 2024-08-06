@@ -168,17 +168,7 @@ public class VirtualPipelineRecorder extends Recorder implements SimpleBuildStep
 
         //creating picture
         if (generatePicture) {
-            int width = DEFAULT_IMAGE_WIDTH;
-            int height = DEFAULT_IMAGE_HEIGHT;
-            VirtualPipelinePictureMaker pm = new VirtualPipelinePictureMaker(width, height);
-            BufferedImage image = pm.createPicture(filterOutput);
-            File picturePath = new File(currentBuildFolder + File.separator + "archive" + File.separator + cachePictureName);
-            boolean pictureMkdirResult = picturePath.mkdirs();
-            if (!pictureMkdirResult) {
-                listener.getLogger().println("VP: cache directories for picture were not successfully created");
-                return ;
-            }
-            javax.imageio.ImageIO.write(image, "png", picturePath);
+            if (createPicture(listener, filterOutput, currentBuildFolder)) return;
         }
 
 
@@ -189,6 +179,21 @@ public class VirtualPipelineRecorder extends Recorder implements SimpleBuildStep
         run.addAction(new VirtualPipelineOffsetAction(run));
         run.addAction(new VirtualPipelineHistoryDiffAction(run, jsonCacheFile, compareAgainstLastStableBuild));
 
+    }
+
+    private boolean createPicture(TaskListener listener, List<VirtualPipelineLineOutput> filterOutput, File currentBuildFolder) throws IOException {
+        int width = DEFAULT_IMAGE_WIDTH;
+        int height = DEFAULT_IMAGE_HEIGHT;
+        VirtualPipelinePictureMaker pm = new VirtualPipelinePictureMaker(width, height);
+        BufferedImage image = pm.createPicture(filterOutput);
+        File picturePath = new File(currentBuildFolder + File.separator + "archive" + File.separator + cachePictureName);
+        boolean pictureMkdirResult = picturePath.mkdirs();
+        if (!pictureMkdirResult) {
+            listener.getLogger().println("VP: cache directories for picture were not successfully created");
+            return true;
+        }
+        javax.imageio.ImageIO.write(image, "png", picturePath);
+        return false;
     }
 
     /**
