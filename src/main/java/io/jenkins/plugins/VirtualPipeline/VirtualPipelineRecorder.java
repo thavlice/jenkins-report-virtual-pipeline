@@ -42,6 +42,8 @@ import java.util.List;
 import java.util.Objects;
 
 
+
+
 /**
  * responsible for performing all actions of the plugin
  */
@@ -53,6 +55,10 @@ public class VirtualPipelineRecorder extends Recorder implements SimpleBuildStep
     private List<VirtualPipelineInput> configurations;
     private Boolean generatePicture = false;
     private Boolean compareAgainstLastStableBuild = false;
+
+    int DEFAULT_IMAGE_WIDTH = 1200;
+    int DEFAULT_IMAGE_HEIGHT = 800;
+
 
     public VirtualPipelineRecorder() {
     }
@@ -162,8 +168,8 @@ public class VirtualPipelineRecorder extends Recorder implements SimpleBuildStep
 
         //creating picture
         if (generatePicture) {
-            int width = 1200;
-            int height = 800;
+            int width = DEFAULT_IMAGE_WIDTH;
+            int height = DEFAULT_IMAGE_HEIGHT;
             VirtualPipelinePictureMaker pm = new VirtualPipelinePictureMaker(width, height);
             BufferedImage image = pm.createPicture(filterOutput);
             File picturePath = new File(currentBuildFolder + File.separator + "archive" + File.separator + cachePictureName);
