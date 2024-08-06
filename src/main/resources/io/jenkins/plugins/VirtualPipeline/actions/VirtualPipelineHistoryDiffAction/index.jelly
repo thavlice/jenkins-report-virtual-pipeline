@@ -31,10 +31,13 @@
             background-color: var(--light-yellow);
             }
             .CHANGE{
-            background-color: var(--line-green);
+            background-color: var(--light-cyan);
             }
             .INSERT{
-            background-color: var(--cyan);
+            background-color: var(--light-green);
+            }
+            .DELETE{
+            background-color: var(--light-red);
             }
         </style>
         <l:main-panel>
