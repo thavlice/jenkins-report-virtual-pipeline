@@ -153,7 +153,7 @@ public class LogFlowProjectAction implements SimpleBuildStep.LastBuildAction {
     private List<LineOutput> getAllCacheFromNamedFile(File file) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            return objectMapper.readValue(file, new TypeReference<List<LineOutput>>() {
+            return objectMapper.readValue(file, new TypeReference<>() {
             });
         } catch (IOException e) {
             throw new RuntimeException(e);
