@@ -10,25 +10,25 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.jenkins.plugins.VirtualPipeline;
+package io.jenkins.plugins.LogFlowVisualizer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jenkins.plugins.VirtualPipeline.input.VirtualPipelineInput;
-import io.jenkins.plugins.VirtualPipeline.input.VirtualPipelineInputAdvanced;
-import io.jenkins.plugins.VirtualPipeline.input.VirtualPipelineInputSimple;
-import io.jenkins.plugins.VirtualPipeline.model.LineType;
-import io.jenkins.plugins.VirtualPipeline.model.LineWithOffset;
-import io.jenkins.plugins.VirtualPipeline.model.VirtualPipelineLineOutput;
+import io.jenkins.plugins.LogFlowVisualizer.input.LogFlowInput;
+import io.jenkins.plugins.LogFlowVisualizer.input.LogFlowInputAdvanced;
+import io.jenkins.plugins.LogFlowVisualizer.input.LogFlowInputSimple;
+import io.jenkins.plugins.LogFlowVisualizer.model.LineType;
+import io.jenkins.plugins.LogFlowVisualizer.model.LineWithOffset;
+import io.jenkins.plugins.LogFlowVisualizer.model.LineOutput;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VirtualPipelineFilter {
+public class LogFlowFilter {
 
-    public static List<VirtualPipelineLineOutput> filter(List<LineWithOffset> lines, List<VirtualPipelineInput> configs) {
-        List<VirtualPipelineLineOutput> result = new ArrayList<>();
+    public static List<LineOutput> filter(List<LineWithOffset> lines, List<LogFlowInput> configs) {
+        List<LineOutput> result = new ArrayList<>();
 
         if (configs.isEmpty()) {
             return result;
@@ -41,7 +41,7 @@ public class VirtualPipelineFilter {
 
         //advanced setup
         boolean advancedRegexLock = false;
-        VirtualPipelineInputAdvanced activeConfig = null;
+        LogFlowInputAdvanced activeConfig = null;
 
 
         //going through every line
@@ -55,10 +55,10 @@ public class VirtualPipelineFilter {
                     //end mark found
                     boolean display = activeConfig.getNumberOfLineToDisplay() == activeRegexCount + 1; // line 0 is start mark
                     if (activeConfig.getDeleteMark()) {
-                        String lineWithoutRegex = VirtualPipelineFilter.removeRegexMark(line, activeConfig.getStartMark());
-                        result.add(new VirtualPipelineLineOutput(activeConfig.getEndMark(), lineWithoutRegex, lineIndex, activeConfig.getDeleteMark(), LineType.END_MARK, lineWithOffset.getOffset(), display));
+                        String lineWithoutRegex = LogFlowFilter.removeRegexMark(line, activeConfig.getStartMark());
+                        result.add(new LineOutput(activeConfig.getEndMark(), lineWithoutRegex, lineIndex, activeConfig.getDeleteMark(), LineType.END_MARK, lineWithOffset.getOffset(), display));
                     } else {
-                        result.add(new VirtualPipelineLineOutput(activeConfig.getEndMark(), line, lineIndex, activeConfig.getDeleteMark(), LineType.END_MARK, lineWithOffset.getOffset(), display));
+                        result.add(new LineOutput(activeConfig.getEndMark(), line, lineIndex, activeConfig.getDeleteMark(), LineType.END_MARK, lineWithOffset.getOffset(), display));
                     }
 
                     advancedRegexLock = false;
@@ -71,7 +71,7 @@ public class VirtualPipelineFilter {
                     boolean display = activeConfig.getNumberOfLineToDisplay() == activeRegexCount + 1; // line 0 is start mark
                     if (activeRegexCount >= activeConfig.getMaxContentLength()) {
                         //end regex because of reaching the max limit
-                        result.add(new VirtualPipelineLineOutput(activeConfig.getStartMark(), line, lineIndex, activeConfig.getDeleteMark(), LineType.LIMIT_REACHED_LINE, lineWithOffset.getOffset(), display));
+                        result.add(new LineOutput(activeConfig.getStartMark(), line, lineIndex, activeConfig.getDeleteMark(), LineType.LIMIT_REACHED_LINE, lineWithOffset.getOffset(), display));
 
 
                         advancedRegexLock = false;
@@ -80,7 +80,7 @@ public class VirtualPipelineFilter {
 
                         activeRegexCount = 0;
                     } else {
-                        result.add(new VirtualPipelineLineOutput(activeConfig.getStartMark(), line, lineIndex, activeConfig.getDeleteMark(), LineType.CONTENT_LINE, lineWithOffset.getOffset(), display));
+                        result.add(new LineOutput(activeConfig.getStartMark(), line, lineIndex, activeConfig.getDeleteMark(), LineType.CONTENT_LINE, lineWithOffset.getOffset(), display));
                     }
 
                 }
@@ -90,15 +90,15 @@ public class VirtualPipelineFilter {
             }
 
             //matching first config, first come, first served principal
-            for (VirtualPipelineInput config :
+            for (LogFlowInput config :
                     configs) {
 
 
                 //determining the type of
-                if (config instanceof VirtualPipelineInputSimple) {
+                if (config instanceof LogFlowInputSimple) {
 
                     // SIMPLE
-                    VirtualPipelineInputSimple simpleConfig = (VirtualPipelineInputSimple) config;
+                    LogFlowInputSimple simpleConfig = (LogFlowInputSimple) config;
 
                     if (simpleConfig.getRegex().isEmpty()) { // empty regex would match all lines
                         continue;
@@ -107,19 +107,19 @@ public class VirtualPipelineFilter {
                     if (line.matches(simpleConfig.getRegex())) {
                         //check to include mark or not
                         if (simpleConfig.getDeleteMark()) {
-                            String lineWithoutRegex = VirtualPipelineFilter.removeRegexMark(line, simpleConfig.getRegex());
-                            result.add(new VirtualPipelineLineOutput(simpleConfig.getRegex(), lineWithoutRegex, lineIndex, simpleConfig.getDeleteMark(), LineType.ONE_LINE, lineWithOffset.getOffset(), true));
+                            String lineWithoutRegex = LogFlowFilter.removeRegexMark(line, simpleConfig.getRegex());
+                            result.add(new LineOutput(simpleConfig.getRegex(), lineWithoutRegex, lineIndex, simpleConfig.getDeleteMark(), LineType.ONE_LINE, lineWithOffset.getOffset(), true));
                         } else {
-                            result.add(new VirtualPipelineLineOutput(simpleConfig.getRegex(), line, lineIndex, simpleConfig.getDeleteMark(), LineType.ONE_LINE, lineWithOffset.getOffset(), true));
+                            result.add(new LineOutput(simpleConfig.getRegex(), line, lineIndex, simpleConfig.getDeleteMark(), LineType.ONE_LINE, lineWithOffset.getOffset(), true));
                         }
                         break;
                     }
 
-                } else if (config instanceof VirtualPipelineInputAdvanced) {
+                } else if (config instanceof LogFlowInputAdvanced) {
 
                     // ADVANCED
 
-                    VirtualPipelineInputAdvanced advancedConfig = (VirtualPipelineInputAdvanced) config;
+                    LogFlowInputAdvanced advancedConfig = (LogFlowInputAdvanced) config;
 
                     if (advancedConfig.getStartMark().isEmpty() || advancedConfig.getEndMark().isEmpty()) { // empty regex would match all lines
                         continue;
@@ -128,10 +128,10 @@ public class VirtualPipelineFilter {
                     if (line.matches(advancedConfig.getStartMark())) {
                         boolean display = advancedConfig.getNumberOfLineToDisplay() == 0;
                         if (advancedConfig.getDeleteMark()) {
-                            String lineWithoutRegex = VirtualPipelineFilter.removeRegexMark(line, advancedConfig.getStartMark());
-                            result.add(new VirtualPipelineLineOutput(advancedConfig.getStartMark(), lineWithoutRegex, lineIndex, advancedConfig.getDeleteMark(), LineType.START_MARK, lineWithOffset.getOffset(), display));
+                            String lineWithoutRegex = LogFlowFilter.removeRegexMark(line, advancedConfig.getStartMark());
+                            result.add(new LineOutput(advancedConfig.getStartMark(), lineWithoutRegex, lineIndex, advancedConfig.getDeleteMark(), LineType.START_MARK, lineWithOffset.getOffset(), display));
                         } else {
-                            result.add(new VirtualPipelineLineOutput(advancedConfig.getStartMark(), line, lineIndex, advancedConfig.getDeleteMark(), LineType.START_MARK, lineWithOffset.getOffset(), display));
+                            result.add(new LineOutput(advancedConfig.getStartMark(), line, lineIndex, advancedConfig.getDeleteMark(), LineType.START_MARK, lineWithOffset.getOffset(), display));
                         }
                         activeConfig = advancedConfig;
                         advancedRegexLock = true;
@@ -151,7 +151,7 @@ public class VirtualPipelineFilter {
         return result;
     }
 
-    public static void saveToJSON(List<VirtualPipelineLineOutput> list, File file) {
+    public static void saveToJSON(List<LineOutput> list, File file) {
 
         ObjectMapper objectMapper = new ObjectMapper();
         try {

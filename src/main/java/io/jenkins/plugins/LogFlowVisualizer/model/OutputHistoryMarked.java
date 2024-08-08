@@ -10,12 +10,12 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.jenkins.plugins.VirtualPipeline.model;
+package io.jenkins.plugins.LogFlowVisualizer.model;
 
-public class VirtualPipelineOutputHistoryMarked extends VirtualPipelineLineOutput {
+public class OutputHistoryMarked extends LineOutput {
     private final HistoryType historyType;
 
-    public VirtualPipelineOutputHistoryMarked(String regex, String line, int index, Boolean deleteMark, LineType type, HistoryType historyType, long lineOffset, Boolean display) {
+    public OutputHistoryMarked(String regex, String line, int index, Boolean deleteMark, LineType type, HistoryType historyType, long lineOffset, Boolean display) {
         super(regex, line, index, deleteMark, type, lineOffset, display);
         this.historyType = historyType;
     }
