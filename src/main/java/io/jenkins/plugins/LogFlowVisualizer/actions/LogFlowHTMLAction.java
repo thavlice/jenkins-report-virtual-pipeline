@@ -10,15 +10,15 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.jenkins.plugins.VirtualPipeline.actions;
+package io.jenkins.plugins.LogFlowVisualizer.actions;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hudson.console.ConsoleNote;
 import hudson.model.Action;
 import hudson.model.Run;
-import io.jenkins.plugins.VirtualPipeline.model.LineType;
-import io.jenkins.plugins.VirtualPipeline.model.VirtualPipelineLineOutput;
+import io.jenkins.plugins.LogFlowVisualizer.model.LineType;
+import io.jenkins.plugins.LogFlowVisualizer.model.LineOutput;
 import jenkins.tasks.SimpleBuildStep;
 
 import java.io.BufferedReader;
@@ -30,12 +30,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.ListIterator;
 
-public class VirtualPipelineHTMLAction implements SimpleBuildStep.LastBuildAction {
+public class LogFlowHTMLAction implements SimpleBuildStep.LastBuildAction {
 
     private final Run<?,?> run;
     private final File cacheFile;
 
-    public VirtualPipelineHTMLAction(Run<?, ?> run, File cacheFile) {
+    public LogFlowHTMLAction(Run<?, ?> run, File cacheFile) {
         this.run = run;
         this.cacheFile = cacheFile;
     }
@@ -55,14 +55,14 @@ public class VirtualPipelineHTMLAction implements SimpleBuildStep.LastBuildActio
         return result;
     }
 
-    public List<VirtualPipelineLineOutput> getMarkedLogs() throws IOException {
+    public List<LineOutput> getMarkedLogs() throws IOException {
         List<String> fullLogs = this.getLogs();
-        List<VirtualPipelineLineOutput> markedLogs = this.getAllCacheFromNamedFile(this.cacheFile);
+        List<LineOutput> markedLogs = this.getAllCacheFromNamedFile(this.cacheFile);
 
-        List<VirtualPipelineLineOutput> result = new ArrayList<>();
+        List<LineOutput> result = new ArrayList<>();
 
-        ListIterator<VirtualPipelineLineOutput> iteratorMarked = markedLogs.listIterator();
-        VirtualPipelineLineOutput currentMarkedLine = null;
+        ListIterator<LineOutput> iteratorMarked = markedLogs.listIterator();
+        LineOutput currentMarkedLine = null;
         if (iteratorMarked.hasNext()) {
             currentMarkedLine = iteratorMarked.next();
         }
@@ -76,14 +76,14 @@ public class VirtualPipelineHTMLAction implements SimpleBuildStep.LastBuildActio
                 }
             }else {
                 //default for line with no marked meaning
-                result.add(new VirtualPipelineLineOutput("", fullLogs.get(index), index, false,
+                result.add(new LineOutput("", fullLogs.get(index), index, false,
                         LineType.DEFAULT, 0, false));
             }
         }
         return result;
     }
 
-    private List<VirtualPipelineLineOutput> getAllCacheFromNamedFile(File file) {
+    private List<LineOutput> getAllCacheFromNamedFile(File file) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             return objectMapper.readValue(file, new TypeReference<>() {

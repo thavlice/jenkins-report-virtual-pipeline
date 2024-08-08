@@ -10,7 +10,7 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.jenkins.plugins.VirtualPipeline.actions;
+package io.jenkins.plugins.LogFlowVisualizer.actions;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,8 +18,8 @@ import com.github.difflib.text.DiffRow;
 import com.github.difflib.text.DiffRowGenerator;
 import hudson.model.Action;
 import hudson.model.Run;
-import io.jenkins.plugins.VirtualPipeline.model.VirtualPipelineLineOutput;
-import io.jenkins.plugins.VirtualPipeline.VirtualPipelineRecorder;
+import io.jenkins.plugins.LogFlowVisualizer.model.LineOutput;
+import io.jenkins.plugins.LogFlowVisualizer.LogFlowRecorder;
 import jenkins.tasks.SimpleBuildStep;
 
 import java.io.File;
@@ -31,13 +31,13 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 
-public class VirtualPipelineHistoryDiffAction implements SimpleBuildStep.LastBuildAction {
+public class LogFlowHistoryDiffAction implements SimpleBuildStep.LastBuildAction {
     private final Run<?, ?> run;
     private final File cacheFile;
 
     private Boolean compareAgainstLastStableBuild = false;
 
-    public VirtualPipelineHistoryDiffAction(Run<?, ?> run, File cacheFile, Boolean compareAgainstLastStableBuild) {
+    public LogFlowHistoryDiffAction(Run<?, ?> run, File cacheFile, Boolean compareAgainstLastStableBuild) {
         this.run = run;
         this.cacheFile = cacheFile;
         this.compareAgainstLastStableBuild = compareAgainstLastStableBuild;
@@ -86,16 +86,16 @@ public class VirtualPipelineHistoryDiffAction implements SimpleBuildStep.LastBui
         }
 
 
-        List<VirtualPipelineLineOutput> currentBuildLines = getAllCacheFromFile();
+        List<LineOutput> currentBuildLines = getAllCacheFromFile();
 
-        List<VirtualPipelineLineOutput> currentBuildLinesToDisplay = currentBuildLines
+        List<LineOutput> currentBuildLinesToDisplay = currentBuildLines
                 .stream()
-                .filter(VirtualPipelineLineOutput::getDisplay)
+                .filter(LineOutput::getDisplay)
                 .collect(Collectors.toList());
-        List<VirtualPipelineLineOutput> previousBuildLines = getAllCacheFromNamedFile(comparingFile);
-        List<VirtualPipelineLineOutput> previousBuildLinesToDisplay = previousBuildLines
+        List<LineOutput> previousBuildLines = getAllCacheFromNamedFile(comparingFile);
+        List<LineOutput> previousBuildLinesToDisplay = previousBuildLines
                 .stream()
-                .filter(VirtualPipelineLineOutput::getDisplay)
+                .filter(LineOutput::getDisplay)
                 .collect(Collectors.toList());
 
         List<String> current = extractStringFromVirtualPipelineOutput(currentBuildLinesToDisplay);
@@ -111,16 +111,16 @@ public class VirtualPipelineHistoryDiffAction implements SimpleBuildStep.LastBui
         return generator.generateDiffRows(previous, current);
     }
 
-    private List<String> extractStringFromVirtualPipelineOutput(List<VirtualPipelineLineOutput> inputList) {
+    private List<String> extractStringFromVirtualPipelineOutput(List<LineOutput> inputList) {
         List<String> result = new ArrayList<>();
-        for (VirtualPipelineLineOutput input :
+        for (LineOutput input :
                 inputList) {
             result.add(input.getLine());
         }
         return result;
     }
 
-    public List<VirtualPipelineLineOutput> getAllCacheFromFile() {
+    public List<LineOutput> getAllCacheFromFile() {
         return this.getAllCacheFromNamedFile(cacheFile);
     }
 
@@ -130,7 +130,7 @@ public class VirtualPipelineHistoryDiffAction implements SimpleBuildStep.LastBui
             return null;
         }
         File buildFolder = previousBuild.getRootDir();
-        return new File(buildFolder + File.separator + VirtualPipelineRecorder.cacheName);
+        return new File(buildFolder + File.separator + LogFlowRecorder.cacheName);
     }
 
     private File getLastStableBuildFile() {
@@ -139,10 +139,10 @@ public class VirtualPipelineHistoryDiffAction implements SimpleBuildStep.LastBui
             return null;
         }
         File buildFolder = previousLastStableBuild.getRootDir();
-        return new File(buildFolder + File.separator + VirtualPipelineRecorder.cacheName);
+        return new File(buildFolder + File.separator + LogFlowRecorder.cacheName);
     }
 
-    private List<VirtualPipelineLineOutput> getAllCacheFromNamedFile(File file) {
+    private List<LineOutput> getAllCacheFromNamedFile(File file) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             return objectMapper.readValue(file, new TypeReference<>() {

@@ -10,7 +10,7 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.jenkins.plugins.VirtualPipeline.input;
+package io.jenkins.plugins.LogFlowVisualizer.input;
 
 import hudson.DescriptorExtensionList;
 import hudson.Extension;
@@ -24,7 +24,7 @@ import org.springframework.lang.NonNull;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-public class VirtualPipelineInputSimple extends VirtualPipelineInput {
+public class LogFlowInputSimple extends LogFlowInput {
 
     private final String regex;
 
@@ -32,7 +32,7 @@ public class VirtualPipelineInputSimple extends VirtualPipelineInput {
 
 
     @DataBoundConstructor
-    public VirtualPipelineInputSimple(String regex, Boolean deleteMark) {
+    public LogFlowInputSimple(String regex, Boolean deleteMark) {
         super();
         this.regex = regex;
         this.deleteMark = deleteMark;
@@ -48,13 +48,13 @@ public class VirtualPipelineInputSimple extends VirtualPipelineInput {
     }
 
 
-    public DescriptorExtensionList<VirtualPipelineInput, VirtualPipelineInputDescriptor> getFormatDescriptors() {
-        return Jenkins.get().getDescriptorList(VirtualPipelineInput.class);
+    public DescriptorExtensionList<LogFlowInput, LogFlowInputDescriptor> getFormatDescriptors() {
+        return Jenkins.get().getDescriptorList(LogFlowInput.class);
     }
 
 
     @Extension
-    public static final class DescriptorImpl extends VirtualPipelineInputDescriptor {
+    public static final class DescriptorImpl extends LogFlowInputDescriptor {
 
         @SuppressWarnings("lgtm[jenkins/no-permission-check]")
         @POST
