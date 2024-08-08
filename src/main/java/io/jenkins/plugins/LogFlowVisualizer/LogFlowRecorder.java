@@ -184,7 +184,7 @@ public class LogFlowRecorder extends Recorder implements SimpleBuildStep {
     private boolean createPicture(TaskListener listener, List<LineOutput> filterOutput, File currentBuildFolder) throws IOException {
         int width = DEFAULT_IMAGE_WIDTH;
         int height = DEFAULT_IMAGE_HEIGHT;
-        LogFLowPictureMaker pm = new LogFLowPictureMaker(width, height);
+        LogFlowPictureMaker pm = new LogFlowPictureMaker(width, height);
         BufferedImage image = pm.createPicture(filterOutput);
         File picturePath = new File(currentBuildFolder + File.separator + "archive" + File.separator + cachePictureName);
         boolean pictureMkdirResult = picturePath.mkdirs();

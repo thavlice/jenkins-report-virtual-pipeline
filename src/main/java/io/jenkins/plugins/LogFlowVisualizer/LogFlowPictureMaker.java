@@ -18,7 +18,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-public class LogFLowPictureMaker {
+public class LogFlowPictureMaker {
 
     private final int width;
     private int height;
@@ -26,7 +26,7 @@ public class LogFLowPictureMaker {
     private Color backColor = Color.WHITE;
     private Color textColor = Color.BLACK;
 
-    public LogFLowPictureMaker(int width, int height, Font font, Color backColor, Color textColor) {
+    public LogFlowPictureMaker(int width, int height, Font font, Color backColor, Color textColor) {
         this.width = width;
         this.height = height;
         this.font = font;
@@ -34,7 +34,7 @@ public class LogFLowPictureMaker {
         this.textColor = textColor;
     }
 
-    public LogFLowPictureMaker(int width, int height) {
+    public LogFlowPictureMaker(int width, int height) {
         this.width = width;
         this.height = height;
     }
