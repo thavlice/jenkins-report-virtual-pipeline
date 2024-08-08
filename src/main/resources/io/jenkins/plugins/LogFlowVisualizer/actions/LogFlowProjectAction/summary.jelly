@@ -69,7 +69,7 @@
 
 
         </style>
-        <h2>Virtual Pipeline results</h2>
+        <h2>Log Flow Visualizer results</h2>
         <div class="codeSection">
             <j:set var="lines" value="${it.onlyMarkedLinesToDisplay}"/>
             <j:forEach items="${lines}" var="line">

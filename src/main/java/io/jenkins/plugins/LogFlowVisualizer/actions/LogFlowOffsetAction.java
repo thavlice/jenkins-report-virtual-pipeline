@@ -104,7 +104,7 @@ public class LogFlowOffsetAction implements SimpleBuildStep.LastBuildAction {
 
     @Override
     public String getDisplayName() {
-        return "Virtual Pipeline Offset Logs";
+        return "Log Flow Visualizer Offset Logs";
     }
 
     @Override

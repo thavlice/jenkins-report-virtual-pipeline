@@ -106,7 +106,7 @@ public class LogFlowHTMLAction implements SimpleBuildStep.LastBuildAction {
 
     @Override
     public String getDisplayName() {
-        return "Virtual Pipeline HTML Logs";
+        return "Log Flow Visualizer HTML Logs";
     }
 
     @Override

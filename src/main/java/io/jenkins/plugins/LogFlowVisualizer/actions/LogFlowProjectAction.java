@@ -194,7 +194,7 @@ public class LogFlowProjectAction implements SimpleBuildStep.LastBuildAction {
 
     @Override
     public String getUrlName() {
-        return "VP";
+        return "LFV";
     }
 
     @Override

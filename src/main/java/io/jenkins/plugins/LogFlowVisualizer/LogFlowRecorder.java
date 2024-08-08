@@ -50,8 +50,8 @@ import java.util.Objects;
 @Extension
 public class LogFlowRecorder extends Recorder implements SimpleBuildStep {
 
-    public static final String cacheName = "VirtualPipelineCache.json";
-    public static final String cachePictureName = "VirtualPipelineResult.png";
+    public static final String cacheName = "LogFlowVisualizerCache.json";
+    public static final String cachePictureName = "LogFlowVisualizerResult.png";
     private List<LogFlowInput> configurations;
     private Boolean generatePicture = false;
     private Boolean compareAgainstLastStableBuild = false;
@@ -117,7 +117,7 @@ public class LogFlowRecorder extends Recorder implements SimpleBuildStep {
     public void perform(@NonNull Run<?, ?> run, @NonNull FilePath workspace, @NonNull EnvVars env, @NonNull Launcher launcher, @NonNull TaskListener listener) throws InterruptedException, IOException {
 
         if (Objects.isNull(configurations) || configurations.isEmpty()) {
-            listener.getLogger().println("VP: configurations are empty");
+            listener.getLogger().println("LFV: configurations are empty");
             return ;
         }
 
@@ -130,7 +130,7 @@ public class LogFlowRecorder extends Recorder implements SimpleBuildStep {
         //creates necessary directories
         boolean mkdirsResult = currentBuildFolder.mkdirs();
         if (mkdirsResult) {
-            listener.getLogger().println("VP: Created new directories");
+            listener.getLogger().println("LFV: Created new directories");
         }
 
 
@@ -157,7 +157,7 @@ public class LogFlowRecorder extends Recorder implements SimpleBuildStep {
 
         boolean createFileResult = jsonCacheFile.createNewFile();
         if (!createFileResult) {
-            listener.getLogger().println("VP: " + cacheName + " was not created");
+            listener.getLogger().println("LFV: " + cacheName + " was not created");
             return;
         }
 
@@ -189,7 +189,7 @@ public class LogFlowRecorder extends Recorder implements SimpleBuildStep {
         File picturePath = new File(currentBuildFolder + File.separator + "archive" + File.separator + cachePictureName);
         boolean pictureMkdirResult = picturePath.mkdirs();
         if (!pictureMkdirResult) {
-            listener.getLogger().println("VP: cache directories for picture were not successfully created");
+            listener.getLogger().println("LFV: cache directories for picture were not successfully created");
             return true;
         }
         javax.imageio.ImageIO.write(image, "png", picturePath);
@@ -199,14 +199,14 @@ public class LogFlowRecorder extends Recorder implements SimpleBuildStep {
     /**
      * mainly used for configuration and input checks
      */
-    @Symbol("virtualPipeline")
+    @Symbol("logFlowVisualizer")
     @Extension
     public static final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
 
         @Override
         @NonNull
         public String getDisplayName() {
-            return "Virtual Pipeline";
+            return "Log Flow Visualizer";
         }
 
         @Override

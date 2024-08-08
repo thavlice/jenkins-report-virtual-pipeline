@@ -1,8 +1,8 @@
-# Virtual Pipeline
+# Log Flow Visualizer
 
 ## Introduction
 
-Virtual Pipeline Jenkins plugin allows the user to define marks (using regular expressions) that can be found in the main
+Log Flow Visualizer Jenkins plugin allows the user to define marks (using regular expressions) that can be found in the main
 log and them visualize then on the Project and Job Page.
 
 
@@ -26,7 +26,7 @@ mvn clean install
 Created `.hpi` file in the target directory can be imported into a running Jenkins instance in the Manage Jenkins Section.
 
 ---
-To use the plugin in Jenkins instance, add it to your project as a  `Virtual Pipeline` post-build step and set up the configuration according to your needs.
+To use the plugin in Jenkins instance, add it to your project as a  `Log Flow Visualizer` post-build step and set up the configuration according to your needs.
 
 After next build, you should be able to see the matched marks in a summary on Project and Build page for this build.
 

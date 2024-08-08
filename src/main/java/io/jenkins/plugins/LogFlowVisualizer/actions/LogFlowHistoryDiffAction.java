@@ -98,8 +98,8 @@ public class LogFlowHistoryDiffAction implements SimpleBuildStep.LastBuildAction
                 .filter(LineOutput::getDisplay)
                 .collect(Collectors.toList());
 
-        List<String> current = extractStringFromVirtualPipelineOutput(currentBuildLinesToDisplay);
-        List<String> previous = extractStringFromVirtualPipelineOutput(previousBuildLinesToDisplay);
+        List<String> current = extractStringFromLogFlowOutput(currentBuildLinesToDisplay);
+        List<String> previous = extractStringFromLogFlowOutput(previousBuildLinesToDisplay);
 
         DiffRowGenerator generator = DiffRowGenerator.create()
                 .showInlineDiffs(true)
@@ -111,7 +111,7 @@ public class LogFlowHistoryDiffAction implements SimpleBuildStep.LastBuildAction
         return generator.generateDiffRows(previous, current);
     }
 
-    private List<String> extractStringFromVirtualPipelineOutput(List<LineOutput> inputList) {
+    private List<String> extractStringFromLogFlowOutput(List<LineOutput> inputList) {
         List<String> result = new ArrayList<>();
         for (LineOutput input :
                 inputList) {
@@ -166,7 +166,7 @@ public class LogFlowHistoryDiffAction implements SimpleBuildStep.LastBuildAction
 
     @Override
     public String getDisplayName() {
-        return "Virtual Pipeline Diff";
+        return "Log Flow Visualizer Diff";
     }
 
     @Override
