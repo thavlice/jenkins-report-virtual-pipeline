@@ -12,7 +12,6 @@
 
 package io.jenkins.plugins.LogFlowVisualizer.input;
 
-import hudson.Extension;
 import hudson.ExtensionPoint;
 import hudson.model.Describable;
 import hudson.model.Descriptor;
