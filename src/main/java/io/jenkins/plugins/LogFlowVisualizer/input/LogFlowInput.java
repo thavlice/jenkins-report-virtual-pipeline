@@ -19,20 +19,12 @@ import hudson.model.Descriptor;
 import jenkins.model.Jenkins;
 
 public abstract class LogFlowInput implements Describable<LogFlowInput>, ExtensionPoint {
-    //TODO change to protected
-    public LogFlowInput() {
+    protected LogFlowInput() {
 
     }
 
     @Override
     public Descriptor<LogFlowInput> getDescriptor() {
         return Jenkins.get().getDescriptorOrDie(this.getClass());
-    }
-
-    @Extension
-    public static class DescriptorImpl extends Descriptor<LogFlowInput> {
-        public String getDisplayName() {
-            return "";
-        }
     }
 }
