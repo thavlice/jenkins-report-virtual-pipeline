@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout">
-    <l:layout title="Virtual Pipeline History Difference">
+    <l:layout title="Log Flow Visualizer History Difference">
         <style>
             .container {
             display: flex;
@@ -31,15 +31,18 @@
             background-color: var(--light-yellow);
             }
             .CHANGE{
-            background-color: var(--line-green);
+            background-color: var(--light-cyan);
             }
             .INSERT{
-            background-color: var(--cyan);
+            background-color: var(--light-green);
+            }
+            .DELETE{
+            background-color: var(--light-red);
             }
         </style>
         <l:main-panel>
             <j:set var="diffLines" value="${it.diffLines}"/>
-            <h2>Virtual Pipeline History Difference</h2>
+            <h2>Log Flow Visualizer History Difference</h2>
             <div style="width: 100%">
                 <div class="container">
                     <div class="colOne">

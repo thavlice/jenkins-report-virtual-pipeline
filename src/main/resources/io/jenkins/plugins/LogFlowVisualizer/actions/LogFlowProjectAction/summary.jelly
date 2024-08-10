@@ -69,7 +69,7 @@
 
 
         </style>
-        <h2>Virtual Pipeline results</h2>
+        <h2>Log Flow Visualizer results</h2>
         <div class="codeSection">
             <j:set var="lines" value="${it.onlyMarkedLinesToDisplay}"/>
             <j:forEach items="${lines}" var="line">
@@ -77,11 +77,11 @@
                     <code>
                         <div>
                             <a class="${line.type}"
-                               href="${it.jenkinsRootUrl}job/${it.build.project.name}/${it.build.number}/html#ID${line.index}">
+                               href="${it.jenkinsRootUrl}job/${it.run.parent.name}/${it.run.number}/html#ID${line.index}">
                                 ${line.line}
                             </a>
                             <a class="${line.type}"
-                               href="${it.jenkinsRootUrl}job/${it.build.project.name}/${it.build.number}/logsOffset/?from=${line.lineStartOffset}">
+                               href="${it.jenkinsRootUrl}job/${it.run.parent.name}/${it.run.number}/logsOffset/?from=${line.lineStartOffset}">
                                 [offset: ${line.lineStartOffset}]
                             </a>
                         </div>

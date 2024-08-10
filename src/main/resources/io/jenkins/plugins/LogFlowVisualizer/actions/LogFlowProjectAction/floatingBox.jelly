@@ -38,7 +38,7 @@
         background-color: var(--line-green);
         }
     </style>
-    <h3>Latest build virtual pipeline results</h3>
+    <h3>Latest build Log Flow Visualizer results</h3>
     <div class="codeSection">
         <j:set var="lines" value="${from.onlyMarkedLinesToDisplay}"/>
         <j:forEach items="${lines}" var="line">
@@ -46,11 +46,11 @@
                 <code>
                     <div class="${line.historyType}">
                         <a class="${line.type}"
-                           href="${from.jenkinsRootUrl}job/${from.build.project.name}/${from.build.number}/html#ID${line.index}">
+                           href="${from.jenkinsRootUrl}job/${from.run.parent.name}/${from.run.number}/html#ID${line.index}">
                             ${line.line}
                         </a>
                         <a class="${line.type}"
-                           href="${from.jenkinsRootUrl}job/${from.build.project.name}/${from.build.number}/logsOffset/?from=${line.lineStartOffset}">
+                           href="${from.jenkinsRootUrl}job/${from.run.parent.name}/${from.run.number}/logsOffset/?from=${line.lineStartOffset}">
                             [offset: ${line.lineStartOffset}]
                         </a>
                     </div>

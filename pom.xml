@@ -10,11 +10,11 @@
     </parent>
 
     <groupId>io.jenkins.plugins</groupId>
-    <artifactId>virtual-pipeline</artifactId>
+    <artifactId>log-flow-visualizer</artifactId>
     <version>${revision}${changelist}</version>
     <packaging>hpi</packaging>
 
-    <name>Virtual Pipeline</name>
+    <name>Log Flow Visualizer</name>
     <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
     <licenses>
         <license>

@@ -10,10 +10,10 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.jenkins.plugins.VirtualPipeline;
+package io.jenkins.plugins.LogFlowVisualizer.model;
 
 //possibly make advanced class from this
-public class VirtualPipelineLineOutput {
+public class LineOutput {
     private String regex;
 
     private String line;
@@ -28,7 +28,7 @@ public class VirtualPipelineLineOutput {
 
     private long lineStartOffset;
 
-    public VirtualPipelineLineOutput(String regex, String line, int index, Boolean deleteMark, LineType type, long lineStartOffset, Boolean display) {
+    public LineOutput(String regex, String line, int index, Boolean deleteMark, LineType type, long lineStartOffset, Boolean display) {
         this.regex = regex;
         this.line = line;
         this.index = index;
@@ -39,7 +39,7 @@ public class VirtualPipelineLineOutput {
     }
 
     // just for the purpose of good deserialization
-    public VirtualPipelineLineOutput() {
+    public LineOutput() {
         super();
     }
 

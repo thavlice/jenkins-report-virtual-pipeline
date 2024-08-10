@@ -10,18 +10,23 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.jenkins.plugins.VirtualPipeline;
+package io.jenkins.plugins.LogFlowVisualizer;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import hudson.DescriptorExtensionList;
-import hudson.Extension;
-import hudson.Launcher;
-import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
-import hudson.model.BuildListener;
+import hudson.*;
+import hudson.console.ConsoleNote;
+import hudson.model.*;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Publisher;
 import hudson.tasks.Recorder;
+import io.jenkins.plugins.LogFlowVisualizer.actions.LogFlowHTMLAction;
+import io.jenkins.plugins.LogFlowVisualizer.actions.LogFlowHistoryDiffAction;
+import io.jenkins.plugins.LogFlowVisualizer.actions.LogFlowOffsetAction;
+import io.jenkins.plugins.LogFlowVisualizer.actions.LogFlowProjectAction;
+import io.jenkins.plugins.LogFlowVisualizer.input.LogFlowInput;
+import io.jenkins.plugins.LogFlowVisualizer.input.LogFlowInputDescriptor;
+import io.jenkins.plugins.LogFlowVisualizer.model.LineWithOffset;
+import io.jenkins.plugins.LogFlowVisualizer.model.LineOutput;
 import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildStep;
 import org.jenkinsci.Symbol;
@@ -37,23 +42,29 @@ import java.util.List;
 import java.util.Objects;
 
 
+
+
 /**
  * responsible for performing all actions of the plugin
  */
 @Extension
-public class VirtualPipelinePublisher extends Recorder implements SimpleBuildStep {
+public class LogFlowRecorder extends Recorder implements SimpleBuildStep {
 
-    public static final String cacheName = "VirtualPipelineCache.json";
-    public static final String cachePictureName = "VirtualPipelineResult.png";
-    private List<VirtualPipelineInput> configurations;
+    public static final String cacheName = "LogFlowVisualizerCache.json";
+    public static final String cachePictureName = "LogFlowVisualizerResult.png";
+    private List<LogFlowInput> configurations;
     private Boolean generatePicture = false;
     private Boolean compareAgainstLastStableBuild = false;
 
-    public VirtualPipelinePublisher() {
+    int DEFAULT_IMAGE_WIDTH = 1200;
+    int DEFAULT_IMAGE_HEIGHT = 800;
+
+
+    public LogFlowRecorder() {
     }
 
     @DataBoundConstructor
-    public VirtualPipelinePublisher(List<VirtualPipelineInput> configurations, Boolean generatePicture, Boolean compareAgainstLastStableBuild) {
+    public LogFlowRecorder(List<LogFlowInput> configurations, Boolean generatePicture, Boolean compareAgainstLastStableBuild) {
         this.configurations = configurations;
         this.generatePicture = generatePicture;
         this.compareAgainstLastStableBuild = compareAgainstLastStableBuild;
@@ -78,46 +89,50 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
     }
 
 
-    public List<VirtualPipelineInput> getConfigurations() {
+    public List<LogFlowInput> getConfigurations() {
         return configurations;
     }
 
 
-    public void setConfigurations(List<VirtualPipelineInput> configurations) {
+    public void setConfigurations(List<LogFlowInput> configurations) {
         this.configurations = configurations;
     }
 
-    public DescriptorExtensionList<VirtualPipelineInput, VirtualPipelineInputDescriptor> getFormatDescriptors() {
-        return Jenkins.get().getDescriptorList(VirtualPipelineInput.class);
+    public DescriptorExtensionList<LogFlowInput, LogFlowInputDescriptor> getFormatDescriptors() {
+        return Jenkins.get().getDescriptorList(LogFlowInput.class);
     }
 
+
     /**
-     * every event from plugin is performed at this function as it is the main extension point for the plugin
      *
-     * @param build    current build
-     * @param launcher launcher
-     * @param listener current listener, can be used to log
-     * @return true if build is marked as successful, false otherwise
-     * @throws InterruptedException exception for being interrupted
-     * @throws IOException          exception for IO operations
+     * @param run a build this is running as a part of
+     * @param workspace a workspace to use for any file operations
+     * @param env environment variables applicable to this step
+     * @param launcher a way to start processes
+     * @param listener a place to send output
+     * @throws InterruptedException
+     * @throws IOException
      */
     @Override
-    public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) throws InterruptedException, IOException {
+    public void perform(@NonNull Run<?, ?> run, @NonNull FilePath workspace, @NonNull EnvVars env, @NonNull Launcher launcher, @NonNull TaskListener listener) throws InterruptedException, IOException {
+
         if (Objects.isNull(configurations) || configurations.isEmpty()) {
-            listener.getLogger().println("VP: configurations are empty");
-            return false;
+            listener.getLogger().println("LFV: configurations are empty");
+            return ;
         }
 
         //here is the performance part, e.g. drawing, printing itself
-        File rootDir = build.getProject().getRootDir();
-        File currentBuildFolder = new File(rootDir.getPath() + File.separator + "builds" + File.separator + build.getNumber());
+        File rootDir = run.getRootDir();
+        File currentBuildFolder = new File(rootDir.getPath());
         File defaultLogs = new File(currentBuildFolder + File.separator + "log");
+
 
         //creates necessary directories
         boolean mkdirsResult = currentBuildFolder.mkdirs();
         if (mkdirsResult) {
-            listener.getLogger().println("VP: Created new directories");
+            listener.getLogger().println("LFV: Created new directories");
         }
+
 
         RandomAccessFile raf = new RandomAccessFile(defaultLogs, "r");
 
@@ -127,65 +142,71 @@ public class VirtualPipelinePublisher extends Recorder implements SimpleBuildSte
         long currentOffset = raf.getFilePointer();
         String line = raf.readLine();
         while (line != null) {
+            line = ConsoleNote.removeNotes(line);
             logLines.add(new LineWithOffset(line, currentOffset));
             currentOffset = raf.getFilePointer();
             line = raf.readLine();
         }
         raf.close();
+
         //getting filtered lines
-        List<VirtualPipelineLineOutput> filterOutput = VirtualPipelineFilter.filter(logLines, getConfigurations());
+        List<LineOutput> filterOutput = LogFlowFilter.filter(logLines, getConfigurations());
 
-
-        //writing in JSON format into output.json
+        // writing in JSON format into output.json
         File jsonCacheFile = new File(currentBuildFolder.getPath() + File.separator + cacheName);
 
         boolean createFileResult = jsonCacheFile.createNewFile();
         if (!createFileResult) {
-            listener.getLogger().println("VP: " + cacheName + " was not created");
-            return false;
+            listener.getLogger().println("LFV: " + cacheName + " was not created");
+            return;
         }
 
-        VirtualPipelineFilter.saveToJSON(filterOutput, jsonCacheFile);
+
+        LogFlowFilter.saveToJSON(filterOutput, jsonCacheFile);
 
 
-        // creating picture
+
+        //creating picture
         if (generatePicture) {
-            int width = 1200;
-            int height = 800;
-            VirtualPipelinePictureMaker pm = new VirtualPipelinePictureMaker(width, height);
-            BufferedImage image = pm.createPicture(filterOutput);
-            File picturePath = new File(currentBuildFolder + File.separator + "archive" + File.separator + cachePictureName);
-            boolean pictureMkdirResult = picturePath.mkdirs();
-            if (!pictureMkdirResult) {
-                listener.getLogger().println("VP: cache directories for picture were not successfully created");
-                return false;
-            }
-            javax.imageio.ImageIO.write(image, "png", picturePath);
+            if (createPicture(listener, filterOutput, currentBuildFolder)) return;
         }
 
 
         // adding actions to build in Jenkins
-        VirtualPipelineProjectAction action = new VirtualPipelineProjectAction(build, this.getConfigurations(), jsonCacheFile, compareAgainstLastStableBuild);
-        build.addAction(action);
-        build.addAction(new VirtualPipelineHTMLAction(build, jsonCacheFile));
-        build.addAction(new VirtualPipelineOffsetAction(build));
-        build.addAction(new VirtualPipelineHistoryDiffAction(build, jsonCacheFile, compareAgainstLastStableBuild));
+        LogFlowProjectAction action = new LogFlowProjectAction(run, this.getConfigurations(), jsonCacheFile, compareAgainstLastStableBuild);
+        run.addAction(action);
+        run.addAction(new LogFlowHTMLAction(run, jsonCacheFile));
+        run.addAction(new LogFlowOffsetAction(run));
+        run.addAction(new LogFlowHistoryDiffAction(run, jsonCacheFile, compareAgainstLastStableBuild));
 
-        return true;
     }
 
+    private boolean createPicture(TaskListener listener, List<LineOutput> filterOutput, File currentBuildFolder) throws IOException {
+        int width = DEFAULT_IMAGE_WIDTH;
+        int height = DEFAULT_IMAGE_HEIGHT;
+        LogFlowPictureMaker pm = new LogFlowPictureMaker(width, height);
+        BufferedImage image = pm.createPicture(filterOutput);
+        File picturePath = new File(currentBuildFolder + File.separator + "archive" + File.separator + cachePictureName);
+        boolean pictureMkdirResult = picturePath.mkdirs();
+        if (!pictureMkdirResult) {
+            listener.getLogger().println("LFV: cache directories for picture were not successfully created");
+            return true;
+        }
+        javax.imageio.ImageIO.write(image, "png", picturePath);
+        return false;
+    }
 
     /**
      * mainly used for configuration and input checks
      */
-    @Symbol("virtualPipeline")
+    @Symbol("logFlowVisualizer")
     @Extension
     public static final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
 
         @Override
         @NonNull
         public String getDisplayName() {
-            return "Virtual Pipeline";
+            return "Log Flow Visualizer";
         }
 
         @Override

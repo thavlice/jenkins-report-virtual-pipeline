@@ -10,7 +10,7 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.jenkins.plugins.VirtualPipeline;
+package io.jenkins.plugins.LogFlowVisualizer.input;
 
 import hudson.Extension;
 import hudson.util.FormValidation;
@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-public class VirtualPipelineInputAdvanced extends VirtualPipelineInput {
+public class LogFlowInputAdvanced extends LogFlowInput {
 
     private static final int DEFAULT_CONTENT_LENGTH = 30;
 
@@ -39,7 +39,7 @@ public class VirtualPipelineInputAdvanced extends VirtualPipelineInput {
     private int numberOfLineToDisplay = 0;
 
     @DataBoundConstructor
-    public VirtualPipelineInputAdvanced(String startMark, String endMark, Boolean deleteMark, int maxContentLength, int numberOfLineToDisplay) {
+    public LogFlowInputAdvanced(String startMark, String endMark, Boolean deleteMark, int maxContentLength, int numberOfLineToDisplay) {
         this.startMark = startMark;
         this.endMark = endMark;
         this.deleteMark = deleteMark;
@@ -69,7 +69,7 @@ public class VirtualPipelineInputAdvanced extends VirtualPipelineInput {
 
 
     @Extension
-    public static final class DescriptorImpl extends VirtualPipelineInputDescriptor {
+    public static final class DescriptorImpl extends LogFlowInputDescriptor {
         @SuppressWarnings("lgtm[jenkins/no-permission-check]")
         @POST
         public FormValidation doCheckStartMark(@QueryParameter String startMark) throws IOException, ServletException {

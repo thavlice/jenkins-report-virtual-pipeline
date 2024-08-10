@@ -10,13 +10,15 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.jenkins.plugins.VirtualPipeline;
+package io.jenkins.plugins.LogFlowVisualizer;
+
+import io.jenkins.plugins.LogFlowVisualizer.model.LineOutput;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-public class VirtualPipelinePictureMaker {
+public class LogFlowPictureMaker {
 
     private final int width;
     private int height;
@@ -24,7 +26,7 @@ public class VirtualPipelinePictureMaker {
     private Color backColor = Color.WHITE;
     private Color textColor = Color.BLACK;
 
-    public VirtualPipelinePictureMaker(int width, int height, Font font, Color backColor, Color textColor) {
+    public LogFlowPictureMaker(int width, int height, Font font, Color backColor, Color textColor) {
         this.width = width;
         this.height = height;
         this.font = font;
@@ -32,7 +34,7 @@ public class VirtualPipelinePictureMaker {
         this.textColor = textColor;
     }
 
-    public VirtualPipelinePictureMaker(int width, int height) {
+    public LogFlowPictureMaker(int width, int height) {
         this.width = width;
         this.height = height;
     }
@@ -61,9 +63,9 @@ public class VirtualPipelinePictureMaker {
         this.height = height;
     }
 
-    public BufferedImage createPicture(List<VirtualPipelineLineOutput> lines) {
+    public BufferedImage createPicture(List<LineOutput> lines) {
         int toDisplayCounter = 0;
-        for (VirtualPipelineLineOutput line :
+        for (LineOutput line :
                 lines) {
             if (line.getDisplay()) {
                 toDisplayCounter += 1;
@@ -80,7 +82,7 @@ public class VirtualPipelinePictureMaker {
 
         int lineHeight = graphics2D.getFontMetrics().getHeight();
         int y = 25;
-        for (VirtualPipelineLineOutput line : lines) {
+        for (LineOutput line : lines) {
             if (!line.getDisplay()) {
                 continue;
             }

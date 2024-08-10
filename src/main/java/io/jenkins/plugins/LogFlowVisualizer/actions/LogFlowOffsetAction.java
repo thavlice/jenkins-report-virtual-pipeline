@@ -10,11 +10,11 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.jenkins.plugins.VirtualPipeline;
+package io.jenkins.plugins.LogFlowVisualizer.actions;
 ///////////////
 
-import hudson.model.AbstractBuild;
 import hudson.model.Action;
+import hudson.model.Run;
 import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildStep;
 import org.kohsuke.stapler.StaplerRequest;
@@ -31,11 +31,11 @@ import java.util.Collection;
 import java.util.List;
 
 
-public class VirtualPipelineOffsetAction implements SimpleBuildStep.LastBuildAction {
-    private final AbstractBuild<?, ?> build;
+public class LogFlowOffsetAction implements SimpleBuildStep.LastBuildAction {
+    private final Run run;
 
-    public VirtualPipelineOffsetAction(AbstractBuild<?, ?> build) {
-        this.build = build;
+    public LogFlowOffsetAction(Run<?, ?> run) {
+        this.run = run;
     }
 
 
@@ -59,7 +59,7 @@ public class VirtualPipelineOffsetAction implements SimpleBuildStep.LastBuildAct
         long from = Long.parseLong(req.getParameter("from"));
         long to = Long.parseLong(req.getParameter("to"));
 
-        RandomAccessFile logs = new RandomAccessFile(this.build.getRootDir() + File.separator + "log", "r");
+        RandomAccessFile logs = new RandomAccessFile(this.run.getRootDir() + File.separator + "log", "r");
 
         Long checkFrom = from;
         Long checkTo = to;
@@ -104,7 +104,7 @@ public class VirtualPipelineOffsetAction implements SimpleBuildStep.LastBuildAct
 
     @Override
     public String getDisplayName() {
-        return "Virtual Pipeline Offset Logs";
+        return "Log Flow Visualizer Offset Logs";
     }
 
     @Override

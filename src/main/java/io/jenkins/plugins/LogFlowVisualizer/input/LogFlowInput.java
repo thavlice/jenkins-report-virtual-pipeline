@@ -10,17 +10,21 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.jenkins.plugins.VirtualPipeline;
+package io.jenkins.plugins.LogFlowVisualizer.input;
 
-public class VirtualPipelineOutputHistoryMarked extends VirtualPipelineLineOutput {
-    private final HistoryType historyType;
+import hudson.Extension;
+import hudson.ExtensionPoint;
+import hudson.model.Describable;
+import hudson.model.Descriptor;
+import jenkins.model.Jenkins;
 
-    public VirtualPipelineOutputHistoryMarked(String regex, String line, int index, Boolean deleteMark, LineType type, HistoryType historyType, long lineOffset, Boolean display) {
-        super(regex, line, index, deleteMark, type, lineOffset, display);
-        this.historyType = historyType;
+public abstract class LogFlowInput implements Describable<LogFlowInput>, ExtensionPoint {
+    protected LogFlowInput() {
+
     }
 
-    public HistoryType getHistoryType() {
-        return historyType;
+    @Override
+    public Descriptor<LogFlowInput> getDescriptor() {
+        return Jenkins.get().getDescriptorOrDie(this.getClass());
     }
 }
