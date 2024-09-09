@@ -1,45 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout">
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler">
     <l:layout title="Log Flow Visualizer History Difference">
-        <style>
-            .container {
-            display: flex;
-            flex-direction: row;
-            }
-
-            .colOne {
-            width: 400px;
-            overflow:auto;
-            overflow-wrap: anywhere;
-            word-break: break-all;
-            white-space: nowrap;
-            }
-
-            .separator{
-            margin: 20px:
-            }
-            .colTwo {
-            width: 400px;
-            overflow:auto;
-            overflow-wrap: anywhere;
-            word-break: break-all;
-            white-space: nowrap;
-            }
-
-            .EQUAL{
-            background-color: var(--light-yellow);
-            }
-            .CHANGE{
-            background-color: var(--light-cyan);
-            }
-            .INSERT{
-            background-color: var(--light-green);
-            }
-            .DELETE{
-            background-color: var(--light-red);
-            }
-        </style>
+        <st:adjunct includes="io.jenkins.plugins.LogFlowVisualizer.actions.LogFlowHistoryDiffAction.HistoryDiffAction"/>
         <l:main-panel>
             <j:set var="diffLines" value="${it.diffLines}"/>
             <h2>Log Flow Visualizer History Difference</h2>

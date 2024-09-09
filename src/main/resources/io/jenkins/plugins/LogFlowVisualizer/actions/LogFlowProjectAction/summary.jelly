@@ -1,74 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core"
-         xmlns:t="/lib/hudson">
+         xmlns:t="/lib/hudson" xmlns:st="jelly:stapler">
     <t:summary icon="symbol-logs">
-        <style type="text/css">
-            .codeSection{
-            width: 500px;
-            height: 400px;
-            overflow:auto;
-            overflow-wrap: anywhere;
-            word-break: break-all;
-            white-space: nowrap;
-            }
-            .codeWrapper{
-            word-wrap: break-word;
-            font-size: var(--font-size-sm);
-            }
-            .codeWrapper a{
-            text-decoration: none;
-            }
-            a.START_MARK{
-            color: var(--dark-grey);
-            font-size: var(--font-size-sm);
-            }
-            a.END_MARK{
-            color: var(--medium-grey);
-            }
-            a.ONE_LINE{
-            color: var(--green);
-            }
-            a.LIMIT_REACHED_LINE{
-            color: var(--warning);
-            }
-            a.CONTENT_LINE{
-            color: var(--primary);
-            }
-
-            div.START_MARK{
-            color: var(--dark-grey);
-            font-size: var(--font-size-sm);
-            }
-            div.END_MARK{
-            color: var(--medium-grey);
-            }
-            div.ONE_LINE{
-            color: var(--green);
-            }
-            div.LIMIT_REACHED_LINE{
-            color: var(--warning);
-            }
-            div.CONTENT_LINE{
-            color: var(--primary);
-            }
-
-            .DIFFERENT_PREVIOUS{
-            background-color: var(--danger-hover);
-            }
-            .DIFFERENT_CURRENT{
-            background-color: var(--line-green);
-            }
-            .JUST_SAME_REGEX{
-            background-color: var(--light-yellow);
-            }
-
-            .legend{
-            margin-top: 2rem;
-            }
-
-
-        </style>
+        <st:adjunct includes="io.jenkins.plugins.LogFlowVisualizer.actions.LogFlowProjectAction.ProjectActionSummary"/>
         <h2>Log Flow Visualizer results</h2>
         <div class="codeSection">
             <j:set var="lines" value="${it.onlyMarkedLinesToDisplay}"/>

@@ -1,0 +1,36 @@
+.container {
+    display: flex;
+    flex-direction: row;
+}
+
+.colOne {
+    width: 400px;
+    overflow:auto;
+    overflow-wrap: anywhere;
+    word-break: break-all;
+    white-space: nowrap;
+}
+
+.separator{
+    margin: 20px;
+}
+.colTwo {
+    width: 400px;
+    overflow:auto;
+    overflow-wrap: anywhere;
+    word-break: break-all;
+    white-space: nowrap;
+}
+
+.EQUAL{
+    background-color: var(--light-yellow);
+}
+.CHANGE{
+    background-color: var(--light-cyan);
+}
+.INSERT{
+    background-color: var(--light-green);
+}
+.DELETE{
+    background-color: var(--light-red);
+}
