@@ -1,0 +1,60 @@
+pre{
+    counter-reset: line -1;
+    white-space: pre;
+    overflow: auto;
+    overflow-wrap: anywhere;
+    word-break: break-all;
+}
+code{
+    counter-increment: line;
+    display: inline-flex;
+}
+code:before{
+    content: counter(line);
+}
+code:before{
+    -webkit-user-select: none;
+}
+.logsWrapper{
+    overflow: auto;
+    overflow-wrap: anywhere;
+    word-break: break-all;
+}
+
+.lineLink a{
+    pointer-events: none;
+    cursor: default;
+    text-decoration: none;
+    scroll-margin-top: 100px;
+}
+
+a:hover, a:visited, a:link, a:active, a:selection{
+    text-decoration: none;
+    font-weight: normal;
+}
+div a {
+    text-decoration: none;
+    display: inline-block;
+    width: 100%;
+}
+p {
+    margin: 0px;
+}
+.START_MARK{
+    color: var(--dark-grey);
+}
+.END_MARK{
+    color: var(--medium-grey);
+}
+.ONE_LINE{
+    color: var(--success);
+}
+.LIMIT_REACHED_LINE{
+    color: var(--warning);
+}
+.CONTENT_LINE{
+    color: var(--primary);
+}
+h3{
+    margin-top: 2rem;
+}
