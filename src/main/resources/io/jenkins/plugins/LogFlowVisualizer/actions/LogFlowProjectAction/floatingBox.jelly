@@ -1,43 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core"
->
-    <style type="text/css">
-        .codeSection{
-        width: 500px;
-        height: 400px;
-        overflow:auto;
-        overflow-wrap: anywhere;
-        word-break: break-all;
-        white-space: nowrap;
-        }
-        .codeWrapper{
-        }
-        .codeWrapper a{
-        text-decoration: none;
-        }
-        a.START_MARK{
-        color: var(--dark-grey);
-        }
-        a.END_MARK{
-        color: var(--medium-grey);
-        }
-        a.ONE_LINE{
-        color: var(--green);
-        }
-        a.LIMIT_REACHED_LINE{
-        color: var(--warning);
-        }
-        a.CONTENT_LINE{
-        color: var(--primary);
-        }
-        .DIFFERENT_PREVIOUS{
-        background-color: var(--danger-hover);
-        }
-        .DIFFERENT_CURRENT{
-        background-color: var(--line-green);
-        }
-    </style>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler">
+    <st:adjunct includes="io.jenkins.plugins.LogFlowVisualizer.actions.LogFlowProjectAction.ProjectActionFloatingBox"/>
     <h3>Latest build Log Flow Visualizer results</h3>
     <div class="codeSection">
         <j:set var="lines" value="${from.onlyMarkedLinesToDisplay}"/>

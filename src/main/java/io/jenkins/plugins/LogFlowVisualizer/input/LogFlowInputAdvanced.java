@@ -19,8 +19,6 @@ import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.verb.POST;
 import org.springframework.lang.NonNull;
 
-import javax.servlet.ServletException;
-import java.io.IOException;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -72,7 +70,7 @@ public class LogFlowInputAdvanced extends LogFlowInput {
     public static final class DescriptorImpl extends LogFlowInputDescriptor {
         @SuppressWarnings("lgtm[jenkins/no-permission-check]")
         @POST
-        public FormValidation doCheckStartMark(@QueryParameter String startMark) throws IOException, ServletException {
+        public FormValidation doCheckStartMark(@QueryParameter String startMark) {
             if (startMark.isEmpty()) {
                 return FormValidation.error("Regex is empty");
             }
@@ -86,7 +84,7 @@ public class LogFlowInputAdvanced extends LogFlowInput {
 
         @SuppressWarnings("lgtm[jenkins/no-permission-check]")
         @POST
-        public FormValidation doCheckEndMark(@QueryParameter String endMark) throws IOException, ServletException {
+        public FormValidation doCheckEndMark(@QueryParameter String endMark) {
             if (endMark.isEmpty()) {
                 return FormValidation.error("Regex is empty");
             }

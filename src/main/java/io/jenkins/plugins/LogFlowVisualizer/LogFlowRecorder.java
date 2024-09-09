@@ -110,11 +110,10 @@ public class LogFlowRecorder extends Recorder implements SimpleBuildStep {
      * @param env environment variables applicable to this step
      * @param launcher a way to start processes
      * @param listener a place to send output
-     * @throws InterruptedException
      * @throws IOException
      */
     @Override
-    public void perform(@NonNull Run<?, ?> run, @NonNull FilePath workspace, @NonNull EnvVars env, @NonNull Launcher launcher, @NonNull TaskListener listener) throws InterruptedException, IOException {
+    public void perform(@NonNull Run<?, ?> run, @NonNull FilePath workspace, @NonNull EnvVars env, @NonNull Launcher launcher, @NonNull TaskListener listener) throws IOException {
 
         if (Objects.isNull(configurations) || configurations.isEmpty()) {
             listener.getLogger().println("LFV: configurations are empty");
